@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>صمم مطبخك في دقيقة | Ahmed Saied Designs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --beige:#F4EDE3; --beige-2:#EADFCF; --sand:#D8C6AC;
+  --wood:#8A5A36; --wood-d:#5E3B22; --wood-l:#B78A5E;
+  --ink:#141210; --ink-2:#2A2622; --muted:#7A6E62;
+  --white:#FFFDF9; --ok:#2F7D4F; --err:#B3412E;
+  --r:18px; --shadow:0 10px 30px rgba(40,25,10,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;background:var(--beige);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"El Messiri",serif;line-height:1.3}
+button,input,select,textarea{font:inherit;color:inherit}
+img{max-width:100%;display:block}
+
+/* ===== Header ===== */
+header.top{position:sticky;top:0;z-index:20;background:rgba(20,18,16,.94);backdrop-filter:blur(8px);color:var(--beige)}
+.top-in{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.brand-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--wood-l),var(--wood-d));display:grid;place-items:center;font-family:"El Messiri";font-weight:700;color:var(--white);font-size:15px;letter-spacing:.5px}
+.brand-name{font-weight:600;font-size:15px;direction:ltr;letter-spacing:.3px}
+.brand-name small{display:block;font-size:11px;color:var(--sand);font-weight:400}
+.top-cta{font-size:13px;color:var(--sand);text-decoration:none;border:1px solid rgba(216,198,172,.35);padding:7px 14px;border-radius:999px}
+
+/* ===== Hero ===== */
+.hero{position:relative;overflow:hidden;background:
+  radial-gradient(1200px 400px at 85% -10%,rgba(183,138,94,.35),transparent 60%),
+  linear-gradient(180deg,var(--ink) 0%,#221C17 100%);color:var(--beige);padding:56px 20px 110px;text-align:center}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:70px;background:var(--beige);border-radius:50% 50% 0 0/100% 100% 0 0}
+.eyebrow{display:inline-block;font-size:13px;color:var(--sand);border:1px solid rgba(216,198,172,.3);padding:5px 14px;border-radius:999px;margin-bottom:18px}
+.hero h1{font-size:clamp(34px,7vw,60px);font-weight:700;margin-bottom:12px}
+.hero h1 span{color:var(--wood-l)}
+.hero p{max-width:560px;margin:0 auto 26px;color:#CFC3B3;font-size:clamp(15px,2.4vw,18px)}
+.hero-steps{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#BFB2A1}
+.hero-steps b{color:var(--white);font-weight:600}
+.hero-steps span{background:rgba(255,255,255,.06);padding:6px 12px;border-radius:999px}
+
+/* ===== Wizard shell ===== */
+main{max-width:920px;margin:-70px auto 0;padding:0 16px 60px;position:relative;z-index:2}
+.card{background:var(--white);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;border:1px solid rgba(138,90,54,.10)}
+.progress{padding:22px 22px 0}
+.prog-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.ps{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;cursor:pointer;background:none;border:0;padding:0}
+.ps .dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;background:var(--beige-2);color:var(--muted);transition:.3s}
+.ps .lbl{font-size:12px;color:var(--muted);font-weight:500}
+.ps.active .dot{background:var(--ink);color:var(--white);box-shadow:0 0 0 5px rgba(20,18,16,.08)}
+.ps.active .lbl{color:var(--ink);font-weight:600}
+.ps.done .dot{background:var(--wood);color:var(--white)}
+.ps:disabled{cursor:default}
+.bar{height:4px;background:var(--beige-2);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--wood-l),var(--wood));border-radius:4px;transition:width .4s ease;margin-right:0}
+
+.step{display:none;padding:26px 22px 8px;animation:fade .4s ease}
+.step.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.step-head{margin-bottom:20px}
+.step-num{font-size:12px;color:var(--wood);font-weight:600;letter-spacing:.5px}
+.step-head h2{font-size:clamp(22px,4.5vw,30px)}
+.step-head p{color:var(--muted);font-size:14px}
+.q{font-weight:600;font-size:16px;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+.q::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--wood);transform:rotate(45deg)}
+
+/* option tiles */
+.grid{display:grid;gap:12px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+.opt{position:relative;cursor:pointer;display:block}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.tile{border:1.5px solid var(--beige-2);border-radius:var(--r);background:var(--white);padding:12px;text-align:center;transition:.2s;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.opt:hover .tile{border-color:var(--sand);transform:translateY(-2px)}
+.opt input:checked + .tile{border-color:var(--ink);background:#FBF7F1;box-shadow:0 0 0 3px rgba(20,18,16,.06)}
+.opt input:focus-visible + .tile{outline:3px solid var(--wood-l);outline-offset:2px}
+.tile .check{position:absolute;top:10px;left:10px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px;opacity:0;transform:scale(.6);transition:.2s}
+.opt input:checked + .tile .check{opacity:1;transform:none}
+.tile .t{font-weight:600;font-size:15px}
+.tile .s{font-size:12px;color:var(--muted)}
+.shape svg{width:100%;height:auto;aspect-ratio:1/1;border-radius:12px;background:#F7F1E8}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{cursor:pointer}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-block;padding:9px 16px;border-radius:999px;border:1.5px solid var(--beige-2);font-size:14px;font-weight:500;background:var(--white);transition:.2s}
+.chip input:checked + span{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.chip input:focus-visible + span{outline:3px solid var(--wood-l);outline-offset:2px}
+
+/* type: kitchen / dressing */
+.type .tile{flex-direction:row;padding:16px;justify-content:flex-start;gap:14px;text-align:right}
+.type .ico{width:48px;height:48px;border-radius:12px;background:var(--beige);display:grid;place-items:center;flex-shrink:0}
+
+/* fields */
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink-2)}
+.inp{position:relative}
+.inp input,.inp select,textarea,.txt{width:100%;border:1.5px solid var(--beige-2);background:var(--white);border-radius:14px;padding:13px 14px;font-size:16px;outline:none;transition:.2s}
+.inp input:focus,textarea:focus,.txt:focus{border-color:var(--wood)}
+.inp .unit{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted);pointer-events:none}
+.inp input[type=number]{padding-left:44px}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.err-msg{font-size:12.5px;color:var(--err);margin-top:6px;display:none}
+.invalid .err-msg{display:block}
+.invalid input,.invalid .txt{border-color:var(--err)}
+.group-err{color:var(--err);font-size:13px;margin-top:8px;display:none}
+.group-err.on{display:block}
+textarea{min-height:80px;resize:vertical}
+
+/* plan preview */
+.plan-wrap{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start}
+.plan{background:#F7F1E8;border-radius:var(--r);padding:12px;text-align:center;position:sticky;top:80px}
+.plan svg{width:100%;height:auto}
+.plan small{color:var(--muted);font-size:12px}
+
+/* swatches */
+.sw .tile{padding:10px 8px 12px}
+.swatch{width:100%;aspect-ratio:1/1;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06),0 4px 10px rgba(0,0,0,.06)}
+.sw .t{font-size:13px}
+.mat .tile{padding:14px 8px}
+.mat .mi{width:100%;height:46px;border-radius:10px}
+
+/* toggles */
+.toggle-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tg{background:#FBF7F1;border:1.5px solid var(--beige-2);border-radius:var(--r);padding:14px}
+.tg h4{font-size:14px;margin-bottom:10px;font-weight:600}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--beige-2);border-radius:12px;padding:4px;gap:4px}
+.seg label{cursor:pointer;position:relative}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:block;text-align:center;padding:9px 6px;border-radius:9px;font-size:14px;font-weight:500;transition:.2s}
+.seg input:checked + span{background:var(--white);box-shadow:0 2px 6px rgba(0,0,0,.08);font-weight:600}
+.seg input:focus-visible + span{outline:2px solid var(--wood)}
+
+/* upload */
+.upload{border:2px dashed var(--sand);border-radius:var(--r);padding:22px;text-align:center;background:#FBF7F1;cursor:pointer;display:block;transition:.2s}
+.upload:hover{border-color:var(--wood)}
+.upload input{display:none}
+.upload .ui{width:52px;height:52px;margin:0 auto 8px;border-radius:50%;background:var(--white);display:grid;place-items:center}
+.upload b{display:block;font-size:15px}
+.upload small{color:var(--muted)}
+.preview{display:none;align-items:center;gap:12px;margin-top:12px;background:var(--white);border:1px solid var(--beige-2);border-radius:14px;padding:10px}
+.preview.on{display:flex}
+.preview img{width:64px;height:64px;object-fit:cover;border-radius:10px}
+.preview .pn{flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.preview button{background:none;border:0;color:var(--err);font-size:13px;cursor:pointer;font-weight:600}
+
+/* summary */
+.summary{margin-top:24px;background:var(--ink);color:var(--beige);border-radius:var(--r);padding:18px 18px 8px}
+.summary h3{font-size:18px;margin-bottom:10px;color:var(--white)}
+.sum-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14px}
+.sum-row span:first-child{color:#A99B8A;flex-shrink:0}
+.sum-row span:last-child{text-align:left;font-weight:500}
+.sum-sw{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-left:6px;border:1px solid rgba(255,255,255,.3)}
+
+/* nav */
+.nav{display:flex;gap:10px;justify-content:space-between;padding:18px 22px 24px;border-top:1px solid var(--beige-2);margin-top:22px;background:var(--white)}
+.btn{border:0;border-radius:14px;padding:14px 22px;font-weight:600;font-size:15px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn-dark{background:var(--ink);color:var(--white);flex:1;max-width:260px}
+.btn-dark:hover{background:var(--ink-2)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--beige-2)}
+.btn-ghost:hover{border-color:var(--sand)}
+.btn[hidden]{display:none}
+
+.wa{display:flex;width:100%;margin-top:22px;background:#1FA855;color:#fff;font-size:clamp(16px,3.6vw,19px);padding:18px 20px;border-radius:18px;box-shadow:0 10px 24px rgba(31,168,85,.3);font-weight:700;text-decoration:none;align-items:center;justify-content:center;gap:10px;text-align:center}
+.wa:hover{background:#198F48}
+.wa svg{flex-shrink:0}
+.promise{display:flex;gap:12px;align-items:center;margin-top:14px;background:var(--beige);border-radius:14px;padding:14px 16px;font-size:14.5px;font-weight:500}
+.promise .pi{width:38px;height:38px;border-radius:50%;background:var(--wood);color:#fff;display:grid;place-items:center;flex-shrink:0}
+.after-note{display:none;margin-top:12px;font-size:13.5px;background:#FFF6E5;border:1px solid #F0D9A8;border-radius:12px;padding:10px 14px}
+.after-note.on{display:block}
+
+/* footer */
+footer{background:var(--ink);color:#A99B8A;text-align:center;padding:28px 20px;font-size:13px}
+footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
+.feats{max-width:920px;margin:0 auto 50px;padding:0 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.feat{background:var(--white);border-radius:var(--r);padding:18px;border:1px solid rgba(138,90,54,.10)}
+.feat b{display:block;font-family:"El Messiri";font-size:17px;margin-bottom:2px}
+.feat span{font-size:13.5px;color:var(--muted)}
+
+/* ===== Mobile ===== */
+@media (max-width:760px){
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .g5{grid-template-columns:repeat(3,1fr)}
+  .sw-grid{grid-template-columns:repeat(4,1fr)!important}
+  .fields{grid-template-columns:1fr}
+  .plan-wrap{grid-template-columns:1fr}
+  .plan{position:static;max-width:240px;margin:0 auto;order:-1}
+  .toggle-row{grid-template-columns:1fr}
+  .feats{grid-template-columns:1fr}
+  .ps .lbl{font-size:11px}
+  .step{padding:22px 16px 4px}
+  .progress{padding:18px 16px 0}
+  .nav{padding:14px 16px 18px;position:sticky;bottom:0;box-shadow:0 -6px 20px rgba(0,0,0,.05);z-index:5}
+  .btn-dark{max-width:none}
+  .hero{padding:40px 18px 100px}
+}
+@media (max-width:400px){
+  .sw-grid{grid-template-columns:repeat(4,1fr)!important;gap:8px!important}
+  .sw .t{font-size:11.5px}
+  .sw .tile{padding:6px 4px 8px}
+  .g5{grid-template-columns:repeat(2,1fr)}
+  .tile .t{font-size:14px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<noscript><style>#wizard{display:none!important}.hero-steps{display:none}.top-cta{display:none}</style></noscript>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#">
+      <div class="brand-mark">AS</div>
+      <div class="brand-name">ahmedsaied-designs<small>مطابخ ودريسنج</small></div>
+    </a>
+    <a class="top-cta" href="#wizard">ابدأ التصميم</a>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="eyebrow">مطابخ · دريسنج · تفصيل على المقاس</span>
+  <h1>صمم مطبخك <span>في دقيقة</span></h1>
+  <p>اختار الشكل والمقاسات والخامة واللون، وابعتلنا تصميمك على واتساب، وفريقنا هيرجعلك بالتكلفة المبدئية.</p>
+  <div class="hero-steps">
+    <span><b>١</b> الشكل</span><span><b>٢</b> المقاسات</span><span><b>٣</b> الخامة واللون</span><span><b>٤</b> بياناتك</span>
+  </div>
+</section>
+
+<main id="wizard">
+  <form class="card" id="form" novalidate>
+    <div class="progress">
+      <div class="prog-steps" id="progSteps">
+        <button type="button" class="ps active" data-go="1"><span class="dot">١</span><span class="lbl">الشكل</span></button>
+        <button type="button" class="ps" data-go="2" disabled><span class="dot">٢</span><span class="lbl">المقاسات</span></button>
+        <button type="button" class="ps" data-go="3" disabled><span class="dot">٣</span><span class="lbl">الخامة واللون</span></button>
+        <button type="button" class="ps" data-go="4" disabled><span class="dot">٤</span><span class="lbl">بياناتك</span></button>
+      </div>
+      <div class="bar"><i id="bar"></i></div>
+    </div>
+
+    <!-- ========== STEP 1 ========== -->
+    <section class="step show" data-step="1">
+      <div class="step-head">
+        <div class="step-num">الخطوة ١ من ٤</div>
+        <h2>شكل المطبخ</h2>
+        <p>اختار التوزيعة الأقرب لمساحتك</p>
+      </div>
+
+      <div class="grid g4" id="shapes">
+        <label class="opt shape"><input type="radio" name="shape" value="مطبخ حرف L">
+          <div class="tile"><span class="check">✓</span>
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D8C6AC" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="18" y="18" width="84" height="20" rx="3" fill="#8A5A36"/>
+              <rect x="82" y="18" width="20" height="80" rx="3" fill="#8A5A36"/>
+              <rect x="18" y="18" width="84" height="5" fill="#141210" opacity=".75"/>
+              <rect x="97" y="18" width="5" height="80" fill="#141210" opacity=".75"/>
+              <circle cx="40" cy="28" r="5" fill="#F4EDE3"/><rect x="86" y="60" width="12" height="16" rx="2" fill="#F4EDE3"/>
+            </svg>
+            <span class="t">حرف L</span>
+          </div>
+        </label>
+        <label class="opt shape"><input type="radio" name="shape" value="مطبخ حرف U">
+          <div class="tile"><span class="check">✓</span>
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D8C6AC" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="18" y="18" width="84" height="20" rx="3" fill="#8A5A36"/>
+              <rect x="82" y="18" width="20" height="84" rx="3" fill="#8A5A36"/>
+              <rect x="18" y="18" width="20" height="84" rx="3" fill="#8A5A36"/>
+              <rect x="18" y="18" width="84" height="5" fill="#141210" opacity=".75"/>
+              <rect x="97" y="18" width="5" height="84" fill="#141210" opacity=".75"/>
+              <rect x="18" y="18" width="5" height="84" fill="#141210" opacity=".75"/>
+              <circle cx="60" cy="28" r="5" fill="#F4EDE3"/><rect x="86" y="62" width="12" height="16" rx="2" fill="#F4EDE3"/><rect x="22" y="62" width="12" height="16" rx="2" fill="#F4EDE3"/>
+            </svg>
+            <span class="t">حرف U</span>
+          </div>
+        </label>
+        <label class="opt shape"><input type="radio" name="shape" value="مطبخ خط مستقيم">
+          <div class="tile"><span class="check">✓</span>
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D8C6AC" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="18" y="18" width="84" height="22" rx="3" fill="#8A5A36"/>
+              <rect x="18" y="18" width="84" height="5" fill="#141210" opacity=".75"/>
+              <circle cx="45" cy="30" r="5" fill="#F4EDE3"/><rect x="70" y="25" width="16" height="11" rx="2" fill="#F4EDE3"/>
+            </svg>
+            <span class="t">خط مستقيم</span>
+          </div>
+        </label>
+        <label class="opt shape"><input type="radio" name="shape" value="مطبخ بجزيرة">
+          <div class="tile"><span class="check">✓</span>
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D8C6AC" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="18" y="18" width="84" height="20" rx="3" fill="#8A5A36"/>
+              <rect x="82" y="18" width="20" height="60" rx="3" fill="#8A5A36"/>
+              <rect x="18" y="18" width="84" height="5" fill="#141210" opacity=".75"/>
+              <rect x="97" y="18" width="5" height="60" fill="#141210" opacity=".75"/>
+              <rect x="32" y="62" width="40" height="24" rx="4" fill="#141210"/>
+              <rect x="35" y="65" width="34" height="18" rx="3" fill="#B78A5E"/>
+              <circle cx="38" cy="94" r="3.5" fill="#8A5A36"/><circle cx="52" cy="94" r="3.5" fill="#8A5A36"/><circle cx="66" cy="94" r="3.5" fill="#8A5A36"/>
+            </svg>
+            <span class="t">بجزيرة</span>
+          </div>
+        </label>
+      </div>
+      <div class="group-err" id="err-shape">من فضلك اختار شكل المطبخ</div>
+
+      <div class="q">عايز تصمم إيه؟</div>
+      <div class="grid g2 type">
+        <label class="opt"><input type="radio" name="type" value="مطبخ" checked>
+          <div class="tile"><span class="check">✓</span>
+            <span class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5E3B22" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="9" width="18" height="12" rx="1.5"/><path d="M3 13h18M12 13v8M8 5v4M16 5v4M6 3h4M14 3h4"/></svg></span>
+            <div><span class="t">مطبخ</span><div class="s">وحدات أرضية وعلوية</div></div>
+          </div>
+        </label>
+        <label class="opt"><input type="radio" name="type" value="دريسنج">
+          <div class="tile"><span class="check">✓</span>
+            <span class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5E3B22" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M12 3v18M3 8h9M7 8v3l-2 2M9.5 15h0M14.5 15h0"/></svg></span>
+            <div><span class="t">دريسنج</span><div class="s">غرفة ملابس / دولاب</div></div>
+          </div>
+        </label>
+      </div>
+    </section>
+
+    <!-- ========== STEP 2 ========== -->
+    <section class="step" data-step="2">
+      <div class="step-head">
+        <div class="step-num">الخطوة ٢ من ٤</div>
+        <h2>المقاسات</h2>
+        <p>بالسنتيمتر — مش لازم تكون دقيقة ١٠٠٪، فريقنا هيعاين بنفسه</p>
+      </div>
+
+      <div class="plan-wrap">
+        <div>
+          <div class="fields">
+            <div class="field" id="f-len"><label for="len">طول الحيطة</label>
+              <div class="inp"><input id="len" type="number" inputmode="numeric" min="50" max="2000" placeholder="مثلا 320"><span class="unit">سم</span></div>
+              <div class="err-msg">اكتب رقم صحيح (٥٠ – ٢٠٠٠ سم)</div></div>
+            <div class="field" id="f-wid"><label for="wid">عرض الحيطة</label>
+              <div class="inp"><input id="wid" type="number" inputmode="numeric" min="50" max="2000" placeholder="مثلا 250"><span class="unit">سم</span></div>
+              <div class="err-msg">اكتب رقم صحيح (٥٠ – ٢٠٠٠ سم)</div></div>
+            <div class="field" id="f-hei"><label for="hei">ارتفاع السقف</label>
+              <div class="inp"><input id="hei" type="number" inputmode="numeric" min="180" max="600" placeholder="مثلا 280"><span class="unit">سم</span></div>
+              <div class="err-msg">اكتب رقم صحيح (١٨٠ – ٦٠٠ سم)</div></div>
+          </div>
+
+          <div class="q">مكان الشباك فين؟</div>
+          <div class="chips" data-group="window">
+            <label class="chip"><input type="radio" name="window" value="الحيطة اللي قدامك"><span>الحيطة اللي قدامك</span></label>
+            <label class="chip"><input type="radio" name="window" value="الحيطة اليمين"><span>الحيطة اليمين</span></label>
+            <label class="chip"><input type="radio" name="window" value="الحيطة الشمال"><span>الحيطة الشمال</span></label>
+            <label class="chip"><input type="radio" name="window" value="مفيش شباك"><span>مفيش شباك</span></label>
+          </div>
+
+          <div class="q">مكان الباب فين؟</div>
+          <div class="chips" data-group="door">
+            <label class="chip"><input type="radio" name="door" value="الحيطة اللي ورايا"><span>الحيطة اللي ورايا</span></label>
+            <label class="chip"><input type="radio" name="door" value="الحيطة اليمين"><span>الحيطة اليمين</span></label>
+            <label class="chip"><input type="radio" name="door" value="الحيطة الشمال"><span>الحيطة الشمال</span></label>
+            <label class="chip"><input type="radio" name="door" value="مفتوح على الصالة"><span>مفتوح على الصالة</span></label>
+          </div>
+
+          <div class="q">مكان الثلاجة والبوتجاز</div>
+          <div class="fields" style="grid-template-columns:1fr 1fr">
+            <div class="field"><label for="fridge">الثلاجة</label>
+              <div class="inp"><select id="fridge" class="txt">
+                <option value="">اختار…</option>
+                <option>يمين المطبخ</option><option>شمال المطبخ</option><option>جنب الباب</option><option>في النص</option><option>لسه مش محدد</option>
+              </select></div></div>
+            <div class="field"><label for="stove">البوتجاز</label>
+              <div class="inp"><select id="stove" class="txt">
+                <option value="">اختار…</option>
+                <option>يمين المطبخ</option><option>شمال المطبخ</option><option>تحت الشباك</option><option>في النص</option><option>في الجزيرة</option><option>لسه مش محدد</option>
+              </select></div></div>
+          </div>
+          <div class="field" style="margin-top:12px"><label for="notes">ملاحظات إضافية (اختياري)</label>
+            <textarea id="notes" class="txt" placeholder="مثلا: الحوض لازم يفضل تحت الشباك، أو فيه عمود في الركن…"></textarea></div>
+        </div>
+
+        <div class="plan" aria-hidden="true">
+          <svg id="planSvg" viewBox="0 0 200 200"></svg>
+          <small id="planCap">معاينة تقريبية</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== STEP 3 ========== -->
+    <section class="step" data-step="3">
+      <div class="step-head">
+        <div class="step-num">الخطوة ٣ من ٤</div>
+        <h2>الخامة واللون</h2>
+        <p>اختار الخامة الأساسية للضلف واللون اللي يناسب ذوقك</p>
+      </div>
+
+      <div class="q">الخامة</div>
+      <div class="grid g5 mat">
+        <label class="opt"><input type="radio" name="material" value="كونتر"><div class="tile"><span class="check">✓</span><div class="mi" style="background:repeating-linear-gradient(90deg,#C9AE8B 0 3px,#BFA27D 3px 7px)"></div><span class="t">كونتر</span><span class="s">اقتصادي</span></div></label>
+        <label class="opt"><input type="radio" name="material" value="MDF"><div class="tile"><span class="check">✓</span><div class="mi" style="background:linear-gradient(135deg,#B58D66,#9C7650)"></div><span class="t">MDF</span><span class="s">عملي</span></div></label>
+        <label class="opt"><input type="radio" name="material" value="بولي لاك"><div class="tile"><span class="check">✓</span><div class="mi" style="background:linear-gradient(135deg,#F7F2EA 0%,#E5DACA 55%,#FFFFFF 60%,#E5DACA 70%)"></div><span class="t">بولي لاك</span><span class="s">مطفي / لامع</span></div></label>
+        <label class="opt"><input type="radio" name="material" value="أكريليك"><div class="tile"><span class="check">✓</span><div class="mi" style="background:linear-gradient(120deg,#1E1B18 0%,#3A332D 40%,#8E8378 46%,#2A2520 52%,#1E1B18 100%)"></div><span class="t">أكريليك</span><span class="s">هاي جلوس</span></div></label>
+        <label class="opt"><input type="radio" name="material" value="خشب طبيعي"><div class="tile"><span class="check">✓</span><div class="mi" style="background:repeating-linear-gradient(100deg,#7A4A2A 0 4px,#8F5C36 4px 9px,#6E4224 9px 11px,#9A673F 11px 16px)"></div><span class="t">خشب طبيعي</span><span class="s">فاخر</span></div></label>
+      </div>
+      <div class="group-err" id="err-material">من فضلك اختار الخامة</div>
+
+      <div class="q">اللون</div>
+      <div class="grid sw-grid" style="grid-template-columns:repeat(8,1fr);gap:10px" id="colors"></div>
+      <div class="group-err" id="err-color">من فضلك اختار اللون</div>
+
+      <div class="q">الإكسسوارات</div>
+      <div class="toggle-row">
+        <div class="tg"><h4>المفصلات</h4>
+          <div class="seg">
+            <label><input type="radio" name="hinges" value="عادية"><span>عادية</span></label>
+            <label><input type="radio" name="hinges" value="سوفت كلوز" checked><span>سوفت كلوز</span></label>
+          </div></div>
+        <div class="tg"><h4>إضاءة ليد</h4>
+          <div class="seg">
+            <label><input type="radio" name="led" value="أيوه" checked><span>أيوه، عايز ليد</span></label>
+            <label><input type="radio" name="led" value="لأ"><span>لأ</span></label>
+          </div></div>
+      </div>
+    </section>
+
+    <!-- ========== STEP 4 ========== -->
+    <section class="step" data-step="4">
+      <div class="step-head">
+        <div class="step-num">الخطوة ٤ من ٤</div>
+        <h2>بياناتك</h2>
+        <p>علشان نقدر نتواصل معاك ونبعتلك التكلفة</p>
+      </div>
+
+      <div class="fields" style="grid-template-columns:1fr 1fr">
+        <div class="field" id="f-name"><label for="name">الاسم</label>
+          <div class="inp"><input id="name" type="text" autocomplete="name" placeholder="اسمك بالكامل" class="txt"></div>
+          <div class="err-msg">من فضلك اكتب اسمك</div></div>
+        <div class="field" id="f-phone"><label for="phone">رقم الواتساب</label>
+          <div class="inp"><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01xxxxxxxxx" class="txt" dir="ltr" style="text-align:right"></div>
+          <div class="err-msg">اكتب رقم موبايل مصري صحيح (١١ رقم يبدأ بـ 01)</div></div>
+      </div>
+
+      <div class="q">المنطقة</div>
+      <div class="chips">
+        <label class="chip"><input type="radio" name="area" value="المعادي"><span>المعادي</span></label>
+        <label class="chip"><input type="radio" name="area" value="العبور"><span>العبور</span></label>
+        <label class="chip"><input type="radio" name="area" value="التجمع"><span>التجمع</span></label>
+        <label class="chip"><input type="radio" name="area" value="مدينة نصر"><span>مدينة نصر</span></label>
+        <label class="chip"><input type="radio" name="area" value="أخرى"><span>أخرى</span></label>
+      </div>
+      <div class="field" id="f-other" style="margin-top:10px;display:none">
+        <div class="inp"><input id="otherArea" type="text" class="txt" placeholder="اكتب منطقتك"></div>
+        <div class="err-msg">اكتب اسم المنطقة</div>
+      </div>
+      <div class="group-err" id="err-area">من فضلك اختار المنطقة</div>
+
+      <div class="q">صورة المطبخ الحالي (اختياري)</div>
+      <label class="upload" for="photo">
+        <input id="photo" type="file" accept="image/*">
+        <div class="ui"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8A5A36" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></div>
+        <b>ارفع صورة من الموبايل</b>
+        <small>صوّر المطبخ دلوقتي أو اختار من المعرض</small>
+      </label>
+      <div class="preview" id="preview"><img id="pimg" alt="صورة المطبخ"><span class="pn" id="pname"></span><button type="button" id="premove">حذف</button></div>
+
+      <div class="summary" id="summary"></div>
+
+      <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.24.68-1.42 1.3-1.95 1.34-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.92-4.66-4.1-.13-.18-1.1-1.47-1.1-2.81 0-1.33.7-1.99.95-2.26.24-.27.53-.34.71-.34h.51c.16 0 .38-.06.6.46.24.55.79 1.9.86 2.04.07.14.11.3.02.48-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.9 1.05.93 1.93 1.22 2.2 1.36.27.14.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.6-.14.25.09 1.58.75 1.85.88.27.14.45.2.52.32.07.11.07.66-.17 1.33z"/></svg>
+        ابعت التصميم لـ ahmedsaied-designs على واتساب
+      </a>
+      <div class="after-note" id="afterNote">📷 بعد ما واتساب يفتح، ابعت صورة المطبخ في نفس المحادثة علشان واتساب مش بيسمح نرفق الصورة تلقائي.</div>
+      <div class="promise"><span class="pi">⏱</span>هنكلمك في خلال 24 ساعة ونقولك التكلفة المبدئية</div>
+    </section>
+
+    <div class="nav">
+      <button type="button" class="btn btn-ghost" id="prev" hidden>→ رجوع</button>
+      <span></span>
+      <button type="button" class="btn btn-dark" id="next">التالي ←</button>
+    </div>
+  </form>
+</main>
+
+<noscript>
+<main style="margin-top:-70px">
+  <form class="card" action="https://wa.me/201117933299" method="get" target="_blank" style="padding:22px">
+    <div class="step-head">
+      <h2>ابعت تفاصيل مطبخك</h2>
+      <p>اكتب اختياراتك جنب كل سطر، وبعدين دوس الزرار الأخضر والرسالة هتفتح على واتساب جاهزة.</p>
+    </div>
+    <textarea name="text" class="txt" dir="rtl" style="min-height:460px;font-size:15px;line-height:1.9">مرحبا ahmedsaied-designs 👋
+عايز تصميم (مطبخ / دريسنج): 
+الشكل (حرف L / حرف U / خط مستقيم / بجزيرة): 
+طول الحيطة (سم): 
+عرض الحيطة (سم): 
+ارتفاع السقف (سم): 
+مكان الشباك: 
+مكان الباب: 
+مكان الثلاجة: 
+مكان البوتجاز: 
+الخامة (كونتر / MDF / بولي لاك / أكريليك / خشب طبيعي): 
+اللون (أبيض / بيج / رمادي / كافيه / خشبي فاتح / خشبي غامق / أخضر زيتي / كحلي): 
+المفصلات (عادية / سوفت كلوز): 
+إضاءة ليد (أيوه / لأ): 
+الاسم: 
+رقم الواتساب: 
+المنطقة (المعادي / العبور / التجمع / مدينة نصر / أخرى): </textarea>
+    <button type="submit" class="wa" style="border:0;cursor:pointer">ابعت التصميم لـ ahmedsaied-designs على واتساب</button>
+    <p class="hint" style="margin-top:10px">📷 لو عندك صورة للمطبخ الحالي، ابعتها في نفس المحادثة بعد ما واتساب يفتح.</p>
+    <div class="promise"><span class="pi">⏱</span>هنكلمك في خلال 24 ساعة ونقولك التكلفة المبدئية</div>
+  </form>
+</main>
+</noscript>
+<section class="feats">
+  <div class="feat"><b>معاينة مجانية</b><span>مهندسنا بيجيلك يقيس على الطبيعة</span></div>
+  <div class="feat"><b>تصميم 3D</b><span>تشوف مطبخك قبل التنفيذ</span></div>
+  <div class="feat"><b>ضمان على التنفيذ</b><span>خامات مختارة وتشطيب نظيف</span></div>
+</section>
+
+<footer>
+  <div class="brand"><div class="brand-mark">AS</div><div class="brand-name">ahmedsaied-designs<small>مطابخ ودريسنج</small></div></div>
+  © ahmedsaied-designs — كل الحقوق محفوظة
+</footer>
+
+<script>
+/* ===== إعدادات: حط رقم واتساب الشركة هنا بالصيغة الدولية بدون + (مثلا 201012345678) ===== */
+const WHATSAPP_NUMBER = "201117933299";
+
+const COLORS = [
+  {n:"أبيض", bg:"#F8F6F2"},
+  {n:"بيج", bg:"#E3D3BC"},
+  {n:"رمادي", bg:"#8E8C88"},
+  {n:"كافيه", bg:"#6B4A35"},
+  {n:"خشبي فاتح", bg:"repeating-linear-gradient(100deg,#D6B48A 0 5px,#C9A479 5px 9px,#DDBE96 9px 14px)", hex:"#D0AE83"},
+  {n:"خشبي غامق", bg:"repeating-linear-gradient(100deg,#5A3620 0 5px,#4A2C19 5px 9px,#64402A 9px 14px)", hex:"#56341F"},
+  {n:"أخضر زيتي", bg:"#5C6345"},
+  {n:"كحلي", bg:"#1F2C43"},
+];
+const colorsEl = document.getElementById('colors');
+colorsEl.innerHTML = COLORS.map(c=>`
+  <label class="opt sw"><input type="radio" name="color" value="${c.n}" data-hex="${c.hex||c.bg}">
+    <div class="tile"><span class="check">✓</span><div class="swatch" style="background:${c.bg}"></div><span class="t">${c.n}</span></div>
+  </label>`).join('');
+
+const $ = s => document.querySelector(s);
+const val = n => (document.querySelector(`input[name="${n}"]:checked`)||{}).value || "";
+let step = 1, maxReached = 1;
+const steps = [...document.querySelectorAll('.step')];
+const ps = [...document.querySelectorAll('.ps')];
+const toAr = n => String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+
+function show(n){
+  step = n; maxReached = Math.max(maxReached,n);
+  steps.forEach(s=>s.classList.toggle('show', +s.dataset.step===n));
+  ps.forEach((p,i)=>{
+    const k=i+1;
+    p.classList.toggle('active',k===n);
+    p.classList.toggle('done',k<n || (k<=maxReached && k!==n));
+    p.disabled = k>maxReached;
+    p.querySelector('.dot').textContent = (k<n) ? "✓" : toAr(k);
+  });
+  $('#bar').style.width = (n*25)+'%';
+  $('#prev').hidden = n===1;
+  $('#next').hidden = n===4;
+  if(n===2) drawPlan();
+  if(n===4) renderSummary();
+  document.getElementById('wizard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function fieldErr(id,bad){ document.getElementById(id).classList.toggle('invalid',bad); return !bad; }
+function groupErr(id,bad){ document.getElementById(id).classList.toggle('on',bad); return !bad; }
+function numOk(id,min,max){ const v=+$('#'+id).value; return $('#'+id).value!=="" && v>=min && v<=max; }
+
+function validate(n){
+  let ok = true;
+  if(n===1){ ok = groupErr('err-shape', !val('shape')) && ok; }
+  if(n===2){
+    ok = fieldErr('f-len', !numOk('len',50,2000)) && ok;
+    ok = fieldErr('f-wid', !numOk('wid',50,2000)) && ok;
+    ok = fieldErr('f-hei', !numOk('hei',180,600)) && ok;
+  }
+  if(n===3){
+    ok = groupErr('err-material', !val('material')) && ok;
+    ok = groupErr('err-color', !val('color')) && ok;
+  }
+  if(n===4){
+    ok = fieldErr('f-name', $('#name').value.trim().length<2) && ok;
+    ok = fieldErr('f-phone', !/^01[0125]\d{8}$/.test(normPhone($('#phone').value))) && ok;
+    ok = groupErr('err-area', !val('area')) && ok;
+    if(val('area')==='أخرى') ok = fieldErr('f-other', !$('#otherArea').value.trim()) && ok;
+  }
+  if(!ok){ const e=document.querySelector('.step.show .invalid, .step.show .group-err.on'); e && e.scrollIntoView({behavior:'smooth',block:'center'}); }
+  return ok;
+}
+function normPhone(p){
+  p = p.replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d]/g,'');
+  if(p.startsWith('0020')) p='0'+p.slice(4); else if(p.startsWith('20') && p.length===12) p='0'+p.slice(2);
+  return p;
+}
+
+$('#next').addEventListener('click',()=>{ if(validate(step)) show(step+1); });
+$('#prev').addEventListener('click',()=> show(step-1));
+ps.forEach(p=>p.addEventListener('click',()=>{ const k=+p.dataset.go; if(k<=maxReached && (k<step || validate(step))) show(k); }));
+
+// clear errors live
+document.addEventListener('change',e=>{
+  if(e.target.name==='shape') groupErr('err-shape',false);
+  if(e.target.name==='material') groupErr('err-material',false);
+  if(e.target.name==='color') groupErr('err-color',false);
+  if(e.target.name==='area'){ groupErr('err-area',false); $('#f-other').style.display = e.target.value==='أخرى'?'block':'none'; }
+  if(step===2) drawPlan();
+  if(step===4) renderSummary();
+});
+document.addEventListener('input',e=>{
+  const f=e.target.closest('.field'); if(f) f.classList.remove('invalid');
+  if(step===2) drawPlan();
+  if(step===4) renderSummary();
+});
+
+/* ===== live top-view plan ===== */
+function drawPlan(){
+  const L=+$('#len').value||300, W=+$('#wid').value||250;
+  const s = 160/Math.max(L,W), w=Math.max(60,L*s), h=Math.max(60,W*s);
+  const x=(200-w)/2, y=(200-h)/2, d=Math.min(22,Math.min(w,h)*.22);
+  const shape=val('shape')||'مطبخ حرف L', isDress=val('type')==='دريسنج';
+  const wood = isDress ? '#5E3B22' : '#8A5A36';
+  let g = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#FFFDF9" stroke="#141210" stroke-width="3"/>`;
+  const run = (rx,ry,rw,rh)=>`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="${wood}" rx="2"/>`;
+  g += run(x+2,y+2,w-4,d);                         // back wall
+  if(/L|U|جزيرة/.test(shape)) g += run(x+w-d-2,y+2,d,h*(/جزيرة/.test(shape)?.65:1)-4);
+  if(/U/.test(shape)) g += run(x+2,y+2,d,h-4);
+  if(/جزيرة/.test(shape)) g += `<rect x="${x+w*.22}" y="${y+h*.55}" width="${w*.4}" height="${h*.2}" rx="3" fill="#141210"/>`;
+  // window
+  const win=val('window');
+  const wc="#7FB3C9";
+  if(win==='الحيطة اللي قدامك') g+=`<rect x="${x+w*.35}" y="${y-3}" width="${w*.3}" height="6" fill="${wc}"/>`;
+  if(win==='الحيطة اليمين') g+=`<rect x="${x+w-3}" y="${y+h*.35}" width="6" height="${h*.3}" fill="${wc}"/>`;
+  if(win==='الحيطة الشمال') g+=`<rect x="${x-3}" y="${y+h*.35}" width="6" height="${h*.3}" fill="${wc}"/>`;
+  // door
+  const door=val('door'), dw=Math.min(w,h)*.28;
+  if(door==='الحيطة اللي ورايا') g+=`<rect x="${x+w*.5-dw/2}" y="${y+h-3}" width="${dw}" height="6" fill="#F4EDE3"/><path d="M${x+w*.5-dw/2} ${y+h} A${dw} ${dw} 0 0 1 ${x+w*.5+dw/2} ${y+h-dw}" fill="none" stroke="#B78A5E" stroke-dasharray="3 3"/>`;
+  if(door==='الحيطة اليمين') g+=`<rect x="${x+w-3}" y="${y+h-dw-8}" width="6" height="${dw}" fill="#F4EDE3"/>`;
+  if(door==='الحيطة الشمال') g+=`<rect x="${x-3}" y="${y+h-dw-8}" width="6" height="${dw}" fill="#F4EDE3"/>`;
+  if(door==='مفتوح على الصالة') g+=`<rect x="${x+6}" y="${y+h-3}" width="${w-12}" height="6" fill="#F4EDE3"/>`;
+  // labels
+  g += `<text x="100" y="${y-8}" text-anchor="middle" font-size="10" fill="#7A6E62">${toAr(L)} سم</text>`;
+  g += `<text x="${x-8}" y="${y+h/2}" text-anchor="middle" font-size="10" fill="#7A6E62" transform="rotate(-90 ${x-8} ${y+h/2})">${toAr(W)} سم</text>`;
+  $('#planSvg').innerHTML = g;
+  $('#planCap').textContent = `${isDress?'دريسنج':'مطبخ'} · ${shape.replace('مطبخ ','')} · معاينة تقريبية`;
+}
+
+/* ===== photo upload ===== */
+$('#photo').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const url=URL.createObjectURL(f);
+  $('#pimg').src=url; $('#pname').textContent=f.name; $('#preview').classList.add('on');
+  renderSummary();
+});
+$('#premove').addEventListener('click',()=>{ $('#photo').value=''; $('#preview').classList.remove('on'); renderSummary(); });
+
+/* ===== summary + whatsapp ===== */
+function data(){
+  const area = val('area')==='أخرى' ? ($('#otherArea').value.trim()||'أخرى') : val('area');
+  return {
+    type:val('type'), shape:val('shape'),
+    len:$('#len').value, wid:$('#wid').value, hei:$('#hei').value,
+    window:val('window')||'—', door:val('door')||'—',
+    fridge:$('#fridge').value||'—', stove:$('#stove').value||'—', notes:$('#notes').value.trim(),
+    material:val('material'), color:val('color'),
+    colorHex:(document.querySelector('input[name="color"]:checked')||{dataset:{}}).dataset.hex,
+    hinges:val('hinges'), led:val('led'),
+    name:$('#name').value.trim(), phone:normPhone($('#phone').value), area,
+    photo: !!$('#photo').files.length
+  };
+}
+function renderSummary(){
+  const d=data();
+  const row=(k,v)=>`<div class="sum-row"><span>${k}</span><span>${v||'—'}</span></div>`;
+  $('#summary').innerHTML = `<h3>ملخص تصميمك</h3>`+
+    row('النوع / الشكل', `${d.type} · ${d.shape}`)+
+    row('المقاسات', `${d.len}×${d.wid} سم · سقف ${d.hei} سم`)+
+    row('الشباك / الباب', `${d.window} / ${d.door}`)+
+    row('الثلاجة / البوتجاز', `${d.fridge} / ${d.stove}`)+
+    row('الخامة', d.material)+
+    row('اللون', `<span class="sum-sw" style="background:${d.colorHex||'transparent'}"></span>${d.color}`)+
+    row('المفصلات / ليد', `${d.hinges} · ليد: ${d.led}`);
+  $('#afterNote').classList.toggle('on', d.photo);
+}
+function message(){
+  const d=data();
+  return [
+    `مرحبا ahmedsaied-designs 👋`,
+    `عايز تصميم ${d.type} من موقع "صمم مطبخك في دقيقة":`,
+    ``,
+    `🏠 الشكل: ${d.shape}`,
+    `📐 المقاسات: طول الحيطة ${d.len} سم × عرض الحيطة ${d.wid} سم — ارتفاع السقف ${d.hei} سم`,
+    `🪟 الشباك: ${d.window}`,
+    `🚪 الباب: ${d.door}`,
+    `🧊 الثلاجة: ${d.fridge}`,
+    `🔥 البوتجاز: ${d.stove}`,
+    d.notes ? `📝 ملاحظات: ${d.notes}` : null,
+    ``,
+    `🪵 الخامة: ${d.material}`,
+    `🎨 اللون: ${d.color}`,
+    `🔩 المفصلات: ${d.hinges}`,
+    `💡 إضاءة ليد: ${d.led}`,
+    ``,
+    `👤 الاسم: ${d.name}`,
+    `📱 رقم الواتساب: ${d.phone}`,
+    `📍 المنطقة: ${d.area}`,
+    d.photo ? `📷 هبعت صورة المطبخ الحالي في الرسالة الجاية` : null
+  ].filter(x=>x!==null).join('\n');
+}
+$('#waBtn').addEventListener('click',e=>{
+  if(!validate(4)){ e.preventDefault(); return; }
+  const base = WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}` : `https://wa.me/`;
+  e.currentTarget.href = `${base}?text=${encodeURIComponent(message())}`;
+});
+
+drawPlan();
+</script>
+</body>
+</html>
