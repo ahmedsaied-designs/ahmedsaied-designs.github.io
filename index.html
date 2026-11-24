@@ -186,6 +186,23 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
 .feat b{display:block;font-family:"El Messiri";font-size:17px;margin-bottom:2px}
 .feat span{font-size:13.5px;color:var(--muted)}
 
+
+/* preview */
+.pv-slot{margin:6px 0 4px}
+#pvCard{display:none;background:#F7F1E8;border:1px solid var(--beige-2);border-radius:var(--r);overflow:hidden}
+.pv-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}
+.pv-top b{font-size:14px}
+.pv-tabs{display:flex;background:var(--beige-2);border-radius:10px;padding:3px;gap:3px}
+.pv-tab{border:0;background:transparent;padding:7px 14px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted);min-height:36px}
+.pv-tab.on{background:var(--ink);color:var(--white)}
+#pv2d{display:block;width:100%;height:auto;background:#EFE6D8}
+#pv3d{display:none;width:100%;height:340px;background:#EFE6D8;touch-action:none;position:relative}
+#pv3d canvas{display:block}
+.pv-msg{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;color:var(--muted);font-size:14px}
+.pv-foot{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.pv-foot #pvCap{color:var(--ink-2);font-weight:600}
+@media (max-width:760px){#pv3d{height:300px}}
+
 /* ===== Mobile ===== */
 @media (max-width:760px){
   .g4{grid-template-columns:repeat(2,1fr)}
@@ -399,6 +416,17 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
         <h2>الخامة واللون</h2>
         <p>اختار الخامة الأساسية للضلف واللون اللي يناسب ذوقك</p>
       </div>
+      <div class="pv-slot"><div id="pvCard">
+  <div class="pv-top"><b>معاينة شكل التصميم</b>
+    <div class="pv-tabs" role="group" aria-label="طريقة العرض">
+      <button type="button" class="pv-tab on" data-m="2d" aria-pressed="true">2D</button>
+      <button type="button" class="pv-tab" data-m="3d" aria-pressed="false">3D</button>
+    </div>
+  </div>
+  <svg id="pv2d" viewBox="0 0 420 270" role="img" aria-label="رسمة تقريبية للمطبخ"></svg>
+  <div id="pv3d"></div>
+  <div class="pv-foot"><span id="pvCap"></span><span id="pvHint">شكل تقريبي، مش بالمقاسات الدقيقة</span></div>
+</div></div>
 
       <div class="q">الخامة</div>
       <div class="grid g5 mat">
@@ -469,6 +497,7 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
       </label>
       <div class="preview" id="preview"><img id="pimg" alt="صورة المطبخ"><span class="pn" id="pname"></span><button type="button" id="premove">حذف</button></div>
 
+      <div class="pv-slot" style="margin-top:22px"></div>
       <div class="summary" id="summary"></div>
 
       <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener">
@@ -570,6 +599,7 @@ function show(n){
   $('#next').hidden = n===4;
   if(n===2) drawPlan();
   if(n===4) renderSummary();
+  if((n===3||n===4) && window.pvPlace) pvPlace(n);
   document.getElementById('wizard').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -616,6 +646,7 @@ document.addEventListener('change',e=>{
   if(e.target.name==='area'){ groupErr('err-area',false); $('#f-other').style.display = e.target.value==='أخرى'?'block':'none'; }
   if(step===2) drawPlan();
   if(step===4) renderSummary();
+  if(step>=3 && window.pvRender) pvRender();
 });
 document.addEventListener('input',e=>{
   const f=e.target.closest('.field'); if(f) f.classList.remove('invalid');
@@ -724,6 +755,379 @@ $('#waBtn').addEventListener('click',e=>{
 });
 
 drawPlan();
+</script>
+<script>
+/* ===== معاينة المطبخ 2D / 3D ===== */
+(function(){
+const pv = document.getElementById('pvCard');
+const svgEl = document.getElementById('pv2d');
+const box3d = document.getElementById('pv3d');
+const tabs = [...document.querySelectorAll('.pv-tab')];
+let mode = '2d', three = null, loading3d = false, rebuildT = null;
+
+const WOOD = {'خشبي فاتح':['#D6B48A','#C29C6E','#E2C59F'], 'خشبي غامق':['#5A3620','#45291A','#6A442B']};
+const HEX = {'أبيض':'#F3F1EC','بيج':'#E3D3BC','رمادي':'#8E8C88','كافيه':'#6B4A35','خشبي فاتح':'#CFAA7E','خشبي غامق':'#55331E','أخضر زيتي':'#5C6345','كحلي':'#1F2C43'};
+
+function st(){
+  const g = n => (document.querySelector(`input[name="${n}"]:checked`)||{}).value || '';
+  const num = (id,d,min,max)=>{ const v=+document.getElementById(id).value; return (v>=min&&v<=max)?v:d; };
+  const color = g('color') || 'بيج';
+  return {
+    shape: g('shape') || 'مطبخ حرف L',
+    dress: g('type') === 'دريسنج',
+    L: num('len',320,50,2000), W: num('wid',260,50,2000), H: num('hei',280,180,600),
+    color, hex: HEX[color]||'#E3D3BC', wood: WOOD[color]||null,
+    mat: g('material') || 'MDF', led: g('led') === 'أيوه',
+    window: g('window'), fridge: document.getElementById('fridge').value, stove: document.getElementById('stove').value
+  };
+}
+function shade(hex, f){ // f<0 darker, f>0 lighter
+  const n=parseInt(hex.slice(1),16); let r=n>>16,g=(n>>8)&255,b=n&255;
+  const t=f<0?0:255, p=Math.abs(f);
+  r=Math.round((t-r)*p+r); g=Math.round((t-g)*p+g); b=Math.round((t-b)*p+b);
+  return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+function lum(hex){ const n=parseInt(hex.slice(1),16); return (0.3*(n>>16)+0.59*((n>>8)&255)+0.11*(n&255))/255; }
+const isL = s=>/L|جزيرة/.test(s.shape), isU = s=>/U/.test(s.shape), isIsland = s=>/جزيرة/.test(s.shape);
+
+/* ---------- 2D ---------- */
+function draw2D(){
+  const s = st();
+  const VW=420, floorY=236, top=22;
+  const sideR = isL(s)||isU(s), sideL = isU(s);
+  const sideW = 46;
+  const availW = VW - 30 - (sideR?sideW:0) - (sideL?sideW:0);
+  const sc = Math.min(availW/s.L, (floorY-top)/s.H);
+  const wW = s.L*sc, wH = s.H*sc;
+  const x0 = 15 + (sideL?sideW:0) + (availW-wW)/2, ceil = floorY - wH;
+  const door = s.wood ? 'url(#pvWood)' : s.hex;
+  const doorEdge = shade(s.wood?s.wood[0]:s.hex,-0.25);
+  const counter = lum(s.hex) > 0.55 ? '#3B3631' : '#EEE8DF';
+  const gloss = s.mat==='أكريليك'?0.45 : s.mat==='بولي لاك'?0.2 : 0;
+  const y = cm => floorY - cm*sc;
+  let o = '';
+  o += `<defs>
+    <pattern id="pvWood" width="14" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(${s.dress?0:90})">
+      <rect width="14" height="40" fill="${s.wood?s.wood[0]:s.hex}"/>
+      <rect x="0" width="4" height="40" fill="${s.wood?s.wood[1]:shade(s.hex,-0.08)}" opacity=".7"/>
+      <rect x="8" width="2" height="40" fill="${s.wood?s.wood[2]:shade(s.hex,0.08)}" opacity=".8"/>
+    </pattern>
+    <pattern id="pvGrain" width="10" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(${s.dress?0:90})">
+      <rect x="0" width="3" height="40" fill="#000" opacity=".07"/><rect x="6" width="1.5" height="40" fill="#fff" opacity=".08"/>
+    </pattern>
+    <linearGradient id="pvGloss" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="${gloss}"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="pvLed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE3A3" stop-opacity=".85"/><stop offset="1" stop-color="#FFE3A3" stop-opacity="0"/></linearGradient>
+    <linearGradient id="pvFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9CBB7"/><stop offset="1" stop-color="#C9B89F"/></linearGradient>
+    <filter id="pvBlur"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>`;
+  o += `<rect x="0" y="${floorY}" width="${VW}" height="${270-floorY}" fill="url(#pvFloor)"/>`;
+  // side walls (fake perspective)
+  const sidePoly = (left)=>{
+    const xa = left? x0 : x0+wW, xb = left? x0-sideW : x0+wW+sideW;
+    return `<polygon points="${xa},${ceil} ${xb},${ceil-14} ${xb},${floorY+22} ${xa},${floorY}" fill="#E4D9C8"/>`;
+  };
+  if(sideR) o += sidePoly(false);
+  if(sideL) o += sidePoly(true);
+  o += `<rect x="${x0}" y="${ceil}" width="${wW}" height="${wH}" fill="#F1EADF"/>`;
+
+  const panel = (x,yy,w,h,extra='')=>{
+    let p = `<rect x="${x+0.8}" y="${yy+0.8}" width="${Math.max(0,w-1.6)}" height="${Math.max(0,h-1.6)}" rx="1.2" fill="${door}" stroke="${doorEdge}" stroke-width=".6"/>`;
+    if(s.mat==='خشب طبيعي' && !s.wood) p += `<rect x="${x+0.8}" y="${yy+0.8}" width="${Math.max(0,w-1.6)}" height="${Math.max(0,h-1.6)}" fill="url(#pvGrain)"/>`;
+    if(gloss) p += `<rect x="${x+0.8}" y="${yy+0.8}" width="${Math.max(0,w-1.6)}" height="${Math.max(0,h-1.6)}" fill="url(#pvGloss)"/>`;
+    return p + extra;
+  };
+  const handle = (x,yy,w,h,vert)=> vert
+     ? `<rect x="${x+w-5}" y="${yy+h*0.35}" width="1.6" height="${Math.min(14,h*0.3)}" rx=".8" fill="#2A2622" opacity=".7"/>`
+     : `<rect x="${x+w*0.3}" y="${yy+4}" width="${w*0.4}" height="1.6" rx=".8" fill="#2A2622" opacity=".7"/>`;
+
+  // side-run fronts (perspective strip)
+  const sideRun = (left)=>{
+    const xa = left? x0 : x0+wW, dir = left?-1:1;
+    const bt = s.dress? y(Math.min(s.H-10,240)) : y(87);
+    const b1 = s.dress? floorY : floorY;
+    const xb = xa + dir*sideW*0.9;
+    let p = `<polygon points="${xa},${bt} ${xb},${bt+5} ${xb},${b1+18} ${xa},${b1}" fill="${door}" stroke="${doorEdge}" stroke-width=".6"/>`;
+    p += `<polygon points="${xa},${bt} ${xb},${bt+5} ${xb},${b1+18} ${xa},${b1}" fill="#000" opacity=".12"/>`;
+    if(!s.dress){
+      p += `<polygon points="${xa},${bt-4*sc} ${xb},${bt-4*sc+5} ${xb},${bt+5} ${xa},${bt}" fill="${counter}"/>`;
+      if(!(s.window===(left?'الحيطة الشمال':'الحيطة اليمين'))){
+        const ut=y(215), ub=y(145);
+        p += `<polygon points="${xa},${ut} ${xb},${ut-6} ${xb},${ub+3} ${xa},${ub}" fill="${door}" stroke="${doorEdge}" stroke-width=".6"/><polygon points="${xa},${ut} ${xb},${ut-6} ${xb},${ub+3} ${xa},${ub}" fill="#000" opacity=".12"/>`;
+      } else {
+        p += `<polygon points="${xa},${y(210)} ${xb},${y(210)-6} ${xb},${y(120)+3} ${xa},${y(120)}" fill="#BFDCE8" stroke="#8A5A36" stroke-width="1.5"/>`;
+      }
+    }
+    return p;
+  };
+
+  if(!s.dress){
+    // window on back wall
+    const n = Math.max(3, Math.min(9, Math.round(s.L/60)));
+    const mw = wW/n;
+    let fr = -1;
+    if(/يمين/.test(s.fridge) && !sideR) fr = n-1;
+    else if(/شمال/.test(s.fridge) && !sideL) fr = 0;
+    else if(/يمين/.test(s.fridge)) fr = n-1;
+    else if(/شمال/.test(s.fridge)) fr = 0;
+    const winBack = s.window==='الحيطة اللي قدامك';
+    const winA = Math.floor(n/2)-1, winB = Math.floor(n/2);
+    let stove = /يمين/.test(s.stove) ? n-2 : /شمال/.test(s.stove) ? 1 : (winBack ? Math.max(0,winA-2) : Math.floor(n/2));
+    if(stove===fr) stove = fr===0?1:n-2;
+    let sink = winBack ? winA : (stove+2<n && stove+2!==fr ? stove+2 : Math.max(0,stove-2));
+    const baseTop = y(87), plinth = y(10), cTop = y(91);
+    for(let i=0;i<n;i++){
+      const x = x0 + i*mw;
+      if(i===fr){
+        o += `<rect x="${x+1}" y="${y(195)}" width="${mw-2}" height="${195*sc}" rx="2" fill="#C9CDD0" stroke="#9CA2A6" stroke-width=".8"/>
+              <line x1="${x+1}" y1="${y(120)}" x2="${x+mw-1}" y2="${y(120)}" stroke="#9CA2A6"/>
+              <rect x="${x+4}" y="${y(170)}" width="1.8" height="${30*sc}" fill="#6E7478"/><rect x="${x+4}" y="${y(105)}" width="1.8" height="${30*sc}" fill="#6E7478"/>`;
+        o += panel(x, y(250), mw, 50*sc);
+        continue;
+      }
+      o += `<rect x="${x}" y="${baseTop}" width="${mw}" height="${baseTop<plinth?plinth-baseTop:0}" fill="none"/>`;
+      if(i===stove){
+        o += panel(x, baseTop, mw, (77*sc)*0.28, handle(x,baseTop,mw,(77*sc)*0.28,false));
+        o += `<rect x="${x+2}" y="${baseTop+(77*sc)*0.3}" width="${mw-4}" height="${(77*sc)*0.66}" rx="2" fill="#26221F"/><rect x="${x+6}" y="${baseTop+(77*sc)*0.4}" width="${mw-12}" height="${(77*sc)*0.4}" rx="1.5" fill="#3E3934"/>`;
+      } else if(i%3===2){
+        const hh = (77*sc)/3;
+        for(let k=0;k<3;k++) o += panel(x, baseTop+k*hh, mw, hh, handle(x,baseTop+k*hh,mw,hh,false));
+      } else {
+        o += panel(x, baseTop, mw, 77*sc, handle(x,baseTop,mw,77*sc,true));
+      }
+      o += `<rect x="${x}" y="${plinth}" width="${mw}" height="${10*sc}" fill="#2A2622"/>`;
+    }
+    // countertop
+    const cx1 = x0 + (fr===0?mw:0), cx2 = x0 + wW - (fr===n-1?mw:0);
+    o += `<rect x="${cx1}" y="${cTop}" width="${cx2-cx1}" height="${4*sc}" fill="${counter}"/>`;
+    // stove top & hood
+    const sx = x0 + stove*mw;
+    o += `<rect x="${sx+3}" y="${cTop-1.5}" width="${mw-6}" height="1.5" fill="#111"/>`;
+    o += `<polygon points="${sx+mw*0.15},${y(175)} ${sx+mw*0.85},${y(175)} ${sx+mw*0.68},${y(195)} ${sx+mw*0.32},${y(195)}" fill="#B7BCBF"/><rect x="${sx+mw*0.38}" y="${Math.max(ceil,y(260))}" width="${mw*0.24}" height="${y(195)-Math.max(ceil,y(260))}" fill="#A9AEB1"/>`;
+    // sink
+    const kx = x0 + sink*mw;
+    o += `<rect x="${kx+mw*0.15}" y="${cTop-1.2}" width="${mw*0.7}" height="1.6" fill="#9CA2A6"/><path d="M${kx+mw*0.5} ${cTop-1} v-${12*sc} h${6*sc}" stroke="#8E959A" stroke-width="1.6" fill="none"/>`;
+    // uppers
+    const ut = y(215), uh = 70*sc;
+    for(let i=0;i<n;i++){
+      const x = x0 + i*mw;
+      if(i===fr || i===stove) continue;
+      if(winBack && (i===winA || i===winB)) continue;
+      o += panel(x, ut, mw, uh, handle(x,ut,mw,uh,true).replace(`y="${ut+uh*0.35}"`,`y="${ut+uh*0.62}"`));
+    }
+    if(winBack){
+      const wx = x0 + winA*mw;
+      o += `<rect x="${wx+3}" y="${y(210)}" width="${mw*2-6}" height="${90*sc}" fill="#CFE6EF" stroke="#8A5A36" stroke-width="2.5"/><line x1="${wx+mw}" y1="${y(210)}" x2="${wx+mw}" y2="${y(120)}" stroke="#8A5A36" stroke-width="2"/>`;
+    }
+    if(s.led){
+      for(let i=0;i<n;i++){
+        if(i===fr || i===stove || (winBack&&(i===winA||i===winB))) continue;
+        const x = x0 + i*mw;
+        o += `<rect x="${x+1}" y="${ut+uh}" width="${mw-2}" height="${(145-91)*sc}" fill="url(#pvLed)" opacity=".65"/><rect x="${x+2}" y="${ut+uh-1}" width="${mw-4}" height="2.2" fill="#FFF3D1" filter="url(#pvBlur)"/>`;
+      }
+    }
+  } else {
+    // dressing: tall units
+    const n = Math.max(3, Math.min(8, Math.round(s.L/55)));
+    const mw = wW/n, tH = Math.min(s.H-10, 240), tt = y(tH);
+    for(let i=0;i<n;i++){
+      const x = x0+i*mw;
+      if(i===Math.floor(n/2) && n>3){
+        o += `<rect x="${x+0.8}" y="${tt+0.8}" width="${mw-1.6}" height="${tH*sc-1.6}" fill="${shade(s.wood?s.wood[0]:s.hex,-0.18)}"/>`;
+        for(let k=1;k<5;k++) o += `<rect x="${x+2}" y="${tt + k*(tH*sc*0.13)}" width="${mw-4}" height="2" fill="${door}"/>`;
+        const dt = tt + tH*sc*0.62, dh = (tH*sc*0.38)/3;
+        for(let k=0;k<3;k++) o += panel(x, dt+k*dh, mw, dh, handle(x,dt+k*dh,mw,dh,false));
+        if(s.led) o += `<rect x="${x+3}" y="${tt+4}" width="2.4" height="${tH*sc*0.55}" fill="#FFE3A3" filter="url(#pvBlur)"/><rect x="${x+mw-5.4}" y="${tt+4}" width="2.4" height="${tH*sc*0.55}" fill="#FFE3A3" filter="url(#pvBlur)"/>`;
+      } else {
+        o += panel(x, tt, mw, tH*sc, `<rect x="${i%2?x+4:x+mw-6}" y="${tt+tH*sc*0.4}" width="1.8" height="${tH*sc*0.2}" rx=".9" fill="#2A2622" opacity=".7"/>`);
+      }
+    }
+    if(s.led) o += `<rect x="${x0+2}" y="${tt-2}" width="${wW-4}" height="3" fill="#FFE3A3" filter="url(#pvBlur)"/>`;
+  }
+  if(sideR) o += sideRun(false);
+  if(sideL) o += sideRun(true);
+  // island in front
+  if(isIsland(s)){
+    const iw = Math.min(wW*0.55, 180*sc*1.2), ih = s.dress? 90*sc : 92*sc, ix = x0 + (wW-iw)/2, iy = floorY + 26 - ih;
+    o += `<ellipse cx="${ix+iw/2}" cy="${floorY+27}" rx="${iw*0.55}" ry="4" fill="#000" opacity=".15"/>`;
+    o += `<rect x="${ix}" y="${iy}" width="${iw}" height="${ih}" rx="2" fill="${door}" stroke="${doorEdge}"/>`;
+    o += `<rect x="${ix}" y="${iy}" width="${iw}" height="${ih}" rx="2" fill="#000" opacity=".1"/>`;
+    o += `<rect x="${ix-4}" y="${iy-5*sc}" width="${iw+8}" height="${5*sc+1}" fill="${s.dress?door:counter}"/>`;
+    if(!s.dress) for(let k=0;k<3;k++){ const bx = ix + iw*(0.2+k*0.3); o += `<rect x="${bx-6}" y="${iy+ih*0.25}" width="12" height="3" rx="1.5" fill="#2A2622"/><rect x="${bx-1}" y="${iy+ih*0.25}" width="2" height="${floorY+26-(iy+ih*0.25)}" fill="#2A2622"/>`; }
+  }
+  svgEl.innerHTML = o;
+}
+
+/* ---------- 3D ---------- */
+function load(src){ return new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src=src; sc.onload=res; sc.onerror=rej; document.head.appendChild(sc); }); }
+function webgl(){ try{ const c=document.createElement('canvas'); return !!(c.getContext('webgl')||c.getContext('experimental-webgl')); }catch(e){ return false; } }
+
+async function init3D(){
+  if(three || loading3d) return;
+  loading3d = true;
+  box3d.innerHTML = '<div class="pv-msg">جاري تحميل الـ 3D…</div>';
+  try{
+    if(!webgl()) throw new Error('no webgl');
+    if(!window.THREE) await load('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js');
+    if(!THREE.OrbitControls) await load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js');
+  }catch(e){
+    loading3d = false;
+    box3d.innerHTML = '<div class="pv-msg">الـ 3D مش متاح على الجهاز ده، اتفرج على الـ 2D</div>';
+    return;
+  }
+  box3d.innerHTML = '';
+  const renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio||1));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  box3d.appendChild(renderer.domElement);
+  const scene = new THREE.Scene(); scene.background = new THREE.Color('#EFE6D8');
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.05, 100);
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.enablePan = false;
+  controls.maxPolarAngle = Math.PI/2.08; controls.minDistance = 1.2; controls.maxDistance = 14;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xb8a58c, 0.75));
+  const dl = new THREE.DirectionalLight(0xffffff, 0.75); dl.position.set(3,6,5); scene.add(dl);
+  const dl2 = new THREE.DirectionalLight(0xfff1dd, 0.3); dl2.position.set(-4,3,2); scene.add(dl2);
+  three = {renderer, scene, camera, controls, group:null, first:true};
+  const resize = ()=>{ const w = box3d.clientWidth||300, h = box3d.clientHeight||300; renderer.setSize(w,h,false); renderer.domElement.style.width='100%'; renderer.domElement.style.height='100%'; camera.aspect = w/h; camera.updateProjectionMatrix(); };
+  three.resize = resize; window.addEventListener('resize', resize); resize();
+  (function loop(){ requestAnimationFrame(loop); if(mode!=='3d'||!pv.offsetParent) return; controls.update(); renderer.render(scene,camera); })();
+  loading3d = false;
+  build3D();
+}
+
+function woodTexture(cols){
+  const c = document.createElement('canvas'); c.width=256; c.height=256; const x=c.getContext('2d');
+  x.fillStyle=cols[0]; x.fillRect(0,0,256,256);
+  for(let i=0;i<70;i++){ x.strokeStyle = i%3?cols[1]:cols[2]; x.globalAlpha=0.25+Math.random()*0.35; x.lineWidth=1+Math.random()*3; x.beginPath(); let yy=Math.random()*256; x.moveTo(0,yy); for(let k=0;k<=256;k+=32){ x.lineTo(k, yy+Math.sin(k/40+i)*3); } x.stroke(); }
+  const t = new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping; t.encoding=THREE.sRGBEncoding; return t;
+}
+
+function build3D(){
+  if(!three) return;
+  const s = st(), T = THREE, {scene, camera, controls} = three;
+  if(three.group){ scene.remove(three.group); three.group.traverse(o=>{ if(o.geometry) o.geometry.dispose(); }); }
+  const G = new T.Group(); three.group = G; scene.add(G);
+  const L = Math.min(s.L,900)/100, W = Math.min(s.W,900)/100, H = Math.min(s.H,450)/100;
+  const rough = {'أكريليك':0.12,'بولي لاك':0.32,'MDF':0.65,'كونتر':0.8,'خشب طبيعي':0.55}[s.mat] ?? 0.6;
+  let doorMat;
+  if(s.wood || s.mat==='خشب طبيعي'){
+    const cols = s.wood || [s.hex, shade(s.hex,-0.12), shade(s.hex,0.1)];
+    doorMat = new T.MeshStandardMaterial({map: woodTexture(cols), roughness: rough});
+  } else doorMat = new T.MeshStandardMaterial({color: new T.Color(s.hex).convertSRGBToLinear(), roughness: rough, metalness: s.mat==='أكريليك'?0.15:0});
+  const cnt = lum(s.hex)>0.55 ? '#3B3631' : '#ECE6DC';
+  const M = c => new T.MeshStandardMaterial({color:new T.Color(c).convertSRGBToLinear(), roughness:0.8});
+  const counterMat = new T.MeshStandardMaterial({color:new T.Color(cnt).convertSRGBToLinear(), roughness:0.35});
+  const steel = new T.MeshStandardMaterial({color:0xc9cdd0, roughness:0.3, metalness:0.6});
+  const dark = M('#26221F'), wallMat = M('#F1EADF'), floorMat = M('#D4C4AD'), gap = M('#1E1A17');
+  wallMat.side = T.DoubleSide;
+  const box = (w,h,d,x,y,z,mat)=>{ const m = new T.Mesh(new T.BoxGeometry(w,h,d), mat); m.position.set(x,y,z); G.add(m); return m; };
+
+  // room
+  const floor = new T.Mesh(new T.PlaneGeometry(L, W), floorMat); floor.rotation.x=-Math.PI/2; floor.position.set(L/2,0,W/2); G.add(floor);
+  const back = new T.Mesh(new T.PlaneGeometry(L, H), wallMat); back.position.set(L/2,H/2,0); G.add(back);
+  const right = new T.Mesh(new T.PlaneGeometry(W, H), wallMat); right.rotation.y=-Math.PI/2; right.position.set(L,H/2,W/2); G.add(right);
+  const left = new T.Mesh(new T.PlaneGeometry(W, H), wallMat); left.rotation.y=Math.PI/2; left.position.set(0,H/2,W/2); G.add(left);
+  const win = (wall)=>{ const g = new T.Mesh(new T.PlaneGeometry(1.1,0.9), new T.MeshStandardMaterial({color:0xcfe6ef, emissive:0x9cc7d8, emissiveIntensity:0.35})); const f=new T.Mesh(new T.PlaneGeometry(1.2,1.0), M('#8A5A36'));
+    if(wall==='b'){ f.position.set(L/2,1.65,0.004); g.position.set(L/2,1.65,0.008); }
+    if(wall==='r'){ f.rotation.y=g.rotation.y=-Math.PI/2; f.position.set(L-0.004,1.65,W/2+0.3); g.position.set(L-0.008,1.65,W/2+0.3); }
+    if(wall==='l'){ f.rotation.y=g.rotation.y=Math.PI/2; f.position.set(0.004,1.65,W/2+0.3); g.position.set(0.008,1.65,W/2+0.3); }
+    G.add(f); G.add(g); };
+  const wb = s.window==='الحيطة اللي قدامك', wr = s.window==='الحيطة اليمين', wl = s.window==='الحيطة الشمال';
+  if(wb) win('b'); if(wr) win('r'); if(wl) win('l');
+
+  // a run of cabinets: from a to b along axis; side: 'b' back(z=0), 'r' right(x=L), 'l' left(x=0)
+  const leds = [];
+  function run(side, a, b, opts={}){
+    const len = b-a; if(len<0.3) return;
+    const n = Math.max(1, Math.round(len/0.6)), mw = len/n;
+    const place = (along, w, h, d, y, mat, inset=0)=>{
+      if(side==='b') return box(w,h,d, along, y, d/2+inset, mat);
+      if(side==='r'){ const m = box(d,h,w, L-d/2-inset, y, along, mat); return m; }
+      if(side==='l'){ return box(d,h,w, d/2+inset, y, along, mat); }
+    };
+    if(s.dress){
+      const th = Math.min(H-0.1, 2.4);
+      for(let i=0;i<n;i++){ const c = a+mw*i+mw/2; place(c, mw-0.012, th, 0.58, th/2, doorMat); if(i<n-1) place(c+mw/2-0.003, 0.006, th, 0.6, th/2, gap); }
+      if(s.led) leds.push({side, a, b, y: th-0.03, d:0.6});
+      return;
+    }
+    place((a+b)/2, len, 0.1, 0.5, 0.05, dark, 0);
+    for(let i=0;i<n;i++){ const c=a+mw*i+mw/2; place(c, mw-0.01, 0.76, 0.58, 0.49, doorMat); if(i<n-1) place(c+mw/2-0.003, 0.006, 0.76, 0.59, 0.49, gap); }
+    place((a+b)/2, len, 0.04, 0.62, 0.89, counterMat);
+    if(!opts.noUpper){
+      for(let i=0;i<n;i++){
+        const c=a+mw*i+mw/2;
+        if(opts.skips && opts.skips.some(r=>c>r[0]&&c<r[1])) continue;
+        place(c, mw-0.01, 0.7, 0.34, 1.8, doorMat); if(i<n-1) place(c+mw/2-0.003, 0.006, 0.7, 0.35, 1.8, gap);
+      }
+      if(s.led) leds.push({side, a, b, y:1.445, d:0.3});
+    }
+  }
+  const hasR = isL(s)||isU(s), hasL = isU(s);
+  const frR = /يمين/.test(s.fridge), frL = /شمال/.test(s.fridge);
+  let bA = 0, bB = L;
+  if(frL && !hasL){ box(0.72,1.9,0.68,0.36,0.95,0.34,steel); bA = 0.74; }
+  if(frR && !hasR){ box(0.72,1.9,0.68,L-0.36,0.95,0.34,steel); bB = L-0.74; }
+  const stoveSide = s.stove;
+  const sx = /يمين/.test(stoveSide) ? Math.min(bB-0.45, L*0.78) : /شمال/.test(stoveSide) ? Math.max(bA+0.45, L*0.22) : (wb ? Math.max(bA+0.45, L/2-1.2) : L/2);
+  const skips = [[sx-0.31, sx+0.31]]; if(wb) skips.push([L/2-0.65, L/2+0.65]);
+  run('b', bA, bB, {skips});
+  if(!s.dress){
+    // remove uppers above stove too (already only one skip honored) -> add hood
+    box(0.6,0.012,0.55,sx,0.915,0.3,dark);
+    box(0.62,0.14,0.45,sx,1.6,0.24,steel); box(0.24,Math.max(0.1,H-1.67),0.22,sx,1.67+(H-1.67)/2,0.12,steel);
+    const sinkX = wb ? Math.min(Math.max(L/2, bA+0.35), bB-0.35) : (sx+0.9<bB ? sx+0.9 : Math.max(bA+0.4, sx-0.9));
+    box(0.55,0.012,0.4,sinkX,0.915,0.3,steel);
+    const tap = box(0.025,0.25,0.025,sinkX,1.03,0.08,steel);
+  }
+  if(hasR){ const e = W-(frR?0.74:0); run('r', 0.62, Math.max(0.9,e), {noUpper: wr}); if(frR) box(0.68,1.9,0.72,L-0.34,0.95,W-0.36,steel); }
+  if(hasL){ const e = W-(frL?0.74:0); run('l', 0.62, Math.max(0.9,e), {noUpper: wl}); if(frL) box(0.68,1.9,0.72,0.34,0.95,W-0.36,steel); }
+  if(isIsland(s)){
+    const iw = Math.min(2.0, L*0.5), id = 0.9, iz = Math.min(W-0.6, Math.max(1.5, W*0.58));
+    box(iw, s.dress?0.85:0.86, id, L/2, (s.dress?0.85:0.86)/2, iz, doorMat);
+    box(iw+0.08, 0.04, id+0.06, L/2, (s.dress?0.87:0.88), iz, s.dress?doorMat:counterMat);
+    if(!s.dress) for(let k=-1;k<=1;k++){ box(0.32,0.04,0.32, L/2+k*iw*0.32, 0.65, iz+id/2+0.35, dark); box(0.04,0.63,0.04, L/2+k*iw*0.32, 0.32, iz+id/2+0.35, dark); }
+  }
+  // LED strips
+  const ledMat = new T.MeshStandardMaterial({color:0xfff1c9, emissive:0xffd88a, emissiveIntensity:1.4});
+  leds.forEach(l=>{
+    const len=l.b-l.a, c=(l.a+l.b)/2;
+    if(l.side==='b') box(len*0.98,0.012,0.03,c,l.y,l.d-0.03,ledMat);
+    if(l.side==='r') box(0.03,0.012,len*0.98,L-l.d+0.03,l.y,c,ledMat);
+    if(l.side==='l') box(0.03,0.012,len*0.98,l.d-0.03,l.y,c,ledMat);
+  });
+  if(s.led && leds.length){ const pl = new T.PointLight(0xffd88a, 0.55, 2.4); pl.position.set(L/2, s.dress?2.2:1.38, 0.35); G.add(pl); }
+
+  if(three.first || three.lastKey !== s.shape+s.L+s.W){
+    const span = Math.max(L, W);
+    camera.position.set(L*0.5 - span*0.3, Math.max(2.1, H*0.85), W + span*1.25);
+    controls.target.set(L/2, 0.95, W*0.35);
+    three.first = false; three.lastKey = s.shape+s.L+s.W;
+  }
+  controls.update();
+}
+
+function render(){
+  draw2D();
+  if(mode==='3d'){ clearTimeout(rebuildT); rebuildT = setTimeout(build3D, 120); }
+  document.getElementById('pvCap').textContent = (st().dress?'دريسنج':'مطبخ') + ' · ' + st().shape.replace('مطبخ ','') + ' · ' + (st().color||'') + ' · ' + st().mat;
+}
+function setMode(m){
+  mode = m;
+  tabs.forEach(t=>{ const on=t.dataset.m===m; t.classList.toggle('on',on); t.setAttribute('aria-pressed',on); });
+  svgEl.style.display = m==='2d'?'block':'none';
+  box3d.style.display = m==='3d'?'block':'none';
+  document.getElementById('pvHint').textContent = m==='3d' ? 'لف المطبخ بصباعك أو بالماوس' : 'شكل تقريبي، مش بالمقاسات الدقيقة';
+  if(m==='3d'){ if(!three) init3D(); else { three.resize(); build3D(); } }
+}
+tabs.forEach(t=>t.addEventListener('click',()=>setMode(t.dataset.m)));
+
+window.pvPlace = function(n){
+  const slot = document.querySelector(`.step[data-step="${n}"] .pv-slot`);
+  if(slot){ slot.appendChild(pv); pv.style.display='block'; render(); if(mode==='3d'&&three) setTimeout(()=>three.resize(),30); }
+};
+window.pvRender = render;
+})();
 </script>
 </body>
 </html>
