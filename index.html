@@ -12,11 +12,14 @@
 <style>
 :root{
   color-scheme:only light;
-  --beige:#F4EDE3; --beige-2:#EADFCF; --sand:#D8C6AC;
-  --wood:#8A5A36; --wood-d:#5E3B22; --wood-l:#B78A5E;
-  --ink:#141210; --ink-2:#2A2622; --muted:#7A6E62;
-  --white:#FFFDF9; --ok:#2F7D4F; --err:#B3412E;
-  --r:18px; --shadow:0 10px 30px rgba(40,25,10,.10);
+  /* مكتبة ألوان Ahmed Saied Designs */
+  --beige:#F5F1EB; --beige-2:#E8DDD0; --sand:#D9C7B2; --cream:#FAF6F0; --cream-2:#EFE8DE;
+  --wood:#8B5A2B; --wood-d:#5C4033; --wood-l:#B0845A;
+  --ink:#1A1A1A; --ink-2:#2B2118; --muted:#7A5C44; --brown:#4A2C1A;
+  --white:#FFFFFF; --err:#A94438;
+  --gold:#C9A227; --gold-l:#E6D5A8; --gold-d:#A67C00;
+  --green:#3F5240; --green-m:#6B7F5E; --green-l:#CBD5C0;
+  --r:18px; --shadow:0 10px 30px rgba(43,33,24,.10);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -26,51 +29,51 @@ button,input,select,textarea{font:inherit;color:inherit}
 img{max-width:100%;display:block}
 
 /* ===== Header ===== */
-header.top{position:sticky;top:0;z-index:20;background:rgba(20,18,16,.94);backdrop-filter:blur(8px);color:var(--beige)}
+header.top{position:sticky;top:0;z-index:20;background:rgba(250,246,240,.95);backdrop-filter:blur(8px);color:var(--ink);border-bottom:1px solid var(--beige-2)}
 .top-in{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
-.brand-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--wood-l),var(--wood-d));display:grid;place-items:center;font-family:"El Messiri";font-weight:700;color:var(--white);font-size:15px;letter-spacing:.5px}
+.brand-mark{width:38px;height:38px;border-radius:10px;background:var(--gold);display:grid;place-items:center;font-family:"El Messiri";font-weight:700;color:var(--ink);font-size:15px;letter-spacing:.5px}
 .brand-name{font-weight:600;font-size:15px;direction:ltr;letter-spacing:.3px}
-.brand-name small{display:block;font-size:11px;color:var(--sand);font-weight:400}
-.top-cta{font-size:13px;color:var(--sand);text-decoration:none;border:1px solid rgba(216,198,172,.35);padding:7px 14px;border-radius:999px}
+.brand-name small{display:block;font-size:11px;color:var(--muted);font-weight:400}
+.top-cta{font-size:13px;color:var(--ink);font-weight:600;text-decoration:none;background:var(--gold-l);border:1px solid var(--gold);padding:7px 14px;border-radius:999px}
 
 /* ===== Hero ===== */
 .hero{position:relative;overflow:hidden;background:
-  radial-gradient(1200px 400px at 85% -10%,rgba(183,138,94,.35),transparent 60%),
-  linear-gradient(180deg,var(--ink) 0%,#221C17 100%);color:var(--beige);padding:56px 20px 110px;text-align:center}
+  radial-gradient(1200px 400px at 85% -10%,rgba(230,213,168,.45),transparent 60%),
+  linear-gradient(180deg,var(--cream) 0%,var(--cream-2) 100%);color:var(--ink);padding:56px 20px 110px;text-align:center}
 .hero::after{content:"";position:absolute;inset:auto 0 0 0;height:70px;background:var(--beige);border-radius:50% 50% 0 0/100% 100% 0 0}
-.eyebrow{display:inline-block;font-size:13px;color:var(--sand);border:1px solid rgba(216,198,172,.3);padding:5px 14px;border-radius:999px;margin-bottom:18px}
+.eyebrow{display:inline-block;font-size:13px;color:var(--muted);border:1px solid var(--sand);padding:5px 14px;border-radius:999px;margin-bottom:18px}
 .hero h1{font-size:clamp(34px,7vw,60px);font-weight:700;margin-bottom:12px}
-.hero h1 span{color:var(--wood-l)}
-.hero p{max-width:560px;margin:0 auto 26px;color:#CFC3B3;font-size:clamp(15px,2.4vw,18px)}
-.hero-steps{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;font-size:13px;color:#BFB2A1}
-.hero-steps b{color:var(--white);font-weight:600}
-.hero-steps span{background:rgba(255,255,255,.06);padding:6px 12px;border-radius:999px}
+.hero h1 span{color:var(--muted)}
+.hero p{max-width:560px;margin:0 auto 26px;color:var(--brown);font-size:clamp(15px,2.4vw,18px)}
+.hero-steps{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.hero-steps b{color:var(--ink);font-weight:700}
+.hero-steps span{background:var(--white);border:1px solid var(--beige-2);padding:6px 12px;border-radius:999px}
 
 /* ===== Wizard shell ===== */
 main{max-width:920px;margin:-70px auto 0;padding:0 16px 60px;position:relative;z-index:2}
-.card{background:var(--white);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;border:1px solid rgba(138,90,54,.10)}
+.card{background:var(--white);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;border:1px solid rgba(139,90,43,.12)}
 .progress{padding:22px 22px 0}
 .prog-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
 .ps{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;cursor:pointer;background:none;border:0;padding:0}
 .ps .dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;background:var(--beige-2);color:var(--muted);transition:.3s}
 .ps .lbl{font-size:12px;color:var(--muted);font-weight:500}
-.ps.active .dot{background:var(--ink);color:var(--white);box-shadow:0 0 0 5px rgba(20,18,16,.08)}
+.ps.active .dot{background:var(--gold);color:var(--ink);box-shadow:0 0 0 5px rgba(201,162,39,.18)}
 .ps.active .lbl{color:var(--ink);font-weight:600}
-.ps.done .dot{background:var(--wood);color:var(--white)}
+.ps.done .dot{background:var(--gold-l);color:var(--ink-2)}
 .ps:disabled{cursor:default}
 .bar{height:4px;background:var(--beige-2);border-radius:4px;overflow:hidden}
-.bar i{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--wood-l),var(--wood));border-radius:4px;transition:width .4s ease;margin-right:0}
+.bar i{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--gold-l),var(--gold));border-radius:4px;transition:width .4s ease;margin-right:0}
 
 .step{display:none;padding:26px 22px 8px;animation:fade .4s ease}
 .step.show{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .step-head{margin-bottom:20px}
-.step-num{font-size:12px;color:var(--wood);font-weight:600;letter-spacing:.5px}
+.step-num{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.5px}
 .step-head h2{font-size:clamp(22px,4.5vw,30px)}
 .step-head p{color:var(--muted);font-size:14px}
 .q{font-weight:600;font-size:16px;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
-.q::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--wood);transform:rotate(45deg)}
+.q::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--gold);transform:rotate(45deg)}
 
 /* option tiles */
 .grid{display:grid;gap:12px}
@@ -81,20 +84,20 @@ main{max-width:920px;margin:-70px auto 0;padding:0 16px 60px;position:relative;z
 .opt input{position:absolute;opacity:0;pointer-events:none}
 .tile{border:1.5px solid var(--beige-2);border-radius:var(--r);background:var(--white);padding:12px;text-align:center;transition:.2s;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
 .opt:hover .tile{border-color:var(--sand);transform:translateY(-2px)}
-.opt input:checked + .tile{border-color:var(--ink);background:#FBF7F1;box-shadow:0 0 0 3px rgba(20,18,16,.06)}
-.opt input:focus-visible + .tile{outline:3px solid var(--wood-l);outline-offset:2px}
-.tile .check{position:absolute;top:10px;left:10px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px;opacity:0;transform:scale(.6);transition:.2s}
+.opt input:checked + .tile{border-color:var(--gold-d);background:var(--cream);box-shadow:0 0 0 3px rgba(201,162,39,.18)}
+.opt input:focus-visible + .tile{outline:3px solid var(--gold);outline-offset:2px}
+.tile .check{position:absolute;top:10px;left:10px;width:22px;height:22px;border-radius:50%;background:var(--gold);color:var(--ink);display:grid;place-items:center;font-size:12px;font-weight:700;opacity:0;transform:scale(.6);transition:.2s}
 .opt input:checked + .tile .check{opacity:1;transform:none}
 .tile .t{font-weight:600;font-size:15px}
 .tile .s{font-size:12px;color:var(--muted)}
-.shape svg{width:100%;height:auto;aspect-ratio:1/1;border-radius:12px;background:#F7F1E8}
+.shape svg{width:100%;height:auto;aspect-ratio:1/1;border-radius:12px;background:var(--cream)}
 
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{cursor:pointer}
 .chip input{position:absolute;opacity:0;pointer-events:none}
 .chip span{display:inline-block;padding:9px 16px;border-radius:999px;border:1.5px solid var(--beige-2);font-size:14px;font-weight:500;background:var(--white);transition:.2s}
-.chip input:checked + span{background:var(--ink);color:var(--white);border-color:var(--ink)}
-.chip input:focus-visible + span{outline:3px solid var(--wood-l);outline-offset:2px}
+.chip input:checked + span{background:var(--gold);color:var(--ink);border-color:var(--gold-d)}
+.chip input:focus-visible + span{outline:3px solid var(--gold);outline-offset:2px}
 
 /* type: kitchen / dressing */
 .type .tile{flex-direction:row;padding:16px;justify-content:flex-start;gap:14px;text-align:right}
@@ -105,44 +108,44 @@ main{max-width:920px;margin:-70px auto 0;padding:0 16px 60px;position:relative;z
 .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink-2)}
 .inp{position:relative}
 .inp input,.inp select,textarea,.txt{width:100%;border:1.5px solid var(--beige-2);background:var(--white);border-radius:14px;padding:13px 14px;font-size:16px;outline:none;transition:.2s}
-.inp input:focus,textarea:focus,.txt:focus{border-color:var(--wood)}
+.inp input:focus,textarea:focus,.txt:focus{border-color:var(--gold-d)}
 .inp .unit{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted);pointer-events:none}
 .inp input[type=number]{padding-left:44px}
 .hint{font-size:12px;color:var(--muted);margin-top:5px}
-.err-msg{font-size:12.5px;color:var(--err);margin-top:6px;display:none}
+.err-msg{font-size:12.5px;color:var(--brown);font-weight:600;margin-top:6px;display:none}
 .invalid .err-msg{display:block}
 .invalid input,.invalid .txt{border-color:var(--err)}
-.group-err{color:var(--err);font-size:13px;margin-top:8px;display:none}
+.group-err{color:var(--brown);font-weight:600;font-size:13px;margin-top:8px;display:none}
 .group-err.on{display:block}
 textarea{min-height:80px;resize:vertical}
 
 /* plan preview */
 .plan-wrap{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start}
-.plan{background:#F7F1E8;border-radius:var(--r);padding:12px;text-align:center;position:sticky;top:80px}
+.plan{background:var(--cream);border-radius:var(--r);padding:12px;text-align:center;position:sticky;top:80px}
 .plan svg{width:100%;height:auto}
 .plan small{color:var(--muted);font-size:12px}
 
 /* swatches */
 .sw .tile{padding:10px 8px 12px}
-.swatch{width:100%;aspect-ratio:1/1;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06),0 4px 10px rgba(0,0,0,.06)}
+.swatch{width:100%;aspect-ratio:1/1;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(26,26,26,.08),0 4px 10px rgba(26,26,26,.06)}
 .sw .t{font-size:13px}
 .mat .tile{padding:14px 8px}
 .mat .mi{width:100%;height:46px;border-radius:10px}
 
 /* toggles */
 .toggle-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tg{background:#FBF7F1;border:1.5px solid var(--beige-2);border-radius:var(--r);padding:14px}
+.tg{background:var(--cream);border:1.5px solid var(--beige-2);border-radius:var(--r);padding:14px}
 .tg h4{font-size:14px;margin-bottom:10px;font-weight:600}
 .seg{display:grid;grid-template-columns:1fr 1fr;background:var(--beige-2);border-radius:12px;padding:4px;gap:4px}
 .seg label{cursor:pointer;position:relative}
 .seg input{position:absolute;opacity:0;pointer-events:none}
 .seg span{display:block;text-align:center;padding:9px 6px;border-radius:9px;font-size:14px;font-weight:500;transition:.2s}
-.seg input:checked + span{background:var(--white);box-shadow:0 2px 6px rgba(0,0,0,.08);font-weight:600}
-.seg input:focus-visible + span{outline:2px solid var(--wood)}
+.seg input:checked + span{background:var(--white);box-shadow:0 2px 6px rgba(26,26,26,.08);font-weight:600}
+.seg input:focus-visible + span{outline:2px solid var(--gold)}
 
 /* upload */
-.upload{border:2px dashed var(--sand);border-radius:var(--r);padding:22px;text-align:center;background:#FBF7F1;cursor:pointer;display:block;transition:.2s}
-.upload:hover{border-color:var(--wood)}
+.upload{border:2px dashed var(--sand);border-radius:var(--r);padding:22px;text-align:center;background:var(--cream);cursor:pointer;display:block;transition:.2s}
+.upload:hover{border-color:var(--gold)}
 .upload input{display:none}
 .upload .ui{width:52px;height:52px;margin:0 auto 8px;border-radius:50%;background:var(--white);display:grid;place-items:center}
 .upload b{display:block;font-size:15px}
@@ -151,52 +154,52 @@ textarea{min-height:80px;resize:vertical}
 .preview.on{display:flex}
 .preview img{width:64px;height:64px;object-fit:cover;border-radius:10px}
 .preview .pn{flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.preview button{background:none;border:0;color:var(--err);font-size:13px;cursor:pointer;font-weight:600}
+.preview button{background:none;border:0;color:var(--brown);text-decoration:underline;font-size:13px;cursor:pointer;font-weight:600}
 
 /* summary */
-.summary{margin-top:24px;background:var(--ink);color:var(--beige);border-radius:var(--r);padding:18px 18px 8px}
-.summary h3{font-size:18px;margin-bottom:10px;color:var(--white)}
-.sum-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14px}
-.sum-row span:first-child{color:#A99B8A;flex-shrink:0}
+.summary{margin-top:24px;background:var(--cream);border:1px solid var(--beige-2);color:var(--ink);border-radius:var(--r);padding:18px 18px 8px}
+.summary h3{font-size:18px;margin-bottom:10px;color:var(--ink)}
+.sum-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid rgba(26,26,26,.08);font-size:14px}
+.sum-row span:first-child{color:var(--muted);flex-shrink:0}
 .sum-row span:last-child{text-align:left;font-weight:500}
-.sum-sw{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-left:6px;border:1px solid rgba(255,255,255,.3)}
+.sum-sw{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-left:6px;border:1px solid rgba(26,26,26,.2)}
 
 /* nav */
 .nav{display:flex;gap:10px;justify-content:space-between;padding:18px 22px 24px;border-top:1px solid var(--beige-2);margin-top:22px;background:var(--white)}
 .btn{border:0;border-radius:14px;padding:14px 22px;font-weight:600;font-size:15px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
-.btn-dark{background:var(--ink);color:var(--white);flex:1;max-width:260px}
-.btn-dark:hover{background:var(--ink-2)}
+.btn-dark{background:var(--gold);color:var(--ink);font-weight:700;flex:1;max-width:260px}
+.btn-dark:hover{background:var(--gold-d)}
 .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--beige-2)}
 .btn-ghost:hover{border-color:var(--sand)}
 .btn[hidden]{display:none}
 
-.wa{display:flex;width:100%;margin-top:22px;background:#1FA855;color:#fff;font-size:clamp(16px,3.6vw,19px);padding:18px 20px;border-radius:18px;box-shadow:0 10px 24px rgba(31,168,85,.3);font-weight:700;text-decoration:none;align-items:center;justify-content:center;gap:10px;text-align:center}
-.wa:hover{background:#198F48}
+.wa{display:flex;width:100%;margin-top:22px;background:var(--green-l);color:var(--ink);border:2px solid var(--green-m);font-size:clamp(16px,3.6vw,19px);padding:18px 20px;border-radius:18px;box-shadow:0 10px 24px rgba(63,82,64,.22);font-weight:700;text-decoration:none;align-items:center;justify-content:center;gap:10px;text-align:center}
+.wa:hover{border-color:var(--green);box-shadow:0 12px 28px rgba(63,82,64,.32)}
 .wa svg{flex-shrink:0}
 .promise{display:flex;gap:12px;align-items:center;margin-top:14px;background:var(--beige);border-radius:14px;padding:14px 16px;font-size:14.5px;font-weight:500}
-.promise .pi{width:38px;height:38px;border-radius:50%;background:var(--wood);color:#fff;display:grid;place-items:center;flex-shrink:0}
-.after-note{display:none;margin-top:12px;font-size:13.5px;background:#FFF6E5;border:1px solid #F0D9A8;border-radius:12px;padding:10px 14px}
+.promise .pi{width:38px;height:38px;border-radius:50%;background:var(--gold-l);color:var(--ink);display:grid;place-items:center;flex-shrink:0}
+.after-note{display:none;margin-top:12px;font-size:13.5px;background:var(--cream);border:1px solid var(--gold-l);border-radius:12px;padding:10px 14px}
 .after-note.on{display:block}
 
 /* footer */
-footer{background:var(--ink);color:#A99B8A;text-align:center;padding:28px 20px;font-size:13px}
-footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
+footer{background:var(--cream-2);color:var(--muted);border-top:1px solid var(--beige-2);text-align:center;padding:28px 20px;font-size:13px}
+footer .brand{justify-content:center;margin-bottom:10px;color:var(--ink)}
 .feats{max-width:920px;margin:0 auto 50px;padding:0 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.feat{background:var(--white);border-radius:var(--r);padding:18px;border:1px solid rgba(138,90,54,.10)}
+.feat{background:var(--white);border-radius:var(--r);padding:18px;border:1px solid rgba(139,90,43,.12)}
 .feat b{display:block;font-family:"El Messiri";font-size:17px;margin-bottom:2px}
 .feat span{font-size:13.5px;color:var(--muted)}
 
 
 /* preview */
 .pv-slot{margin:6px 0 4px}
-#pvCard{display:none;background:#F7F1E8;border:1px solid var(--beige-2);border-radius:var(--r);overflow:hidden}
+#pvCard{display:none;background:var(--cream);border:1px solid var(--beige-2);border-radius:var(--r);overflow:hidden}
 .pv-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}
 .pv-top b{font-size:14px}
 .pv-tabs{display:flex;background:var(--beige-2);border-radius:10px;padding:3px;gap:3px}
 .pv-tab{border:0;background:transparent;padding:7px 14px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted);min-height:36px}
-.pv-tab.on{background:var(--ink);color:var(--white)}
-#pv2d{display:block;width:100%;height:auto;background:#EFE6D8}
-#pv3d{display:none;width:100%;height:340px;background:#EFE6D8;touch-action:none;position:relative}
+.pv-tab.on{background:var(--gold);color:var(--ink)}
+#pv2d{display:block;width:100%;height:auto;background:var(--cream-2)}
+#pv3d{display:none;width:100%;height:340px;background:var(--cream-2);touch-action:none;position:relative}
 #pv3d canvas{display:block}
 .pv-msg{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;color:var(--muted);font-size:14px}
 .pv-foot{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
@@ -276,12 +279,12 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
         <label class="opt shape"><input type="radio" name="shape" value="مطبخ حرف L">
           <div class="tile"><span class="check">✓</span>
             <svg viewBox="0 0 120 120" aria-hidden="true">
-              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D8C6AC" stroke-width="2" stroke-dasharray="4 4"/>
-              <rect x="18" y="18" width="84" height="20" rx="3" fill="#8A5A36"/>
-              <rect x="82" y="18" width="20" height="80" rx="3" fill="#8A5A36"/>
-              <rect x="18" y="18" width="84" height="5" fill="#141210" opacity=".75"/>
-              <rect x="97" y="18" width="5" height="80" fill="#141210" opacity=".75"/>
-              <circle cx="40" cy="28" r="5" fill="#F4EDE3"/><rect x="86" y="60" width="12" height="16" rx="2" fill="#F4EDE3"/>
+              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D9C7B2" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="18" y="18" width="84" height="20" rx="3" fill="#8B5A2B"/>
+              <rect x="82" y="18" width="20" height="80" rx="3" fill="#8B5A2B"/>
+              <rect x="18" y="18" width="84" height="5" fill="#1A1A1A" opacity=".75"/>
+              <rect x="97" y="18" width="5" height="80" fill="#1A1A1A" opacity=".75"/>
+              <circle cx="40" cy="28" r="5" fill="#EFE8DE"/><rect x="86" y="60" width="12" height="16" rx="2" fill="#EFE8DE"/>
             </svg>
             <span class="t">حرف L</span>
           </div>
@@ -289,14 +292,14 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
         <label class="opt shape"><input type="radio" name="shape" value="مطبخ حرف U">
           <div class="tile"><span class="check">✓</span>
             <svg viewBox="0 0 120 120" aria-hidden="true">
-              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D8C6AC" stroke-width="2" stroke-dasharray="4 4"/>
-              <rect x="18" y="18" width="84" height="20" rx="3" fill="#8A5A36"/>
-              <rect x="82" y="18" width="20" height="84" rx="3" fill="#8A5A36"/>
-              <rect x="18" y="18" width="20" height="84" rx="3" fill="#8A5A36"/>
-              <rect x="18" y="18" width="84" height="5" fill="#141210" opacity=".75"/>
-              <rect x="97" y="18" width="5" height="84" fill="#141210" opacity=".75"/>
-              <rect x="18" y="18" width="5" height="84" fill="#141210" opacity=".75"/>
-              <circle cx="60" cy="28" r="5" fill="#F4EDE3"/><rect x="86" y="62" width="12" height="16" rx="2" fill="#F4EDE3"/><rect x="22" y="62" width="12" height="16" rx="2" fill="#F4EDE3"/>
+              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D9C7B2" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="18" y="18" width="84" height="20" rx="3" fill="#8B5A2B"/>
+              <rect x="82" y="18" width="20" height="84" rx="3" fill="#8B5A2B"/>
+              <rect x="18" y="18" width="20" height="84" rx="3" fill="#8B5A2B"/>
+              <rect x="18" y="18" width="84" height="5" fill="#1A1A1A" opacity=".75"/>
+              <rect x="97" y="18" width="5" height="84" fill="#1A1A1A" opacity=".75"/>
+              <rect x="18" y="18" width="5" height="84" fill="#1A1A1A" opacity=".75"/>
+              <circle cx="60" cy="28" r="5" fill="#EFE8DE"/><rect x="86" y="62" width="12" height="16" rx="2" fill="#EFE8DE"/><rect x="22" y="62" width="12" height="16" rx="2" fill="#EFE8DE"/>
             </svg>
             <span class="t">حرف U</span>
           </div>
@@ -304,10 +307,10 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
         <label class="opt shape"><input type="radio" name="shape" value="مطبخ خط مستقيم">
           <div class="tile"><span class="check">✓</span>
             <svg viewBox="0 0 120 120" aria-hidden="true">
-              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D8C6AC" stroke-width="2" stroke-dasharray="4 4"/>
-              <rect x="18" y="18" width="84" height="22" rx="3" fill="#8A5A36"/>
-              <rect x="18" y="18" width="84" height="5" fill="#141210" opacity=".75"/>
-              <circle cx="45" cy="30" r="5" fill="#F4EDE3"/><rect x="70" y="25" width="16" height="11" rx="2" fill="#F4EDE3"/>
+              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D9C7B2" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="18" y="18" width="84" height="22" rx="3" fill="#8B5A2B"/>
+              <rect x="18" y="18" width="84" height="5" fill="#1A1A1A" opacity=".75"/>
+              <circle cx="45" cy="30" r="5" fill="#EFE8DE"/><rect x="70" y="25" width="16" height="11" rx="2" fill="#EFE8DE"/>
             </svg>
             <span class="t">خط مستقيم</span>
           </div>
@@ -315,14 +318,14 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
         <label class="opt shape"><input type="radio" name="shape" value="مطبخ بجزيرة">
           <div class="tile"><span class="check">✓</span>
             <svg viewBox="0 0 120 120" aria-hidden="true">
-              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D8C6AC" stroke-width="2" stroke-dasharray="4 4"/>
-              <rect x="18" y="18" width="84" height="20" rx="3" fill="#8A5A36"/>
-              <rect x="82" y="18" width="20" height="60" rx="3" fill="#8A5A36"/>
-              <rect x="18" y="18" width="84" height="5" fill="#141210" opacity=".75"/>
-              <rect x="97" y="18" width="5" height="60" fill="#141210" opacity=".75"/>
-              <rect x="32" y="62" width="40" height="24" rx="4" fill="#141210"/>
-              <rect x="35" y="65" width="34" height="18" rx="3" fill="#B78A5E"/>
-              <circle cx="38" cy="94" r="3.5" fill="#8A5A36"/><circle cx="52" cy="94" r="3.5" fill="#8A5A36"/><circle cx="66" cy="94" r="3.5" fill="#8A5A36"/>
+              <rect x="14" y="14" width="92" height="92" rx="4" fill="none" stroke="#D9C7B2" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="18" y="18" width="84" height="20" rx="3" fill="#8B5A2B"/>
+              <rect x="82" y="18" width="20" height="60" rx="3" fill="#8B5A2B"/>
+              <rect x="18" y="18" width="84" height="5" fill="#1A1A1A" opacity=".75"/>
+              <rect x="97" y="18" width="5" height="60" fill="#1A1A1A" opacity=".75"/>
+              <rect x="32" y="62" width="40" height="24" rx="4" fill="#1A1A1A"/>
+              <rect x="35" y="65" width="34" height="18" rx="3" fill="#B0845A"/>
+              <circle cx="38" cy="94" r="3.5" fill="#8B5A2B"/><circle cx="52" cy="94" r="3.5" fill="#8B5A2B"/><circle cx="66" cy="94" r="3.5" fill="#8B5A2B"/>
             </svg>
             <span class="t">بجزيرة</span>
           </div>
@@ -334,13 +337,13 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
       <div class="grid g2 type">
         <label class="opt"><input type="radio" name="type" value="مطبخ" checked>
           <div class="tile"><span class="check">✓</span>
-            <span class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5E3B22" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="9" width="18" height="12" rx="1.5"/><path d="M3 13h18M12 13v8M8 5v4M16 5v4M6 3h4M14 3h4"/></svg></span>
+            <span class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#A67C00" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="9" width="18" height="12" rx="1.5"/><path d="M3 13h18M12 13v8M8 5v4M16 5v4M6 3h4M14 3h4"/></svg></span>
             <div><span class="t">مطبخ</span><div class="s">وحدات أرضية وعلوية</div></div>
           </div>
         </label>
         <label class="opt"><input type="radio" name="type" value="دريسنج">
           <div class="tile"><span class="check">✓</span>
-            <span class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5E3B22" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M12 3v18M3 8h9M7 8v3l-2 2M9.5 15h0M14.5 15h0"/></svg></span>
+            <span class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#A67C00" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M12 3v18M3 8h9M7 8v3l-2 2M9.5 15h0M14.5 15h0"/></svg></span>
             <div><span class="t">دريسنج</span><div class="s">غرفة ملابس / دولاب</div></div>
           </div>
         </label>
@@ -430,11 +433,11 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
 
       <div class="q">الخامة</div>
       <div class="grid g5 mat">
-        <label class="opt"><input type="radio" name="material" value="كونتر"><div class="tile"><span class="check">✓</span><div class="mi" style="background:repeating-linear-gradient(90deg,#C9AE8B 0 3px,#BFA27D 3px 7px)"></div><span class="t">كونتر</span><span class="s">اقتصادي</span></div></label>
-        <label class="opt"><input type="radio" name="material" value="MDF"><div class="tile"><span class="check">✓</span><div class="mi" style="background:linear-gradient(135deg,#B58D66,#9C7650)"></div><span class="t">MDF</span><span class="s">عملي</span></div></label>
-        <label class="opt"><input type="radio" name="material" value="بولي لاك"><div class="tile"><span class="check">✓</span><div class="mi" style="background:linear-gradient(135deg,#F7F2EA 0%,#E5DACA 55%,#FFFFFF 60%,#E5DACA 70%)"></div><span class="t">بولي لاك</span><span class="s">مطفي / لامع</span></div></label>
-        <label class="opt"><input type="radio" name="material" value="أكريليك"><div class="tile"><span class="check">✓</span><div class="mi" style="background:linear-gradient(120deg,#1E1B18 0%,#3A332D 40%,#8E8378 46%,#2A2520 52%,#1E1B18 100%)"></div><span class="t">أكريليك</span><span class="s">هاي جلوس</span></div></label>
-        <label class="opt"><input type="radio" name="material" value="خشب طبيعي"><div class="tile"><span class="check">✓</span><div class="mi" style="background:repeating-linear-gradient(100deg,#7A4A2A 0 4px,#8F5C36 4px 9px,#6E4224 9px 11px,#9A673F 11px 16px)"></div><span class="t">خشب طبيعي</span><span class="s">فاخر</span></div></label>
+        <label class="opt"><input type="radio" name="material" value="كونتر"><div class="tile"><span class="check">✓</span><div class="mi" style="background:repeating-linear-gradient(90deg,#D2B48C 0 3px,#B99F83 3px 7px)"></div><span class="t">كونتر</span><span class="s">اقتصادي</span></div></label>
+        <label class="opt"><input type="radio" name="material" value="MDF"><div class="tile"><span class="check">✓</span><div class="mi" style="background:linear-gradient(135deg,#B0845A,#B0845A)"></div><span class="t">MDF</span><span class="s">عملي</span></div></label>
+        <label class="opt"><input type="radio" name="material" value="بولي لاك"><div class="tile"><span class="check">✓</span><div class="mi" style="background:linear-gradient(135deg,#F5F1EB 0%,#E8DDD0 55%,#FFFFFF 60%,#E8DDD0 70%)"></div><span class="t">بولي لاك</span><span class="s">مطفي / لامع</span></div></label>
+        <label class="opt"><input type="radio" name="material" value="أكريليك"><div class="tile"><span class="check">✓</span><div class="mi" style="background:linear-gradient(120deg,#1A1A1A 0%,#333333 40%,#6B6B6B 46%,#2B2118 52%,#1A1A1A 100%)"></div><span class="t">أكريليك</span><span class="s">هاي جلوس</span></div></label>
+        <label class="opt"><input type="radio" name="material" value="خشب طبيعي"><div class="tile"><span class="check">✓</span><div class="mi" style="background:repeating-linear-gradient(100deg,#8B5A2B 0 4px,#8B5A2B 4px 9px,#8B5A2B 9px 11px,#8B5A2B 11px 16px)"></div><span class="t">خشب طبيعي</span><span class="s">فاخر</span></div></label>
       </div>
       <div class="group-err" id="err-material">من فضلك اختار الخامة</div>
 
@@ -491,7 +494,7 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
       <div class="q">صورة المطبخ الحالي (اختياري)</div>
       <label class="upload" for="photo">
         <input id="photo" type="file" accept="image/*">
-        <div class="ui"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8A5A36" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></div>
+        <div class="ui"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#A67C00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></div>
         <b>ارفع صورة من الموبايل</b>
         <small>صوّر المطبخ دلوقتي أو اختار من المعرض</small>
       </label>
@@ -501,11 +504,11 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
       <div class="summary" id="summary"></div>
 
       <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.24.68-1.42 1.3-1.95 1.34-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.92-4.66-4.1-.13-.18-1.1-1.47-1.1-2.81 0-1.33.7-1.99.95-2.26.24-.27.53-.34.71-.34h.51c.16 0 .38-.06.6.46.24.55.79 1.9.86 2.04.07.14.11.3.02.48-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.9 1.05.93 1.93 1.22 2.2 1.36.27.14.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.6-.14.25.09 1.58.75 1.85.88.27.14.45.2.52.32.07.11.07.66-.17 1.33z"/></svg>
-        ابعت التصميم لـ ahmedsaied-designs على واتساب
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#3F5240" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.24.68-1.42 1.3-1.95 1.34-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.92-4.66-4.1-.13-.18-1.1-1.47-1.1-2.81 0-1.33.7-1.99.95-2.26.24-.27.53-.34.71-.34h.51c.16 0 .38-.06.6.46.24.55.79 1.9.86 2.04.07.14.11.3.02.48-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.9 1.05.93 1.93 1.22 2.2 1.36.27.14.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.6-.14.25.09 1.58.75 1.85.88.27.14.45.2.52.32.07.11.07.66-.17 1.33z"/></svg>
+        <span>ابعت التصميم لـ <span dir="ltr" style="white-space:nowrap">ahmedsaied-designs</span> على واتساب</span>
       </a>
-      <div class="after-note" id="afterNote">📷 بعد ما واتساب يفتح، ابعت صورة المطبخ في نفس المحادثة علشان واتساب مش بيسمح نرفق الصورة تلقائي.</div>
-      <div class="promise"><span class="pi">⏱</span>هنكلمك في خلال 24 ساعة ونقولك التكلفة المبدئية</div>
+      <div class="after-note" id="afterNote">بعد ما واتساب يفتح، ابعت صورة المطبخ في نفس المحادثة علشان واتساب مش بيسمح نرفق الصورة تلقائي.</div>
+      <div class="promise"><span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A67C00" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>هنكلمك في خلال 24 ساعة ونقولك التكلفة المبدئية</div>
     </section>
 
     <div class="nav">
@@ -541,8 +544,8 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
 رقم الواتساب: 
 المنطقة (المعادي / العبور / التجمع / مدينة نصر / أخرى): </textarea>
     <button type="submit" class="wa" style="border:0;cursor:pointer">ابعت التصميم لـ ahmedsaied-designs على واتساب</button>
-    <p class="hint" style="margin-top:10px">📷 لو عندك صورة للمطبخ الحالي، ابعتها في نفس المحادثة بعد ما واتساب يفتح.</p>
-    <div class="promise"><span class="pi">⏱</span>هنكلمك في خلال 24 ساعة ونقولك التكلفة المبدئية</div>
+    <p class="hint" style="margin-top:10px">لو عندك صورة للمطبخ الحالي، ابعتها في نفس المحادثة بعد ما واتساب يفتح.</p>
+    <div class="promise"><span class="pi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A67C00" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>هنكلمك في خلال 24 ساعة ونقولك التكلفة المبدئية</div>
   </form>
 </main>
 </noscript>
@@ -562,17 +565,17 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
 const WHATSAPP_NUMBER = "201117933299";
 
 const COLORS = [
-  {n:"أبيض", bg:"#F8F6F2"},
-  {n:"بيج", bg:"#E3D3BC"},
-  {n:"رمادي", bg:"#8E8C88"},
-  {n:"كافيه", bg:"#6B4A35"},
-  {n:"خشبي فاتح", bg:"repeating-linear-gradient(100deg,#D6B48A 0 5px,#C9A479 5px 9px,#DDBE96 9px 14px)", hex:"#D0AE83"},
-  {n:"خشبي غامق", bg:"repeating-linear-gradient(100deg,#5A3620 0 5px,#4A2C19 5px 9px,#64402A 9px 14px)", hex:"#56341F"},
-  {n:"أخضر زيتي", bg:"#5C6345"},
-  {n:"كحلي", bg:"#1F2C43"},
-  {n:"جوز ASD", bg:"url(walnut.jpg) center/cover, repeating-linear-gradient(95deg,#8A5F46 0 5px,#74503A 5px 9px,#9A6C52 9px 14px)", hex:"#8A5F46"},
-  {n:"بيج ASD", bg:"linear-gradient(135deg,#C9B9AB 0%,#BAA899 45%,#D3C6BA 50%,#BAA899 58%)", hex:"#BAA899"},
-  {n:"جوز + بيج ASD", bg:"linear-gradient(90deg,#BAA899 0 55%,transparent 55%), url(walnut.jpg) center/cover, #8A5F46", hex:"#BAA899"},
+  {n:"أبيض", bg:"#FFFFFF"},
+  {n:"بيج", bg:"#D9C7B2"},
+  {n:"رمادي", bg:"#A6A6A6"},
+  {n:"كافيه", bg:"#7A5C44"},
+  {n:"خشبي فاتح", bg:"repeating-linear-gradient(100deg,#D2B48C 0 5px,#C19A6B 5px 9px,#E6D5B8 9px 14px)", hex:"#D2B48C"},
+  {n:"خشبي غامق", bg:"repeating-linear-gradient(100deg,#5C4033 0 5px,#3E2C22 5px 9px,#8B5A2B 9px 14px)", hex:"#5C4033"},
+  {n:"أخضر زيتي", bg:"#6B7F5E"},
+  {n:"كحلي", bg:"#1F2A3A"},
+  {n:"جوز ASD", bg:"url(walnut.jpg) center/cover, repeating-linear-gradient(95deg,#8B5A2B 0 5px,#5C4033 5px 9px,#B0845A 9px 14px)", hex:"#8B5A2B"},
+  {n:"بيج ASD", bg:"linear-gradient(135deg,#CDB79C 0%,#B99F83 45%,#D9C7B2 50%,#B99F83 58%)", hex:"#B99F83"},
+  {n:"جوز + بيج ASD", bg:"linear-gradient(90deg,#B99F83 0 55%,transparent 55%), url(walnut.jpg) center/cover, #8B5A2B", hex:"#B99F83"},
 ];
 const colorsEl = document.getElementById('colors');
 colorsEl.innerHTML = COLORS.map(c=>`
@@ -663,28 +666,28 @@ function drawPlan(){
   const s = 160/Math.max(L,W), w=Math.max(60,L*s), h=Math.max(60,W*s);
   const x=(200-w)/2, y=(200-h)/2, d=Math.min(22,Math.min(w,h)*.22);
   const shape=val('shape')||'مطبخ حرف L', isDress=val('type')==='دريسنج';
-  const wood = isDress ? '#5E3B22' : '#8A5A36';
-  let g = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#FFFDF9" stroke="#141210" stroke-width="3"/>`;
+  const wood = isDress ? '#4A2C1A' : '#8B5A2B';
+  let g = `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="3"/>`;
   const run = (rx,ry,rw,rh)=>`<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="${wood}" rx="2"/>`;
   g += run(x+2,y+2,w-4,d);                         // back wall
   if(/L|U|جزيرة/.test(shape)) g += run(x+w-d-2,y+2,d,h*(/جزيرة/.test(shape)?.65:1)-4);
   if(/U/.test(shape)) g += run(x+2,y+2,d,h-4);
-  if(/جزيرة/.test(shape)) g += `<rect x="${x+w*.22}" y="${y+h*.55}" width="${w*.4}" height="${h*.2}" rx="3" fill="#141210"/>`;
+  if(/جزيرة/.test(shape)) g += `<rect x="${x+w*.22}" y="${y+h*.55}" width="${w*.4}" height="${h*.2}" rx="3" fill="#1A1A1A"/>`;
   // window
   const win=val('window');
-  const wc="#7FB3C9";
+  const wc="#7A8FA6";
   if(win==='الحيطة اللي قدامك') g+=`<rect x="${x+w*.35}" y="${y-3}" width="${w*.3}" height="6" fill="${wc}"/>`;
   if(win==='الحيطة اليمين') g+=`<rect x="${x+w-3}" y="${y+h*.35}" width="6" height="${h*.3}" fill="${wc}"/>`;
   if(win==='الحيطة الشمال') g+=`<rect x="${x-3}" y="${y+h*.35}" width="6" height="${h*.3}" fill="${wc}"/>`;
   // door
   const door=val('door'), dw=Math.min(w,h)*.28;
-  if(door==='الحيطة اللي ورايا') g+=`<rect x="${x+w*.5-dw/2}" y="${y+h-3}" width="${dw}" height="6" fill="#F4EDE3"/><path d="M${x+w*.5-dw/2} ${y+h} A${dw} ${dw} 0 0 1 ${x+w*.5+dw/2} ${y+h-dw}" fill="none" stroke="#B78A5E" stroke-dasharray="3 3"/>`;
-  if(door==='الحيطة اليمين') g+=`<rect x="${x+w-3}" y="${y+h-dw-8}" width="6" height="${dw}" fill="#F4EDE3"/>`;
-  if(door==='الحيطة الشمال') g+=`<rect x="${x-3}" y="${y+h-dw-8}" width="6" height="${dw}" fill="#F4EDE3"/>`;
-  if(door==='مفتوح على الصالة') g+=`<rect x="${x+6}" y="${y+h-3}" width="${w-12}" height="6" fill="#F4EDE3"/>`;
+  if(door==='الحيطة اللي ورايا') g+=`<rect x="${x+w*.5-dw/2}" y="${y+h-3}" width="${dw}" height="6" fill="#EFE8DE"/><path d="M${x+w*.5-dw/2} ${y+h} A${dw} ${dw} 0 0 1 ${x+w*.5+dw/2} ${y+h-dw}" fill="none" stroke="#B0845A" stroke-dasharray="3 3"/>`;
+  if(door==='الحيطة اليمين') g+=`<rect x="${x+w-3}" y="${y+h-dw-8}" width="6" height="${dw}" fill="#EFE8DE"/>`;
+  if(door==='الحيطة الشمال') g+=`<rect x="${x-3}" y="${y+h-dw-8}" width="6" height="${dw}" fill="#EFE8DE"/>`;
+  if(door==='مفتوح على الصالة') g+=`<rect x="${x+6}" y="${y+h-3}" width="${w-12}" height="6" fill="#EFE8DE"/>`;
   // labels
-  g += `<text x="100" y="${y-8}" text-anchor="middle" font-size="10" fill="#7A6E62">${toAr(L)} سم</text>`;
-  g += `<text x="${x-8}" y="${y+h/2}" text-anchor="middle" font-size="10" fill="#7A6E62" transform="rotate(-90 ${x-8} ${y+h/2})">${toAr(W)} سم</text>`;
+  g += `<text x="100" y="${y-8}" text-anchor="middle" font-size="10" fill="#6B6B6B">${toAr(L)} سم</text>`;
+  g += `<text x="${x-8}" y="${y+h/2}" text-anchor="middle" font-size="10" fill="#6B6B6B" transform="rotate(-90 ${x-8} ${y+h/2})">${toAr(W)} سم</text>`;
   $('#planSvg').innerHTML = g;
   $('#planCap').textContent = `${isDress?'دريسنج':'مطبخ'} · ${shape.replace('مطبخ ','')} · معاينة تقريبية`;
 }
@@ -768,9 +771,9 @@ const box3d = document.getElementById('pv3d');
 const tabs = [...document.querySelectorAll('.pv-tab')];
 let mode = '2d', three = null, loading3d = false, rebuildT = null;
 
-const WALNUT = ['#8A5F46','#6B4533','#A0735A'];
-const WOOD = {'خشبي فاتح':['#D2AE82','#B98F60','#E0C29A'], 'خشبي غامق':['#5A3620','#3F2516','#6E4629'], 'جوز ASD':WALNUT};
-const HEX = {'أبيض':'#F2F0EB','بيج':'#E2D2BA','رمادي':'#8C8A86','كافيه':'#6B4A35','خشبي فاتح':'#CFAA7E','خشبي غامق':'#55331E','أخضر زيتي':'#5A6243','كحلي':'#1F2B42','جوز ASD':'#8A5F46','بيج ASD':'#BAA899','جوز + بيج ASD':'#BAA899'};
+const WALNUT = ['#8B5A2B','#5C4033','#B0845A'];
+const WOOD = {'خشبي فاتح':['#D2B48C','#C19A6B','#E6D5B8'], 'خشبي غامق':['#5C4033','#3E2C22','#8B5A2B'], 'جوز ASD':WALNUT};
+const HEX = {'أبيض':'#FFFFFF','بيج':'#D9C7B2','رمادي':'#A6A6A6','كافيه':'#7A5C44','خشبي فاتح':'#D2B48C','خشبي غامق':'#5C4033','أخضر زيتي':'#6B7F5E','كحلي':'#1F2A3A','جوز ASD':'#8B5A2B','بيج ASD':'#B99F83','جوز + بيج ASD':'#B99F83'};
 
 function st(){
   const g = n => (document.querySelector(`input[name="${n}"]:checked`)||{}).value || '';
@@ -779,16 +782,18 @@ function st(){
   return {
     shape: g('shape') || 'مطبخ حرف L', dress: g('type') === 'دريسنج',
     L: num('len',320,50,2000), W: num('wid',260,50,2000), H: num('hei',280,180,600),
-    color, hex: HEX[color]||'#E2D2BA', wood: WOOD[color]||null, accent: color==='جوز + بيج ASD' ? WALNUT : null,
+    color, hex: HEX[color]||'#D9C7B2', wood: WOOD[color]||null, accent: color==='جوز + بيج ASD' ? WALNUT : null,
     mat: g('material') || 'MDF', led: g('led') === 'أيوه',
     window: g('window'), fridge: document.getElementById('fridge').value, stove: document.getElementById('stove').value
   };
 }
+const ASD_PAL = ['#E6D5B8','#D2B48C','#C19A6B','#B0845A','#8B5A2B','#5C4033','#3E2C22','#FFFFFF','#F5F1EB','#FAF6F0','#EFE8DE','#E8DDD0','#D9C7B2','#B99F83','#CDB79C','#F2F2F2','#D9D9D9','#A6A6A6','#6B6B6B','#333333','#7A5C44','#2B2118','#4A2C1A','#1A1A1A','#000000','#DCE8F0','#7A8FA6','#3A5A7C','#2C3E55','#1F2A3A','#121A26','#CBD5C0','#6B7F5E','#3F5240','#2E3B2F','#1E2A1F','#E6D5A8','#C9A227','#A67C00','#B87333','#E0BFB8','#A94438','#D08C4A','#D9A441'];
+function snap(r,g,b){ let best='#000000', bd=1e9; for(const p of ASD_PAL){ const n=parseInt(p.slice(1),16), dr=(n>>16)-r, dg=((n>>8)&255)-g, db=(n&255)-b, d=2*dr*dr+4*dg*dg+3*db*db; if(d<bd){bd=d;best=p;} } return best; }
 function shade(hex, f){ const n=parseInt(hex.slice(1),16); let r=n>>16,g=(n>>8)&255,b=n&255; const t=f<0?0:255, p=Math.abs(f);
-  r=Math.round((t-r)*p+r); g=Math.round((t-g)*p+g); b=Math.round((t-b)*p+b); return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1); }
+  r=Math.round((t-r)*p+r); g=Math.round((t-g)*p+g); b=Math.round((t-b)*p+b); return snap(r,g,b); }
 function lum(hex){ const n=parseInt(hex.slice(1),16); return (0.3*(n>>16)+0.59*((n>>8)&255)+0.11*(n&255))/255; }
 const isL = s=>/L|جزيرة/.test(s.shape), isU = s=>/U/.test(s.shape), isIsland = s=>/جزيرة/.test(s.shape);
-const counterHex = s => lum(s.wood?s.wood[0]:s.hex) > 0.5 ? '#36322E' : '#ECE7E0';
+const counterHex = s => lum(s.wood?s.wood[0]:s.hex) > 0.5 ? '#333333' : '#EFE8DE';
 
 /* =================== 2D =================== */
 function draw2D(){
@@ -809,30 +814,30 @@ function draw2D(){
   <pattern id="pvWood" width="12" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(${s.dress?0:90})">
     <rect width="12" height="60" fill="${base}"/><path d="M2 0 C3 20 1 40 2 60" stroke="${s.wood?s.wood[1]:shade(base,-.1)}" stroke-width="1.6" fill="none" opacity=".7"/>
     <path d="M7 0 C8 25 6 35 7.5 60" stroke="${s.wood?s.wood[2]:shade(base,.1)}" stroke-width="1" fill="none" opacity=".8"/><path d="M10 0 C11 30 9 45 10 60" stroke="${s.wood?s.wood[1]:shade(base,-.1)}" stroke-width=".6" fill="none" opacity=".6"/></pattern>
-  <pattern id="pvWalnut" width="30" height="95" patternUnits="userSpaceOnUse"><rect width="30" height="95" fill="#8A5F46"/><path d="M5 0 C7 30 3 60 5 95" stroke="#6B4533" stroke-width="2" fill="none" opacity=".7"/><path d="M17 0 C19 35 15 55 17.5 95" stroke="#A0735A" stroke-width="1.4" fill="none" opacity=".8"/><path d="M25 0 C26 30 24 70 25 95" stroke="#6B4533" stroke-width="1" fill="none" opacity=".6"/><image href="walnut.jpg" width="30" height="95" preserveAspectRatio="xMidYMid slice"/></pattern>
+  <pattern id="pvWalnut" width="30" height="95" patternUnits="userSpaceOnUse"><rect width="30" height="95" fill="#8B5A2B"/><path d="M5 0 C7 30 3 60 5 95" stroke="#5C4033" stroke-width="2" fill="none" opacity=".7"/><path d="M17 0 C19 35 15 55 17.5 95" stroke="#B0845A" stroke-width="1.4" fill="none" opacity=".8"/><path d="M25 0 C26 30 24 70 25 95" stroke="#5C4033" stroke-width="1" fill="none" opacity=".6"/><image href="walnut.jpg" width="30" height="95" preserveAspectRatio="xMidYMid slice"/></pattern>
   <pattern id="pvGrain" width="9" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(${s.dress?0:90})"><path d="M2 0 C3 20 1 40 2 60" stroke="#000" stroke-width="1.2" fill="none" opacity=".08"/><path d="M6 0 C7 25 5 35 6.5 60" stroke="#fff" stroke-width=".8" fill="none" opacity=".1"/></pattern>
   <linearGradient id="pvShadeV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".10"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient>
   <linearGradient id="pvGloss" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="${gloss}"/><stop offset=".38" stop-color="#fff" stop-opacity="${gloss*0.15}"/><stop offset=".42" stop-color="#fff" stop-opacity="0"/></linearGradient>
-  <linearGradient id="pvSteel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#D9DDDF"/><stop offset=".45" stop-color="#F3F5F6"/><stop offset=".55" stop-color="#BFC4C7"/><stop offset="1" stop-color="#E4E7E9"/></linearGradient>
-  <linearGradient id="pvSteelV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEF0F1"/><stop offset="1" stop-color="#AEB3B6"/></linearGradient>
-  <linearGradient id="pvGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E2A27"/><stop offset=".45" stop-color="#151311"/><stop offset=".5" stop-color="#3A3531"/><stop offset=".55" stop-color="#151311"/></linearGradient>
-  <linearGradient id="pvSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFE0EE"/><stop offset="1" stop-color="#EAF5F8"/></linearGradient>
+  <linearGradient id="pvSteel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#D9D9D9"/><stop offset=".45" stop-color="#F2F2F2"/><stop offset=".55" stop-color="#D9D9D9"/><stop offset="1" stop-color="#F2F2F2"/></linearGradient>
+  <linearGradient id="pvSteelV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2F2F2"/><stop offset="1" stop-color="#A6A6A6"/></linearGradient>
+  <linearGradient id="pvGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#333333"/><stop offset=".45" stop-color="#1A1A1A"/><stop offset=".5" stop-color="#333333"/><stop offset=".55" stop-color="#1A1A1A"/></linearGradient>
+  <linearGradient id="pvSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DCE8F0"/><stop offset="1" stop-color="#F2F2F2"/></linearGradient>
   <linearGradient id="pvUnder" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
-  <linearGradient id="pvLed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE2A0" stop-opacity=".9"/><stop offset="1" stop-color="#FFE2A0" stop-opacity="0"/></linearGradient>
-  <radialGradient id="pvPend" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#FFE7B5" stop-opacity=".55"/><stop offset="1" stop-color="#FFE7B5" stop-opacity="0"/></radialGradient>
-  <linearGradient id="pvWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3EEE6"/><stop offset="1" stop-color="#E9E1D5"/></linearGradient>
-  <pattern id="pvTile" width="${Math.max(6,15*sc)}" height="${Math.max(3,7.5*sc)}" patternUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="#F5F2EC"/><path d="M0 .3 H100 M.3 0 V100" stroke="#D8D0C4" stroke-width=".6"/></pattern>
-  <pattern id="pvQuartz" width="24" height="10" patternUnits="userSpaceOnUse"><rect width="24" height="10" fill="${cnt}"/><circle cx="4" cy="3" r=".5" fill="${cntDark?'#5a554f':'#cfc8bd'}"/><circle cx="15" cy="7" r=".4" fill="${cntDark?'#4c4843':'#d8d2c8'}"/><circle cx="20" cy="2" r=".35" fill="${cntDark?'#625c56':'#c7bfb3'}"/></pattern>
-  <linearGradient id="pvFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CDBEA8"/><stop offset="1" stop-color="#E3D7C5"/></linearGradient>
+  <linearGradient id="pvLed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E6D5A8" stop-opacity=".9"/><stop offset="1" stop-color="#E6D5A8" stop-opacity="0"/></linearGradient>
+  <radialGradient id="pvPend" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#E6D5A8" stop-opacity=".55"/><stop offset="1" stop-color="#E6D5A8" stop-opacity="0"/></radialGradient>
+  <linearGradient id="pvWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F5F1EB"/><stop offset="1" stop-color="#E8DDD0"/></linearGradient>
+  <pattern id="pvTile" width="${Math.max(6,15*sc)}" height="${Math.max(3,7.5*sc)}" patternUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="#F5F1EB"/><path d="M0 .3 H100 M.3 0 V100" stroke="#E8DDD0" stroke-width=".6"/></pattern>
+  <pattern id="pvQuartz" width="24" height="10" patternUnits="userSpaceOnUse"><rect width="24" height="10" fill="${cnt}"/><circle cx="4" cy="3" r=".5" fill="${cntDark?'#6B6B6B':'#D9C7B2'}"/><circle cx="15" cy="7" r=".4" fill="${cntDark?'#333333':'#E8DDD0'}"/><circle cx="20" cy="2" r=".35" fill="${cntDark?'#6B6B6B':'#D9C7B2'}"/></pattern>
+  <linearGradient id="pvFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9C7B2"/><stop offset="1" stop-color="#E8DDD0"/></linearGradient>
   <filter id="pvBlur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
   <filter id="pvSoft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
   </defs>`;
   // floor with perspective tiles
   o += `<rect x="0" y="${floorY}" width="${VW}" height="${270-floorY}" fill="url(#pvFloor)"/>`;
-  for(let k=1;k<4;k++){ const yy = floorY + (270-floorY)*(k*k)/16; o += `<line x1="0" y1="${yy}" x2="${VW}" y2="${yy}" stroke="#B9A88F" stroke-width=".5" opacity=".6"/>`; }
-  for(let k=-6;k<=6;k++){ const xt = VW/2 + k*28, xb = VW/2 + k*60; o += `<line x1="${xt}" y1="${floorY}" x2="${xb}" y2="270" stroke="#B9A88F" stroke-width=".5" opacity=".5"/>`; }
+  for(let k=1;k<4;k++){ const yy = floorY + (270-floorY)*(k*k)/16; o += `<line x1="0" y1="${yy}" x2="${VW}" y2="${yy}" stroke="#B99F83" stroke-width=".5" opacity=".6"/>`; }
+  for(let k=-6;k<=6;k++){ const xt = VW/2 + k*28, xb = VW/2 + k*60; o += `<line x1="${xt}" y1="${floorY}" x2="${xb}" y2="270" stroke="#B99F83" stroke-width=".5" opacity=".5"/>`; }
   const sidePoly = (left)=>{ const xa = left? x0 : x0+wW, xb = left? x0-sideW : x0+wW+sideW;
-    return `<polygon points="${xa},${ceil} ${xb},${ceil-14} ${xb},${floorY+22} ${xa},${floorY}" fill="#E2D8C8"/>`; };
+    return `<polygon points="${xa},${ceil} ${xb},${ceil-14} ${xb},${floorY+22} ${xa},${floorY}" fill="#E8DDD0"/>`; };
   if(sideR) o += sidePoly(false);
   if(sideL) o += sidePoly(true);
   o += `<rect x="${x0}" y="${ceil}" width="${wW}" height="${wH}" fill="url(#pvWall)"/>`;
@@ -856,13 +861,13 @@ function draw2D(){
     for(let k=1;k<3;k++){ const t=k/3, xx = xa+(xb-xa)*t; p += `<line x1="${xx}" y1="${bt+5*t}" x2="${xx}" y2="${floorY+18*t-(s.dress?0:10*sc)}" stroke="${edge}" stroke-width=".6"/>`; }
     if(!s.dress){
       p += `<polygon points="${xa},${y(91)} ${xb},${y(91)+5} ${xb},${y(87)+5} ${xa},${y(87)}" fill="${cnt}"/>`;
-      p += `<polygon points="${xa},${y(10)} ${xb},${y(10)+15} ${xb},${floorY+18} ${xa},${floorY}" fill="#24201D"/>`;
+      p += `<polygon points="${xa},${y(10)} ${xb},${y(10)+15} ${xb},${floorY+18} ${xa},${floorY}" fill="#1A1A1A"/>`;
       if(s.window!==(left?'الحيطة الشمال':'الحيطة اليمين')){
         const ut=y(215), ub=y(145);
         p += `<polygon points="${xa},${ut} ${xb},${ut-6} ${xb},${ub+3} ${xa},${ub}" fill="${door}" stroke="${edge}" stroke-width=".5"/><polygon points="${xa},${ut} ${xb},${ut-6} ${xb},${ub+3} ${xa},${ub}" fill="#000" opacity="${sh}"/>`;
         if(s.led) p += `<polygon points="${xa},${ub} ${xb},${ub+3} ${xb},${y(91)+5} ${xa},${y(91)}" fill="url(#pvLed)" opacity=".5"/>`;
       } else {
-        p += `<polygon points="${xa},${y(210)} ${xb},${y(210)-6} ${xb},${y(120)+3} ${xa},${y(120)}" fill="url(#pvSky)" stroke="#3A332D" stroke-width="2"/>`;
+        p += `<polygon points="${xa},${y(210)} ${xb},${y(210)-6} ${xb},${y(120)+3} ${xa},${y(120)}" fill="url(#pvSky)" stroke="#333333" stroke-width="2"/>`;
       }
     }
     return p;
@@ -886,8 +891,8 @@ function draw2D(){
       const x = x0 + i*mw;
       if(i===fr){
         const fy = y(196), fh = 196*sc;
-        o += `<rect x="${x+1}" y="${fy}" width="${mw-2}" height="${fh}" rx="2.5" fill="url(#pvSteel)" stroke="#9AA0A4" stroke-width=".6"/>
-              <line x1="${x+1}" y1="${y(118)}" x2="${x+mw-1}" y2="${y(118)}" stroke="#8C9296" stroke-width=".8"/>
+        o += `<rect x="${x+1}" y="${fy}" width="${mw-2}" height="${fh}" rx="2.5" fill="url(#pvSteel)" stroke="#A6A6A6" stroke-width=".6"/>
+              <line x1="${x+1}" y1="${y(118)}" x2="${x+mw-1}" y2="${y(118)}" stroke="#A6A6A6" stroke-width=".8"/>
               ${vBar(x+4, y(178), 40*sc)}${vBar(x+4, y(110), 40*sc)}
               <rect x="${x+1}" y="${fy}" width="${mw-2}" height="${fh}" rx="2.5" fill="url(#pvGloss)" opacity=".6"/>`;
         o += panel(x, y(250), mw, 52*sc);
@@ -898,8 +903,8 @@ function draw2D(){
         o += panel(x, baseTop, mw, dh, hBar(x+mw*0.3, baseTop+3, mw*0.4));
         o += `<rect x="${x+1}" y="${baseTop+dh+1}" width="${mw-2}" height="${bh-dh-2}" rx="1.5" fill="url(#pvGlass)"/>
               <rect x="${x+mw*0.18}" y="${baseTop+dh+5}" width="${mw*0.64}" height="2" rx="1" fill="url(#pvSteelV)"/>
-              <rect x="${x+5}" y="${baseTop+dh+11}" width="${mw-10}" height="${bh-dh-17}" rx="1.5" fill="#0D0C0B" opacity=".6"/>
-              <rect x="${x+mw*0.42}" y="${baseTop+dh+8}" width="${mw*0.16}" height="1.6" fill="#E9A23B" opacity=".9"/>`;
+              <rect x="${x+5}" y="${baseTop+dh+11}" width="${mw-10}" height="${bh-dh-17}" rx="1.5" fill="#000000" opacity=".6"/>
+              <rect x="${x+mw*0.42}" y="${baseTop+dh+8}" width="${mw*0.16}" height="1.6" fill="#D9A441" opacity=".9"/>`;
       } else if(i%3===2){
         const hh = bh/3;
         for(let k=0;k<3;k++) o += panel(x, baseTop+k*hh, mw, hh, hBar(x+mw*0.3, baseTop+k*hh+3, mw*0.4));
@@ -907,21 +912,21 @@ function draw2D(){
         o += panel(x, baseTop, mw, bh, vBar(i%2? x+mw-5 : x+3.2, baseTop+4, Math.min(16, bh*0.25)));
       }
     }
-    o += `<rect x="${x0}" y="${y(10)}" width="${wW}" height="${10*sc}" fill="#24201D"/>`;
+    o += `<rect x="${x0}" y="${y(10)}" width="${wW}" height="${10*sc}" fill="#1A1A1A"/>`;
     if(fr>=0) o += panel(x0+fr*mw, y(10), mw, 0.01);
     // countertop
     o += `<rect x="${bx1-1}" y="${cTop}" width="${bx2-bx1+2}" height="${4*sc}" fill="url(#pvQuartz)"/><rect x="${bx1-1}" y="${cTop}" width="${bx2-bx1+2}" height=".8" fill="#fff" opacity="${cntDark?.18:.6}"/><rect x="${bx1-1}" y="${cTop+4*sc-.8}" width="${bx2-bx1+2}" height=".8" fill="#000" opacity=".25"/>`;
     // cooktop + knobs + hood
     const sx = x0 + stove*mw;
-    o += `<rect x="${sx+3}" y="${cTop-1.6}" width="${mw-6}" height="1.6" rx=".6" fill="#111"/>`;
+    o += `<rect x="${sx+3}" y="${cTop-1.6}" width="${mw-6}" height="1.6" rx=".6" fill="#1A1A1A"/>`;
     const hb = y(170), ht = Math.max(ceil, y(s.H));
     o += `<rect x="${sx+mw*0.36}" y="${ht}" width="${mw*0.28}" height="${hb-ht-12*sc}" fill="url(#pvSteel)"/>
-          <polygon points="${sx+mw*0.08},${hb} ${sx+mw*0.92},${hb} ${sx+mw*0.72},${hb-12*sc} ${sx+mw*0.28},${hb-12*sc}" fill="url(#pvSteel)" stroke="#9AA0A4" stroke-width=".5"/>
-          <rect x="${sx+mw*0.08}" y="${hb}" width="${mw*0.84}" height="2.2" fill="#8E9498"/>
+          <polygon points="${sx+mw*0.08},${hb} ${sx+mw*0.92},${hb} ${sx+mw*0.72},${hb-12*sc} ${sx+mw*0.28},${hb-12*sc}" fill="url(#pvSteel)" stroke="#A6A6A6" stroke-width=".5"/>
+          <rect x="${sx+mw*0.08}" y="${hb}" width="${mw*0.84}" height="2.2" fill="#A6A6A6"/>
           <rect x="${sx+mw*0.15}" y="${hb+2.2}" width="${mw*0.7}" height="${(cTop-hb)*0.5}" fill="url(#pvLed)" opacity=".25"/>`;
     // sink + faucet
     const kx = x0 + sink*mw;
-    o += `<rect x="${kx+mw*0.14}" y="${cTop-1.2}" width="${mw*0.72}" height="1.4" rx=".6" fill="#8E9498"/>
+    o += `<rect x="${kx+mw*0.14}" y="${cTop-1.2}" width="${mw*0.72}" height="1.4" rx=".6" fill="#A6A6A6"/>
           <path d="M${kx+mw*0.5} ${cTop-1} v-${13*sc} q0 -${4*sc} ${4*sc} -${4*sc} h${2*sc} v${3*sc}" stroke="url(#pvSteel)" stroke-width="1.9" fill="none" stroke-linecap="round"/>`;
     // uppers
     for(let i=0;i<n;i++){
@@ -934,15 +939,15 @@ function draw2D(){
       const wx = x0 + winA*mw + 3, ww = mw*2-6, wy = y(212), wh = 92*sc;
       o += `<rect x="${wx}" y="${wy}" width="${ww}" height="${wh}" fill="url(#pvSky)"/>
             <polygon points="${wx+ww*0.15},${wy} ${wx+ww*0.35},${wy} ${wx+ww*0.12},${wy+wh} ${wx},${wy+wh} ${wx},${wy+wh*0.6}" fill="#fff" opacity=".35"/>
-            <rect x="${wx}" y="${wy}" width="${ww}" height="${wh}" fill="none" stroke="#3A332D" stroke-width="2.6"/>
-            <line x1="${wx+ww/2}" y1="${wy}" x2="${wx+ww/2}" y2="${wy+wh}" stroke="#3A332D" stroke-width="1.8"/>
-            <rect x="${wx-3}" y="${wy+wh}" width="${ww+6}" height="2.4" fill="#E9E3D9"/>`;
+            <rect x="${wx}" y="${wy}" width="${ww}" height="${wh}" fill="none" stroke="#333333" stroke-width="2.6"/>
+            <line x1="${wx+ww/2}" y1="${wy}" x2="${wx+ww/2}" y2="${wy+wh}" stroke="#333333" stroke-width="1.8"/>
+            <rect x="${wx-3}" y="${wy+wh}" width="${ww+6}" height="2.4" fill="#EFE8DE"/>`;
     }
     if(s.led){
       for(let i=0;i<n;i++){
         if(i===fr || i===stove || (winBack&&(i===winA||i===winB))) continue;
         const x = x0 + i*mw;
-        o += `<rect x="${x+1}" y="${ut+uh}" width="${mw-2}" height="${cTop-(ut+uh)}" fill="url(#pvLed)" opacity=".55"/><rect x="${x+2}" y="${ut+uh-.5}" width="${mw-4}" height="2" fill="#FFF4D6" filter="url(#pvBlur)"/>`;
+        o += `<rect x="${x+1}" y="${ut+uh}" width="${mw-2}" height="${cTop-(ut+uh)}" fill="url(#pvLed)" opacity=".55"/><rect x="${x+2}" y="${ut+uh-.5}" width="${mw-4}" height="2" fill="#E6D5B8" filter="url(#pvBlur)"/>`;
       }
     }
   } else {
@@ -955,16 +960,16 @@ function draw2D(){
         if(s.wood) o += `<rect x="${x+0.7}" y="${tt+0.7}" width="${mw-1.4}" height="${tH*sc-1.4}" fill="url(#pvWood)" opacity=".6"/>`;
         const sh = tH*sc*0.6;
         for(let k=1;k<=4;k++){ const yy = tt + k*(sh/4.3); o += `<rect x="${x+2}" y="${yy}" width="${mw-4}" height="2.2" fill="${door}"/><rect x="${x+2}" y="${yy+2.2}" width="${mw-4}" height="1.4" fill="#000" opacity=".2"/>`;
-          const cols=['#CDBBA4','#7D8A96','#EFE9DF','#9B7E66']; for(let c=0;c<2;c++) o += `<rect x="${x+5+c*(mw-10)/2}" y="${yy-6}" width="${(mw-14)/2}" height="6" rx="1" fill="${cols[(k+c)%4]}"/>`; }
+          const cols=['#CDB79C','#7A8FA6','#EFE8DE','#B99F83']; for(let c=0;c<2;c++) o += `<rect x="${x+5+c*(mw-10)/2}" y="${yy-6}" width="${(mw-14)/2}" height="6" rx="1" fill="${cols[(k+c)%4]}"/>`; }
         const dt = tt + tH*sc*0.64, dh = (tH*sc*0.36)/3;
         for(let k=0;k<3;k++) o += panel(x, dt+k*dh, mw, dh, hBar(x+mw*0.3, dt+k*dh+3, mw*0.4));
-        if(s.led) o += `<rect x="${x+3}" y="${tt+3}" width="${mw-6}" height="${sh}" fill="url(#pvLed)" opacity=".45"/><rect x="${x+4}" y="${tt+2}" width="${mw-8}" height="2" fill="#FFF4D6" filter="url(#pvBlur)"/>`;
+        if(s.led) o += `<rect x="${x+3}" y="${tt+3}" width="${mw-6}" height="${sh}" fill="url(#pvLed)" opacity=".45"/><rect x="${x+4}" y="${tt+2}" width="${mw-8}" height="2" fill="#E6D5B8" filter="url(#pvBlur)"/>`;
       } else {
         o += panel(x, tt, mw, tH*sc, vBar(i%2? x+3.2 : x+mw-5, tt+tH*sc*0.38, tH*sc*0.24));
       }
     }
-    o += `<rect x="${x0}" y="${floorY-3}" width="${wW}" height="3" fill="#24201D"/>`;
-    if(s.led) o += `<rect x="${x0+2}" y="${tt-3}" width="${wW-4}" height="3" fill="#FFE3A3" filter="url(#pvBlur)"/>`;
+    o += `<rect x="${x0}" y="${floorY-3}" width="${wW}" height="3" fill="#1A1A1A"/>`;
+    if(s.led) o += `<rect x="${x0+2}" y="${tt-3}" width="${wW-4}" height="3" fill="#E6D5A8" filter="url(#pvBlur)"/>`;
   }
   if(s.color==='جوز ASD') { door = 'url(#pvWalnut)'; }
   if(sideR) o += sideRun(false);
@@ -978,16 +983,16 @@ function draw2D(){
   if(isIsland(s)){
     const iw = Math.min(wW*0.55, 200*sc), ih = (s.dress?88:90)*sc, ix = x0 + (wW-iw)/2, iy = floorY + 26 - ih;
     if(!s.dress){
-      for(let k=0;k<2;k++){ const px = ix + iw*(0.3+k*0.4), py = iy - 70*sc; o += `<ellipse cx="${px}" cy="${iy}" rx="${22}" ry="6" fill="url(#pvPend)"/><line x1="${px}" y1="${ceil}" x2="${px}" y2="${py}" stroke="#2A2622" stroke-width=".8"/><path d="M${px-3} ${py} L${px-9} ${py+11} L${px+9} ${py+11} L${px+3} ${py} Z" fill="#1E1B18"/><ellipse cx="${px}" cy="${py+11}" rx="9" ry="1.6" fill="#FFE7B5"/>`; }
+      for(let k=0;k<2;k++){ const px = ix + iw*(0.3+k*0.4), py = iy - 70*sc; o += `<ellipse cx="${px}" cy="${iy}" rx="${22}" ry="6" fill="url(#pvPend)"/><line x1="${px}" y1="${ceil}" x2="${px}" y2="${py}" stroke="#2B2118" stroke-width=".8"/><path d="M${px-3} ${py} L${px-9} ${py+11} L${px+9} ${py+11} L${px+3} ${py} Z" fill="#1A1A1A"/><ellipse cx="${px}" cy="${py+11}" rx="9" ry="1.6" fill="#E6D5A8"/>`; }
     }
     o += `<ellipse cx="${ix+iw/2}" cy="${floorY+27}" rx="${iw*0.6}" ry="5" fill="#000" opacity=".22" filter="url(#pvSoft)"/>`;
     const n2 = Math.max(2, Math.round(iw/(60*sc)));
     for(let k=0;k<n2;k++) o += panel(ix + k*iw/n2, iy, iw/n2, ih, s.dress? hBar(ix+k*iw/n2+iw/n2*0.3, iy+4, iw/n2*0.4) : vBar(ix+k*iw/n2+(k%2? iw/n2-5:3.2), iy+4, Math.min(14,ih*.25)));
-    if(s.accent) o += `<rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="${base}"/><rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="url(#pvGloss)"/><rect x="${ix+2}" y="${iy+ih-2}" width="${iw-4}" height="2.4" fill="#FFE3A3" filter="url(#pvBlur)"/>`;
+    if(s.accent) o += `<rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="${base}"/><rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="url(#pvGloss)"/><rect x="${ix+2}" y="${iy+ih-2}" width="${iw-4}" height="2.4" fill="#E6D5A8" filter="url(#pvBlur)"/>`;
     o += `<rect x="${ix-5}" y="${iy-5*sc}" width="${iw+10}" height="${5*sc+1}" fill="${s.dress?door:'url(#pvQuartz)'}"/><rect x="${ix-5}" y="${iy-5*sc}" width="${iw+10}" height=".8" fill="#fff" opacity=".5"/>`;
     if(!s.dress){
       o += `<rect x="${ix-5}" y="${iy-5*sc}" width="4" height="${ih+5*sc}" fill="url(#pvQuartz)"/><rect x="${ix+iw+1}" y="${iy-5*sc}" width="4" height="${ih+5*sc}" fill="url(#pvQuartz)"/>`;
-      for(let k=0;k<3;k++){ const bx = ix + iw*(0.2+k*0.3), sy = iy+ih*0.28; o += `<ellipse cx="${bx}" cy="${floorY+27}" rx="8" ry="2" fill="#000" opacity=".2"/><rect x="${bx-8}" y="${sy}" width="16" height="3.4" rx="1.7" fill="#2B2724"/><line x1="${bx-6}" y1="${sy+3}" x2="${bx-8}" y2="${floorY+26}" stroke="#2B2724" stroke-width="1.4"/><line x1="${bx+6}" y1="${sy+3}" x2="${bx+8}" y2="${floorY+26}" stroke="#2B2724" stroke-width="1.4"/><line x1="${bx-7}" y1="${sy+(floorY+26-sy)*0.6}" x2="${bx+7}" y2="${sy+(floorY+26-sy)*0.6}" stroke="url(#pvSteel)" stroke-width="1.2"/>`; }
+      for(let k=0;k<3;k++){ const bx = ix + iw*(0.2+k*0.3), sy = iy+ih*0.28; o += `<ellipse cx="${bx}" cy="${floorY+27}" rx="8" ry="2" fill="#000" opacity=".2"/><rect x="${bx-8}" y="${sy}" width="16" height="3.4" rx="1.7" fill="#333333"/><line x1="${bx-6}" y1="${sy+3}" x2="${bx-8}" y2="${floorY+26}" stroke="#333333" stroke-width="1.4"/><line x1="${bx+6}" y1="${sy+3}" x2="${bx+8}" y2="${floorY+26}" stroke="#333333" stroke-width="1.4"/><line x1="${bx-7}" y1="${sy+(floorY+26-sy)*0.6}" x2="${bx+7}" y2="${sy+(floorY+26-sy)*0.6}" stroke="url(#pvSteel)" stroke-width="1.2"/>`; }
     }
   }
   svgEl.innerHTML = o;
@@ -1023,14 +1028,14 @@ async function init3D(){
   renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.78;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
   box3d.appendChild(renderer.domElement);
-  const scene = new T.Scene(); scene.background = new T.Color('#DCD2C3');
+  const scene = new T.Scene(); scene.background = new T.Color('#E8DDD0');
   if(T.RoomEnvironment){ const pm = new T.PMREMGenerator(renderer); scene.environment = pm.fromScene(new T.RoomEnvironment(), 0.04).texture; }
   const camera = new T.PerspectiveCamera(40, 1, 0.05, 100);
   const controls = new T.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true; controls.enablePan = false;
   controls.maxPolarAngle = Math.PI/2.08; controls.minDistance = 1.2; controls.maxDistance = 14;
-  scene.add(new T.HemisphereLight(0xfff6ea, 0xb39f86, scene.environment?0.12:0.8));
-  const sun = new T.DirectionalLight(0xfff2e0, 1.0);
+  scene.add(new T.HemisphereLight(0xFAF6F0, 0xB99F83, scene.environment?0.12:0.8));
+  const sun = new T.DirectionalLight(0xEFE8DE, 1.0);
   sun.castShadow = true; sun.shadow.mapSize.set(1024,1024); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02;
   Object.assign(sun.shadow.camera, {left:-7,right:7,top:7,bottom:-7,near:0.5,far:30}); sun.shadow.radius = 4;
   scene.add(sun); scene.add(sun.target);
@@ -1052,7 +1057,7 @@ function canvasTex(key, w, h, draw, rep){
 const rnd = (a)=>{ let x=Math.sin(a)*10000; return x-Math.floor(x); };
 function woodTex(cols){
   const t0 = woodTexP(cols);
-  if(cols[0]==='#8A5F46' && !t0.__real && /^https?:/.test(location.protocol)){ t0.__real = 1; const im = new Image(); im.onload = ()=>{ t0.image = im; t0.needsUpdate = true; }; im.src = 'walnut.jpg'; }
+  if(cols[0]==='#8B5A2B' && !t0.__real && /^https?:/.test(location.protocol)){ t0.__real = 1; const im = new Image(); im.onload = ()=>{ t0.image = im; t0.needsUpdate = true; }; im.src = 'walnut.jpg'; }
   return t0;
 }
 function woodTexP(cols){ return canvasTex('w'+cols.join(), 256, 512, (x,w,h)=>{
@@ -1062,24 +1067,24 @@ function woodTexP(cols){ return canvasTex('w'+cols.join(), 256, 512, (x,w,h)=>{
   x.globalAlpha=1; }); }
 function quartzTex(hex){ return canvasTex('q'+hex, 512, 512, (x,w,h)=>{
   const dark = lum(hex)<0.5; x.fillStyle=hex; x.fillRect(0,0,w,h);
-  for(let i=0;i<3500;i++){ x.fillStyle = (rnd(i)>0.5? (dark?'#6a645d':'#c9c1b5') : (dark?'#24211e':'#fbfaf7')); x.globalAlpha=0.25+rnd(i+1)*0.5; const r=0.4+rnd(i+2)*1.3; x.fillRect(rnd(i+3)*w, rnd(i+4)*h, r, r); }
-  x.globalAlpha=dark?0.18:0.22; x.strokeStyle = dark?'#9a938a':'#b9b0a2'; x.lineWidth=1.2;
+  for(let i=0;i<3500;i++){ x.fillStyle = (rnd(i)>0.5? (dark?'#6B6B6B':'#D9C7B2') : (dark?'#1A1A1A':'#FAF6F0')); x.globalAlpha=0.25+rnd(i+1)*0.5; const r=0.4+rnd(i+2)*1.3; x.fillRect(rnd(i+3)*w, rnd(i+4)*h, r, r); }
+  x.globalAlpha=dark?0.18:0.22; x.strokeStyle = dark?'#A6A6A6':'#A6A6A6'; x.lineWidth=1.2;
   for(let v=0;v<3;v++){ x.beginPath(); let px=rnd(v+9)*w, py=0; x.moveTo(px,py); while(py<h){ px+= (rnd(py+v)-0.5)*40; py+=30; x.lineTo(px,py);} x.stroke(); }
   x.globalAlpha=1; }); }
 function tileTex(){ return canvasTex('tile', 512, 256, (x,w,h)=>{
-  x.fillStyle='#D6CEC2'; x.fillRect(0,0,w,h);
+  x.fillStyle='#E8DDD0'; x.fillRect(0,0,w,h);
   const tw=w/4, th=h/8;
   for(let r=0;r<8;r++) for(let c=-1;c<5;c++){ const off = r%2? tw/2:0, xx=c*tw+off, yy=r*th; const v = 236+Math.floor(rnd(r*7+c)*10);
-    const g = x.createLinearGradient(0,yy,0,yy+th); g.addColorStop(0,`rgb(${v+6},${v+4},${v})`); g.addColorStop(1,`rgb(${v-4},${v-6},${v-10})`);
+    const g = x.createLinearGradient(0,yy,0,yy+th); g.addColorStop(0, v%2?'#FFFFFF':'#FAF6F0'); g.addColorStop(1, '#F5F1EB');
     x.fillStyle=g; x.fillRect(xx+2,yy+2,tw-4,th-4); }
 }); }
 function floorTex(){ return canvasTex('floor', 512, 512, (x,w,h)=>{
-  x.fillStyle='#BFB2A0'; x.fillRect(0,0,w,h);
+  x.fillStyle='#CDB79C'; x.fillRect(0,0,w,h);
   for(let r=0;r<2;r++) for(let c=0;c<2;c++){ const v = 214+Math.floor(rnd(r*3+c)*10);
-    x.fillStyle=`rgb(${v-26},${v-36},${v-50})`; x.fillRect(c*w/2+2, r*h/2+2, w/2-4, h/2-4);
-    for(let i=0;i<500;i++){ x.fillStyle = rnd(i+r*9+c)>0.5?'rgba(255,255,255,.12)':'rgba(120,100,80,.10)'; x.fillRect(c*w/2+rnd(i*3+c)*(w/2), r*h/2+rnd(i*5+r)*(h/2), 2+rnd(i)*6, 1+rnd(i+2)*3); } }
+    x.fillStyle=(r+c)%2?'#EFE8DE':'#E8DDD0'; x.fillRect(c*w/2+2, r*h/2+2, w/2-4, h/2-4);
+    for(let i=0;i<500;i++){ x.fillStyle = rnd(i+r*9+c)>0.5?'rgba(255,255,255,.12)':'rgba(122,92,68,.10)'; x.fillRect(c*w/2+rnd(i*3+c)*(w/2), r*h/2+rnd(i*5+r)*(h/2), 2+rnd(i)*6, 1+rnd(i+2)*3); } }
 }); }
-function skyTex(){ return canvasTex('sky', 64, 128, (x,w,h)=>{ const g=x.createLinearGradient(0,0,0,h); g.addColorStop(0,'#9FCFE6'); g.addColorStop(0.7,'#E4F2F8'); g.addColorStop(1,'#F6EEDD'); x.fillStyle=g; x.fillRect(0,0,w,h); }); }
+function skyTex(){ return canvasTex('sky', 64, 128, (x,w,h)=>{ const g=x.createLinearGradient(0,0,0,h); g.addColorStop(0,'#DCE8F0'); g.addColorStop(0.7,'#DCE8F0'); g.addColorStop(1,'#EFE8DE'); x.fillStyle=g; x.fillRect(0,0,w,h); }); }
 
 function build3D(){
   if(!three) return;
@@ -1094,19 +1099,19 @@ function build3D(){
   const finish = {'أكريليك':{r:0.07,cc:1},'بولي لاك':{r:0.28,cc:0.4},'MDF':{r:0.6,cc:0},'كونتر':{r:0.75,cc:0},'خشب طبيعي':{r:0.5,cc:0.15}}[s.mat] || {r:0.6,cc:0};
   const doorOpts = {roughness: finish.r, envMapIntensity: envOn?(finish.cc?0.7:0.3):0};
   if(s.wood || s.mat==='خشب طبيعي'){ const cols = s.wood || [s.hex, shade(s.hex,-0.12), shade(s.hex,0.1)]; doorOpts.map = woodTex(cols); }
-  else doorOpts.color = new T.Color((s.color==='بيج ASD'||s.accent) ? '#B09987' : s.hex).convertSRGBToLinear();
+  else doorOpts.color = new T.Color(s.hex).convertSRGBToLinear();
   const doorMat = finish.cc ? new T.MeshPhysicalMaterial(Object.assign({clearcoat:finish.cc, clearcoatRoughness:0.08}, doorOpts)) : new T.MeshStandardMaterial(doorOpts);
   const carcMat = Std({color:new T.Color(shade(s.wood?s.wood[0]:s.hex,-0.3)).convertSRGBToLinear(), roughness:0.8});
   const cntHex = counterHex(s);
   const cntTex = quartzTex(cntHex);
   const counterMat = Std({map: cntTex, roughness:0.22, envMapIntensity: envOn?0.9:0});
-  const steel = Std({color:0xd4d8db, roughness:0.22, metalness:0.85, envMapIntensity: envOn?1.2:0});
-  const blackGlass = Std({color:0x0e0d0c, roughness:0.06, metalness:0.2, envMapIntensity: envOn?1.3:0});
-  const dark = Std({color:0x221e1b, roughness:0.7});
-  const wallMat = Std({color:new T.Color('#E6DCCD').convertSRGBToLinear(), roughness:0.95, envMapIntensity: envOn?0.18:0});
+  const steel = Std({color:0xD9D9D9, roughness:0.22, metalness:0.85, envMapIntensity: envOn?1.2:0});
+  const blackGlass = Std({color:0x000000, roughness:0.06, metalness:0.2, envMapIntensity: envOn?1.3:0});
+  const dark = Std({color:0x1A1A1A, roughness:0.7});
+  const wallMat = Std({color:new T.Color('#E8DDD0').convertSRGBToLinear(), roughness:0.95, envMapIntensity: envOn?0.18:0});
   const tex = (t,rx,ry)=>{ const c=t.clone(); c.needsUpdate=true; c.repeat.set(rx,ry); return c; };
   const floorMat = Std({map: tex(floorTex(), L/1.2, W/1.2), roughness:0.4, envMapIntensity: envOn?0.3:0});
-  const ledMat = new T.MeshStandardMaterial({color:0xfff1c9, emissive:0xffd88a, emissiveIntensity:2});
+  const ledMat = new T.MeshStandardMaterial({color:0xE6D5A8, emissive:0xE6D5A8, emissiveIntensity:2});
   const RB = T.RoundedBoxGeometry;
   const geo = (w,h,d,round)=> (round && RB) ? new RB(w,h,d,2,Math.min(0.006, Math.min(w,h,d)/2.2)) : new T.BoxGeometry(w,h,d);
   const mk = (parent,w,h,d,x,y,z,mat,round)=>{ const m = new T.Mesh(geo(w,h,d,round), mat); m.position.set(x,y,z); m.castShadow = true; m.receiveShadow = true; parent.add(m); return m; };
@@ -1116,22 +1121,22 @@ function build3D(){
   const wall = (w, x, z, ry)=>{ const m = new T.Mesh(new T.PlaneGeometry(w, H), wallMat); m.position.set(x,H/2,z); m.rotation.y = ry; m.receiveShadow = true; G.add(m); return m; };
   wall(L, L/2, 0, 0); wall(W, L, W/2, -Math.PI/2); wall(W, 0, W/2, Math.PI/2);
   // skirting
-  mk(G, L, 0.08, 0.012, L/2, 0.04, 0.006, Std({color:0xe4dccf, roughness:0.6}));
+  mk(G, L, 0.08, 0.012, L/2, 0.04, 0.006, Std({color:0xE8DDD0, roughness:0.6}));
 
   const wb = s.window==='الحيطة اللي قدامك', wr = s.window==='الحيطة اليمين', wl = s.window==='الحيطة الشمال';
-  const frameMat = Std({color:0x2c2724, roughness:0.4, metalness:0.3});
+  const frameMat = Std({color:0x2B2118, roughness:0.4, metalness:0.3});
   const glassMat = new T.MeshBasicMaterial({map: skyTex()});
   function windowOn(side){
     const g = new T.Group(), ww=1.1, wh=0.95;
     const gl = new T.Mesh(new T.PlaneGeometry(ww,wh), glassMat); gl.position.z = 0.004; g.add(gl);
     mk(g, ww+0.08, 0.04, 0.06, 0, wh/2, 0.03, frameMat); mk(g, ww+0.08, 0.04, 0.06, 0, -wh/2, 0.03, frameMat);
     mk(g, 0.04, wh, 0.06, -ww/2, 0, 0.03, frameMat); mk(g, 0.04, wh, 0.06, ww/2, 0, 0.03, frameMat); mk(g, 0.03, wh, 0.05, 0, 0, 0.03, frameMat);
-    mk(g, ww+0.16, 0.025, 0.14, 0, -wh/2-0.03, 0.07, Std({color:0xece6dc, roughness:0.5}));
+    mk(g, ww+0.16, 0.025, 0.14, 0, -wh/2-0.03, 0.07, Std({color:0xEFE8DE, roughness:0.5}));
     if(side==='b') g.position.set(L/2, 1.68, 0);
     if(side==='r'){ g.rotation.y=-Math.PI/2; g.position.set(L, 1.68, Math.min(W-0.8, W/2+0.3)); }
     if(side==='l'){ g.rotation.y=Math.PI/2; g.position.set(0, 1.68, Math.min(W-0.8, W/2+0.3)); }
     G.add(g);
-    const wl2 = new T.PointLight(0xdcefff, 0.35, 4); wl2.position.copy(g.position); wl2.position.add(new T.Vector3(side==='b'?0:(side==='r'?-0.6:0.6), -0.2, side==='b'?0.6:0)); G.add(wl2);
+    const wl2 = new T.PointLight(0xDCE8F0, 0.35, 4); wl2.position.copy(g.position); wl2.position.add(new T.Vector3(side==='b'?0:(side==='r'?-0.6:0.6), -0.2, side==='b'?0.6:0)); G.add(wl2);
   }
   if(wb) windowOn('b'); if(wr) windowOn('r'); if(wl) windowOn('l');
 
@@ -1158,7 +1163,7 @@ function build3D(){
       if(kind==='oven'){
         mk(g, mw-0.004, 0.16, 0.019, cx, 0.78, FZ, doorMat, true); handleH(g, cx, 0.82, FZ, Math.min(0.3, mw*0.5));
         mk(g, mw-0.01, 0.58, 0.022, cx, 0.4, FZ, blackGlass, true); handleH(g, cx, 0.64, FZ+0.004, Math.min(0.42, mw*0.7));
-        mk(g, mw*0.5, 0.025, 0.004, cx, 0.56, FZ+0.013, new T.MeshStandardMaterial({color:0x111111, emissive:0xe9a23b, emissiveIntensity:0.6}));
+        mk(g, mw*0.5, 0.025, 0.004, cx, 0.56, FZ+0.013, new T.MeshStandardMaterial({color:0x1A1A1A, emissive:0xD9A441, emissiveIntensity:0.6}));
       } else if(kind==='drawers' || (!kind && i%3===2)){
         const hs=[0.2,0.27,0.27]; let yy = 0.86;
         hs.forEach(hh=>{ mk(g, mw-0.004, hh-0.004, 0.019, cx, yy-hh/2, FZ, doorMat, true); handleH(g, cx, yy-0.045, FZ, Math.min(0.32, mw*0.5)); yy-=hh; });
@@ -1179,7 +1184,7 @@ function build3D(){
         handleV(g, i%2? cx+mw/2-0.04 : cx-mw/2+0.04, 1.52, 0.335, 0.14);
         if(s.led){ mk(g, mw-0.04, 0.008, 0.02, cx, 1.446, 0.27, ledMat); }
       }
-      if(s.led && ledLights<3){ const pl = new T.PointLight(0xffcf7d, 0.5, 1.6, 2); pl.position.set(len/2, 1.38, 0.3); g.add(pl); ledLights++; }
+      if(s.led && ledLights<3){ const pl = new T.PointLight(0xD9A441, 0.5, 1.6, 2); pl.position.set(len/2, 1.38, 0.3); g.add(pl); ledLights++; }
     }
     placeRun(g, side, a, len);
     return g;
@@ -1197,12 +1202,12 @@ function build3D(){
         mk(g, mw, th-0.08, 0.02, cx, 0.08+(th-0.08)/2, 0.01, carcMat);
         mk(g, 0.02, th-0.08, 0.58, cx-mw/2+0.01, 0.08+(th-0.08)/2, 0.29, doorMat); mk(g, 0.02, th-0.08, 0.58, cx+mw/2-0.01, 0.08+(th-0.08)/2, 0.29, doorMat);
         mk(g, mw, 0.02, 0.58, cx, th-0.01, 0.29, doorMat);
-        const cols=[0xCDBBA4,0x7D8A96,0xEFE9DF,0x9B7E66,0x3E4A5A];
+        const cols=[0xCDB79C,0x7A8FA6,0xEFE8DE,0xB99F83,0x2C3E55];
         for(let k=0;k<4;k++){ const yy = 0.95 + k*((th-1.0)/4); mk(g, mw-0.04, 0.02, 0.56, cx, yy, 0.29, doorMat);
           for(let c=0;c<2;c++) mk(g, (mw-0.12)/2, 0.07+rnd(k+c)*0.05, 0.3, cx-mw/4+0.02+c*(mw/2-0.04), yy+0.06, 0.3, Std({color:cols[(k*2+c)%5], roughness:0.95})); }
         const hs=[0.29,0.29,0.29]; let yy=0.9;
         hs.forEach(hh=>{ mk(g, mw-0.004, hh-0.004, 0.019, cx, yy-hh/2, FZ, doorMat, true); handleH(g, cx, yy-0.05, FZ, Math.min(0.3,mw*0.5)); yy-=hh; });
-        if(s.led){ mk(g, mw-0.06, 0.008, 0.02, cx, th-0.03, 0.5, ledMat); const pl=new T.PointLight(0xffcf7d,0.5,1.4,2); pl.position.set(cx, th-0.15, 0.4); g.add(pl); }
+        if(s.led){ mk(g, mw-0.06, 0.008, 0.02, cx, th-0.03, 0.5, ledMat); const pl=new T.PointLight(0xD9A441,0.5,1.4,2); pl.position.set(cx, th-0.15, 0.4); g.add(pl); }
       } else {
         mk(g, mw, th-0.08, 0.56, cx, 0.08+(th-0.08)/2, 0.28, carcMat);
         mk(g, mw-0.004, th-0.084, 0.019, cx, 0.08+(th-0.08)/2, FZ, doorMat, true);
@@ -1241,16 +1246,16 @@ function build3D(){
     kitchenRun('b', bA, bB, {kinds, skips});
     // cooktop & hood
     mk(G, Math.min(0.58,mw-0.04), 0.006, 0.5, sx, 0.903, 0.3, blackGlass);
-    const ringMat = Std({color:0x3a3a3a, roughness:0.4});
+    const ringMat = Std({color:0x333333, roughness:0.4});
     [[-0.13,-0.1],[0.13,-0.1],[-0.13,0.1],[0.13,0.1]].forEach(([dx,dz],k)=>{ const r = new T.Mesh(new T.TorusGeometry(k%3?0.06:0.08, 0.004, 6, 32), ringMat); r.rotation.x=-Math.PI/2; r.position.set(sx+dx, 0.907, 0.3+dz); G.add(r); });
     mk(G, Math.min(0.6,mw), 0.06, 0.48, sx, 1.62, 0.24, steel, true);
     const hoodTop = Math.max(1.75, H-0.02);
     mk(G, 0.26, hoodTop-1.65, 0.24, sx, 1.65+(hoodTop-1.65)/2, 0.12, steel, true);
-    const hl = new T.PointLight(0xfff0d0, 0.25, 1.2, 2); hl.position.set(sx, 1.55, 0.35); G.add(hl);
+    const hl = new T.PointLight(0xE6D5B8, 0.25, 1.2, 2); hl.position.set(sx, 1.55, 0.35); G.add(hl);
     // sink + faucet
     const kx = bA + mw*kIdx + mw/2;
     mk(G, Math.min(0.55, mw-0.06), 0.004, 0.4, kx, 0.9015, 0.3, steel);
-    mk(G, Math.min(0.5, mw-0.1), 0.003, 0.35, kx, 0.9035, 0.31, Std({color:0x6f7479, roughness:0.35, metalness:0.8}));
+    mk(G, Math.min(0.5, mw-0.1), 0.003, 0.35, kx, 0.9035, 0.31, Std({color:0x6B6B6B, roughness:0.35, metalness:0.8}));
     const curve = new T.CatmullRomCurve3([new T.Vector3(0,0,0), new T.Vector3(0,0.24,0), new T.Vector3(0,0.31,0.05), new T.Vector3(0,0.29,0.15), new T.Vector3(0,0.25,0.17)]);
     const tap = new T.Mesh(new T.TubeGeometry(curve, 24, 0.012, 8, false), steel); tap.position.set(kx, 0.9, 0.08); tap.castShadow=true; G.add(tap);
     if(hasR){ const e = W-(frR?0.75:0); kitchenRun('r', 0.62, Math.max(0.95,e), {noUpper: wr, noSplash:false}); if(frR) fridge(L-0.35, W-0.37, -Math.PI/2); }
@@ -1274,18 +1279,18 @@ function build3D(){
       const ov = 0.28;
       mk(g, iw+0.1, 0.04, id+ov, 0, ih+0.02, ov/2, counterMat);
       mk(g, 0.04, ih+0.0, id+ov, -iw/2-0.03, ih/2, ov/2, counterMat); mk(g, 0.04, ih, id+ov, iw/2+0.03, ih/2, ov/2, counterMat);
-      const seat = Std({color:0x2b2724, roughness:0.55}), legM = Std({color:0x1d1a18, roughness:0.4, metalness:0.5});
+      const seat = Std({color:0x333333, roughness:0.55}), legM = Std({color:0x1A1A1A, roughness:0.4, metalness:0.5});
       for(let k=-1;k<=1;k++){ const bx = k*iw*0.3, bz = id/2+ov+0.12;
         const st0 = new T.Mesh(new T.CylinderGeometry(0.18,0.17,0.05,24), seat); st0.position.set(bx,0.66,bz); st0.castShadow=true; g.add(st0);
         const p0 = new T.Mesh(new T.CylinderGeometry(0.02,0.02,0.64,10), legM); p0.position.set(bx,0.32,bz); p0.castShadow=true; g.add(p0);
         const b0 = new T.Mesh(new T.CylinderGeometry(0.17,0.19,0.015,24), legM); b0.position.set(bx,0.008,bz); g.add(b0);
         const f0 = new T.Mesh(new T.TorusGeometry(0.13,0.008,6,24), legM); f0.rotation.x=-Math.PI/2; f0.position.set(bx,0.25,bz); g.add(f0); }
-      const shadeM = Std({color:0x1b1816, roughness:0.45, metalness:0.4, side:T.DoubleSide}), bulb = new T.MeshStandardMaterial({color:0xfff3d6, emissive:0xffd38a, emissiveIntensity:2.2});
+      const shadeM = Std({color:0x1A1A1A, roughness:0.45, metalness:0.4, side:T.DoubleSide}), bulb = new T.MeshStandardMaterial({color:0xE6D5B8, emissive:0xE6D5A8, emissiveIntensity:2.2});
       for(let k=0;k<2;k++){ const px = (k?1:-1)*iw*0.22, py = Math.max(1.6, Math.min(H-0.35, 1.85));
         const cord = new T.Mesh(new T.CylinderGeometry(0.004,0.004,H-py,6), dark); cord.position.set(px, py+(H-py)/2, ov/2); g.add(cord);
         const sh = new T.Mesh(new T.CylinderGeometry(0.04,0.16,0.2,28,1,true), shadeM); sh.position.set(px, py-0.1, ov/2); g.add(sh);
         const bl = new T.Mesh(new T.SphereGeometry(0.04,16,12), bulb); bl.position.set(px, py-0.16, ov/2); g.add(bl);
-        const pl = new T.PointLight(0xffd9a0, 0.7, 2.6, 2); pl.position.set(px, py-0.25, ov/2); g.add(pl); }
+        const pl = new T.PointLight(0xE6D5A8, 0.7, 2.6, 2); pl.position.set(px, py-0.25, ov/2); g.add(pl); }
     }
   }
 
@@ -1293,7 +1298,7 @@ function build3D(){
     const th = Math.min(H, 2.62);
     mk(G, 0.05, th, 0.66, 0.025, th/2, 0.33, accentMat); mk(G, 0.05, th, 0.66, L-0.025, th/2, 0.33, accentMat);
     if(!s.dress && th > 2.22) mk(G, L-0.1, th-2.18, 0.38, L/2, 2.18+(th-2.18)/2, 0.19, accentMat);
-    if(isIsland(s) && !s.dress){ const iz = Math.min(W-0.75, Math.max(1.55, W*0.58)), iw = Math.min(2.0, L*0.5); mk(G, iw-0.01, 0.24, 0.02, L/2, 0.46, iz+0.45, doorMat, true); mk(G, iw-0.04, 0.008, 0.02, L/2, 0.11, iz+0.44, new T.MeshStandardMaterial({color:0xfff1c9, emissive:0xffd88a, emissiveIntensity:2})); }
+    if(isIsland(s) && !s.dress){ const iz = Math.min(W-0.75, Math.max(1.55, W*0.58)), iw = Math.min(2.0, L*0.5); mk(G, iw-0.01, 0.24, 0.02, L/2, 0.46, iz+0.45, doorMat, true); mk(G, iw-0.04, 0.008, 0.02, L/2, 0.11, iz+0.44, new T.MeshStandardMaterial({color:0xE6D5A8, emissive:0xE6D5A8, emissiveIntensity:2})); }
   }
   // lights follow room size
   sun.position.set(L*0.5+2.5, H+3.5, W+3); sun.target.position.set(L/2, 0, W/2);
