@@ -439,7 +439,7 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
       <div class="group-err" id="err-material">من فضلك اختار الخامة</div>
 
       <div class="q">اللون</div>
-      <div class="grid sw-grid" style="grid-template-columns:repeat(8,1fr);gap:10px" id="colors"></div>
+      <div class="grid sw-grid" style="grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:10px" id="colors"></div>
       <div class="group-err" id="err-color">من فضلك اختار اللون</div>
 
       <div class="q">الإكسسوارات</div>
@@ -534,7 +534,7 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--beige)}
 مكان الثلاجة: 
 مكان البوتجاز: 
 الخامة (كونتر / MDF / بولي لاك / أكريليك / خشب طبيعي): 
-اللون (أبيض / بيج / رمادي / كافيه / خشبي فاتح / خشبي غامق / أخضر زيتي / كحلي): 
+اللون (أبيض / بيج / رمادي / كافيه / خشبي فاتح / خشبي غامق / أخضر زيتي / كحلي / جوز ASD / بيج ASD / جوز + بيج ASD): 
 المفصلات (عادية / سوفت كلوز): 
 إضاءة ليد (أيوه / لأ): 
 الاسم: 
@@ -570,6 +570,9 @@ const COLORS = [
   {n:"خشبي غامق", bg:"repeating-linear-gradient(100deg,#5A3620 0 5px,#4A2C19 5px 9px,#64402A 9px 14px)", hex:"#56341F"},
   {n:"أخضر زيتي", bg:"#5C6345"},
   {n:"كحلي", bg:"#1F2C43"},
+  {n:"جوز ASD", bg:"url(walnut.jpg) center/cover, repeating-linear-gradient(95deg,#8A5F46 0 5px,#74503A 5px 9px,#9A6C52 9px 14px)", hex:"#8A5F46"},
+  {n:"بيج ASD", bg:"linear-gradient(135deg,#C9B9AB 0%,#BAA899 45%,#D3C6BA 50%,#BAA899 58%)", hex:"#BAA899"},
+  {n:"جوز + بيج ASD", bg:"linear-gradient(90deg,#BAA899 0 55%,transparent 55%), url(walnut.jpg) center/cover, #8A5F46", hex:"#BAA899"},
 ];
 const colorsEl = document.getElementById('colors');
 colorsEl.innerHTML = COLORS.map(c=>`
@@ -765,8 +768,9 @@ const box3d = document.getElementById('pv3d');
 const tabs = [...document.querySelectorAll('.pv-tab')];
 let mode = '2d', three = null, loading3d = false, rebuildT = null;
 
-const WOOD = {'خشبي فاتح':['#D2AE82','#B98F60','#E0C29A'], 'خشبي غامق':['#5A3620','#3F2516','#6E4629']};
-const HEX = {'أبيض':'#F2F0EB','بيج':'#E2D2BA','رمادي':'#8C8A86','كافيه':'#6B4A35','خشبي فاتح':'#CFAA7E','خشبي غامق':'#55331E','أخضر زيتي':'#5A6243','كحلي':'#1F2B42'};
+const WALNUT = ['#8A5F46','#6B4533','#A0735A'];
+const WOOD = {'خشبي فاتح':['#D2AE82','#B98F60','#E0C29A'], 'خشبي غامق':['#5A3620','#3F2516','#6E4629'], 'جوز ASD':WALNUT};
+const HEX = {'أبيض':'#F2F0EB','بيج':'#E2D2BA','رمادي':'#8C8A86','كافيه':'#6B4A35','خشبي فاتح':'#CFAA7E','خشبي غامق':'#55331E','أخضر زيتي':'#5A6243','كحلي':'#1F2B42','جوز ASD':'#8A5F46','بيج ASD':'#BAA899','جوز + بيج ASD':'#BAA899'};
 
 function st(){
   const g = n => (document.querySelector(`input[name="${n}"]:checked`)||{}).value || '';
@@ -775,7 +779,7 @@ function st(){
   return {
     shape: g('shape') || 'مطبخ حرف L', dress: g('type') === 'دريسنج',
     L: num('len',320,50,2000), W: num('wid',260,50,2000), H: num('hei',280,180,600),
-    color, hex: HEX[color]||'#E2D2BA', wood: WOOD[color]||null,
+    color, hex: HEX[color]||'#E2D2BA', wood: WOOD[color]||null, accent: color==='جوز + بيج ASD' ? WALNUT : null,
     mat: g('material') || 'MDF', led: g('led') === 'أيوه',
     window: g('window'), fridge: document.getElementById('fridge').value, stove: document.getElementById('stove').value
   };
@@ -796,7 +800,7 @@ function draw2D(){
   const wW = s.L*sc, wH = s.H*sc;
   const x0 = 15 + (sideL?sideW:0) + (availW-wW)/2, ceil = floorY - wH;
   const base = s.wood?s.wood[0]:s.hex;
-  const door = s.wood ? 'url(#pvWood)' : base;
+  let door = s.wood ? 'url(#pvWood)' : base;
   const edge = shade(base,-0.28);
   const cnt = counterHex(s), cntDark = lum(cnt)<0.5;
   const gloss = s.mat==='أكريليك'?0.55 : s.mat==='بولي لاك'?0.25 : 0.06;
@@ -805,6 +809,7 @@ function draw2D(){
   <pattern id="pvWood" width="12" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(${s.dress?0:90})">
     <rect width="12" height="60" fill="${base}"/><path d="M2 0 C3 20 1 40 2 60" stroke="${s.wood?s.wood[1]:shade(base,-.1)}" stroke-width="1.6" fill="none" opacity=".7"/>
     <path d="M7 0 C8 25 6 35 7.5 60" stroke="${s.wood?s.wood[2]:shade(base,.1)}" stroke-width="1" fill="none" opacity=".8"/><path d="M10 0 C11 30 9 45 10 60" stroke="${s.wood?s.wood[1]:shade(base,-.1)}" stroke-width=".6" fill="none" opacity=".6"/></pattern>
+  <pattern id="pvWalnut" width="30" height="95" patternUnits="userSpaceOnUse"><rect width="30" height="95" fill="#8A5F46"/><path d="M5 0 C7 30 3 60 5 95" stroke="#6B4533" stroke-width="2" fill="none" opacity=".7"/><path d="M17 0 C19 35 15 55 17.5 95" stroke="#A0735A" stroke-width="1.4" fill="none" opacity=".8"/><path d="M25 0 C26 30 24 70 25 95" stroke="#6B4533" stroke-width="1" fill="none" opacity=".6"/><image href="walnut.jpg" width="30" height="95" preserveAspectRatio="xMidYMid slice"/></pattern>
   <pattern id="pvGrain" width="9" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(${s.dress?0:90})"><path d="M2 0 C3 20 1 40 2 60" stroke="#000" stroke-width="1.2" fill="none" opacity=".08"/><path d="M6 0 C7 25 5 35 6.5 60" stroke="#fff" stroke-width=".8" fill="none" opacity=".1"/></pattern>
   <linearGradient id="pvShadeV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".10"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient>
   <linearGradient id="pvGloss" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="${gloss}"/><stop offset=".38" stop-color="#fff" stop-opacity="${gloss*0.15}"/><stop offset=".42" stop-color="#fff" stop-opacity="0"/></linearGradient>
@@ -961,8 +966,15 @@ function draw2D(){
     o += `<rect x="${x0}" y="${floorY-3}" width="${wW}" height="3" fill="#24201D"/>`;
     if(s.led) o += `<rect x="${x0+2}" y="${tt-3}" width="${wW-4}" height="3" fill="#FFE3A3" filter="url(#pvBlur)"/>`;
   }
+  if(s.color==='جوز ASD') { door = 'url(#pvWalnut)'; }
   if(sideR) o += sideRun(false);
   if(sideL) o += sideRun(true);
+  if(s.accent){
+    const fw = Math.max(4, 6*sc), topY = y(Math.min(s.H, 262));
+    if(!s.dress && y(217) > topY) o += `<rect x="${x0}" y="${topY}" width="${wW}" height="${y(217)-topY}" fill="url(#pvWalnut)"/><rect x="${x0}" y="${y(217)-1}" width="${wW}" height="1" fill="#000" opacity=".25"/>`;
+    o += `<rect x="${x0-fw/2}" y="${topY}" width="${fw}" height="${floorY-topY}" fill="url(#pvWalnut)"/><rect x="${x0+wW-fw/2}" y="${topY}" width="${fw}" height="${floorY-topY}" fill="url(#pvWalnut)"/>`;
+    door = 'url(#pvWalnut)';
+  }
   if(isIsland(s)){
     const iw = Math.min(wW*0.55, 200*sc), ih = (s.dress?88:90)*sc, ix = x0 + (wW-iw)/2, iy = floorY + 26 - ih;
     if(!s.dress){
@@ -971,6 +983,7 @@ function draw2D(){
     o += `<ellipse cx="${ix+iw/2}" cy="${floorY+27}" rx="${iw*0.6}" ry="5" fill="#000" opacity=".22" filter="url(#pvSoft)"/>`;
     const n2 = Math.max(2, Math.round(iw/(60*sc)));
     for(let k=0;k<n2;k++) o += panel(ix + k*iw/n2, iy, iw/n2, ih, s.dress? hBar(ix+k*iw/n2+iw/n2*0.3, iy+4, iw/n2*0.4) : vBar(ix+k*iw/n2+(k%2? iw/n2-5:3.2), iy+4, Math.min(14,ih*.25)));
+    if(s.accent) o += `<rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="${base}"/><rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="url(#pvGloss)"/><rect x="${ix+2}" y="${iy+ih-2}" width="${iw-4}" height="2.4" fill="#FFE3A3" filter="url(#pvBlur)"/>`;
     o += `<rect x="${ix-5}" y="${iy-5*sc}" width="${iw+10}" height="${5*sc+1}" fill="${s.dress?door:'url(#pvQuartz)'}"/><rect x="${ix-5}" y="${iy-5*sc}" width="${iw+10}" height=".8" fill="#fff" opacity=".5"/>`;
     if(!s.dress){
       o += `<rect x="${ix-5}" y="${iy-5*sc}" width="4" height="${ih+5*sc}" fill="url(#pvQuartz)"/><rect x="${ix+iw+1}" y="${iy-5*sc}" width="4" height="${ih+5*sc}" fill="url(#pvQuartz)"/>`;
@@ -1037,7 +1050,12 @@ function canvasTex(key, w, h, draw, rep){
   return (c3[key]=t);
 }
 const rnd = (a)=>{ let x=Math.sin(a)*10000; return x-Math.floor(x); };
-function woodTex(cols){ return canvasTex('w'+cols.join(), 256, 512, (x,w,h)=>{
+function woodTex(cols){
+  const t0 = woodTexP(cols);
+  if(cols[0]==='#8A5F46' && !t0.__real && /^https?:/.test(location.protocol)){ t0.__real = 1; const im = new Image(); im.onload = ()=>{ t0.image = im; t0.needsUpdate = true; }; im.src = 'walnut.jpg'; }
+  return t0;
+}
+function woodTexP(cols){ return canvasTex('w'+cols.join(), 256, 512, (x,w,h)=>{
   x.fillStyle=cols[0]; x.fillRect(0,0,w,h);
   for(let i=0;i<120;i++){ x.strokeStyle = i%3?cols[1]:cols[2]; x.globalAlpha=0.12+rnd(i)*0.35; x.lineWidth=0.6+rnd(i+7)*2.4;
     x.beginPath(); const x0=rnd(i+3)*w; x.moveTo(x0,0); for(let yy=0;yy<=h;yy+=32) x.lineTo(x0+Math.sin(yy/70+i)*4+Math.sin(yy/23+i*2)*1.2, yy); x.stroke(); }
@@ -1072,10 +1090,11 @@ function build3D(){
   const envOn = !!scene.environment;
   const Std = (o)=> new T.MeshStandardMaterial(Object.assign({envMapIntensity: envOn?0.4:0}, o));
   // door material by finish
+  const accentMat = s.accent ? Std({map: woodTex(WALNUT), roughness:0.42, envMapIntensity: envOn?0.5:0}) : null;
   const finish = {'أكريليك':{r:0.07,cc:1},'بولي لاك':{r:0.28,cc:0.4},'MDF':{r:0.6,cc:0},'كونتر':{r:0.75,cc:0},'خشب طبيعي':{r:0.5,cc:0.15}}[s.mat] || {r:0.6,cc:0};
   const doorOpts = {roughness: finish.r, envMapIntensity: envOn?(finish.cc?0.7:0.3):0};
   if(s.wood || s.mat==='خشب طبيعي'){ const cols = s.wood || [s.hex, shade(s.hex,-0.12), shade(s.hex,0.1)]; doorOpts.map = woodTex(cols); }
-  else doorOpts.color = new T.Color(s.hex).convertSRGBToLinear();
+  else doorOpts.color = new T.Color((s.color==='بيج ASD'||s.accent) ? '#B09987' : s.hex).convertSRGBToLinear();
   const doorMat = finish.cc ? new T.MeshPhysicalMaterial(Object.assign({clearcoat:finish.cc, clearcoatRoughness:0.08}, doorOpts)) : new T.MeshStandardMaterial(doorOpts);
   const carcMat = Std({color:new T.Color(shade(s.wood?s.wood[0]:s.hex,-0.3)).convertSRGBToLinear(), roughness:0.8});
   const cntHex = counterHex(s);
@@ -1246,9 +1265,9 @@ function build3D(){
     for(let i=0;i<n;i++){ const cx = -iw/2+mw*i+mw/2;
       // drawers face the back run (‑z side)
       const front = new T.Group(); front.rotation.y = Math.PI; front.position.set(0,0,0); g.add(front);
-      if(s.dress){ [0.25,0.25,0.25].forEach((hh,k)=>{ mk(front, mw-0.004, hh-0.004, 0.019, -cx, 0.82-hh/2-k*hh, id/2-0.02, doorMat, true); handleH(front, -cx, 0.82-0.05-k*hh, id/2-0.02, Math.min(0.28,mw*0.5)); }); }
-      else { mk(front, mw-0.004, 0.72, 0.019, -cx, 0.48, id/2-0.02, doorMat, true); handleV(front, i%2? -cx+mw/2-0.04 : -cx-mw/2+0.04, 0.72, id/2-0.02, 0.16); }
-      mk(g, mw-0.004, ih-0.14, 0.019, cx, 0.1+(ih-0.14)/2, id/2-0.02, doorMat, true);
+      if(s.dress){ [0.25,0.25,0.25].forEach((hh,k)=>{ mk(front, mw-0.004, hh-0.004, 0.019, -cx, 0.82-hh/2-k*hh, id/2-0.02, (accentMat||doorMat), true); handleH(front, -cx, 0.82-0.05-k*hh, id/2-0.02, Math.min(0.28,mw*0.5)); }); }
+      else { mk(front, mw-0.004, 0.72, 0.019, -cx, 0.48, id/2-0.02, (accentMat||doorMat), true); handleV(front, i%2? -cx+mw/2-0.04 : -cx-mw/2+0.04, 0.72, id/2-0.02, 0.16); }
+      mk(g, mw-0.004, ih-0.14, 0.019, cx, 0.1+(ih-0.14)/2, id/2-0.02, (accentMat||doorMat), true);
     }
     if(s.dress){ mk(g, iw+0.04, 0.03, id+0.04, 0, ih+0.015, 0, doorMat, true); }
     else {
@@ -1270,6 +1289,12 @@ function build3D(){
     }
   }
 
+  if(accentMat){
+    const th = Math.min(H, 2.62);
+    mk(G, 0.05, th, 0.66, 0.025, th/2, 0.33, accentMat); mk(G, 0.05, th, 0.66, L-0.025, th/2, 0.33, accentMat);
+    if(!s.dress && th > 2.22) mk(G, L-0.1, th-2.18, 0.38, L/2, 2.18+(th-2.18)/2, 0.19, accentMat);
+    if(isIsland(s) && !s.dress){ const iz = Math.min(W-0.75, Math.max(1.55, W*0.58)), iw = Math.min(2.0, L*0.5); mk(G, iw-0.01, 0.24, 0.02, L/2, 0.46, iz+0.45, doorMat, true); mk(G, iw-0.04, 0.008, 0.02, L/2, 0.11, iz+0.44, new T.MeshStandardMaterial({color:0xfff1c9, emissive:0xffd88a, emissiveIntensity:2})); }
+  }
   // lights follow room size
   sun.position.set(L*0.5+2.5, H+3.5, W+3); sun.target.position.set(L/2, 0, W/2);
   if(three.first || three.lastKey !== s.shape+s.L+s.W+s.dress){
