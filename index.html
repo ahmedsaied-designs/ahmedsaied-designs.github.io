@@ -504,7 +504,7 @@ footer .brand{justify-content:center;margin-bottom:10px;color:var(--ink)}
       <div class="summary" id="summary"></div>
 
       <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="#3F5240" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.24.68-1.42 1.3-1.95 1.34-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.92-4.66-4.1-.13-.18-1.1-1.47-1.1-2.81 0-1.33.7-1.99.95-2.26.24-.27.53-.34.71-.34h.51c.16 0 .38-.06.6.46.24.55.79 1.9.86 2.04.07.14.11.3.02.48-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.9 1.05.93 1.93 1.22 2.2 1.36.27.14.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.6-.14.25.09 1.58.75 1.85.88.27.14.45.2.52.32.07.11.07.66-.17 1.33z"/></svg>
+        <svg width="26" height="26" viewBox="0 0 24 24" style="fill:var(--green)" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.03c-.24.68-1.42 1.3-1.95 1.34-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.92-4.66-4.1-.13-.18-1.1-1.47-1.1-2.81 0-1.33.7-1.99.95-2.26.24-.27.53-.34.71-.34h.51c.16 0 .38-.06.6.46.24.55.79 1.9.86 2.04.07.14.11.3.02.48-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.9 1.05.93 1.93 1.22 2.2 1.36.27.14.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.6-.14.25.09 1.58.75 1.85.88.27.14.45.2.52.32.07.11.07.66-.17 1.33z"/></svg>
         <span>ابعت التصميم لـ <span dir="ltr" style="white-space:nowrap">ahmedsaied-designs</span> على واتساب</span>
       </a>
       <div class="after-note" id="afterNote">بعد ما واتساب يفتح، ابعت صورة المطبخ في نفس المحادثة علشان واتساب مش بيسمح نرفق الصورة تلقائي.</div>
@@ -1333,5 +1333,104 @@ window.pvPlace = function(n){
 window.pvRender = render;
 })();
 </script>
+<!-- ===== شريط ألوان الموقع (بيظهر بس مع #colors في اللينك) ===== -->
+<style>
+#tb{position:fixed;inset:auto 0 0 0;z-index:60;background:#FAF6F0;border-top:2px solid #C9A227;box-shadow:0 -10px 30px rgba(43,33,24,.18);color:#1A1A1A;font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;display:none;max-height:62vh;overflow:auto}
+#tb.on{display:block}
+#tb .tb-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;position:sticky;top:0;background:#FAF6F0;border-bottom:1px solid #E8DDD0}
+#tb .tb-head b{font-size:15px}
+#tb .tb-actions{display:flex;gap:6px;flex-wrap:wrap}
+#tb .tb-btn{border:1.5px solid #C9A227;background:#E6D5A8;color:#1A1A1A;border-radius:10px;padding:7px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;min-height:36px}
+#tb .tb-btn.ghost{background:#FFFFFF;border-color:#D9C7B2}
+#tb .tb-rows{padding:6px 14px 14px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+#tb .tb-row,#tb .tb-row>div{min-width:0}
+#tb.min .tb-rows{display:none}
+#tb .tb-row h4{font-size:13px;margin:0 0 6px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#tb .tb-row h4 span{font-weight:400;color:#7A5C44;direction:ltr}
+#tb .tb-sw{display:flex;gap:8px;overflow-x:auto;padding:3px 2px 6px;scroll-snap-type:x proximity}
+#tb .tb-sw button{flex:0 0 auto;width:40px;height:40px;border-radius:10px;border:1px solid #D9D9D9;cursor:pointer;position:relative;scroll-snap-align:start;padding:0}
+#tb .tb-sw button[aria-pressed="true"]{outline:3px solid #A67C00;outline-offset:2px}
+#tb .tb-sw button[aria-pressed="true"]::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:16px;color:var(--ck,#1A1A1A)}
+#tb .tb-warn{font-size:12.5px;font-weight:600;color:#4A2C1A;background:#E6D5A8;border-radius:8px;padding:6px 10px;margin-top:4px;display:none}
+#tb .tb-warn.on{display:block}
+#tb .tb-fam{font-size:11px;color:#7A5C44;margin:0 0 4px}
+body.tb-open{padding-bottom:62vh}
+</style>
+<section id="tb" aria-label="شريط ألوان الموقع">
+  <div class="tb-head">
+    <b>ألوان الموقع</b>
+    <div class="tb-actions">
+      <button type="button" class="tb-btn" id="tbCopy">انسخ الاختيارات</button>
+      <button type="button" class="tb-btn ghost" id="tbReset">رجّع الأصلي</button>
+      <button type="button" class="tb-btn ghost" id="tbMin" aria-expanded="true">تصغير</button>
+    </div>
+  </div>
+  <div class="tb-rows" id="tbRows"></div>
+</section>
+<script>
+(function(){
+  const FAM = {
+    'Beige & Cream':['#FFFFFF','#F5F1EB','#FAF6F0','#EFE8DE','#E8DDD0','#D9C7B2','#B99F83','#CDB79C'],
+    'Brown & Black':['#7A5C44','#2B2118','#4A2C1A','#1A1A1A','#000000'],
+    'Blue':['#DCE8F0','#7A8FA6','#3A5A7C','#2C3E55','#1F2A3A','#121A26'],
+    'Green':['#CBD5C0','#6B7F5E','#3F5240','#2E3B2F','#1E2A1F'],
+    'Gold':['#E6D5A8','#C9A227','#A67C00','#B87333','#E0BFB8']
+  };
+  const ROLES = [
+    {k:'bg',  t:'الخلفية',            fams:['Beige & Cream'],            def:'#F5F1EB'},
+    {k:'tx',  t:'الكتابة',            fams:['Brown & Black'],            def:'#1A1A1A'},
+    {k:'btn', t:'الأزرار والأيقونات', fams:['Blue','Green','Gold'],      def:'#C9A227'},
+    {k:'wa',  t:'زرار الواتساب',      fams:['Blue','Green','Gold'],      def:'#CBD5C0'}
+  ];
+  const famOf = c => Object.keys(FAM).find(f=>FAM[f].includes(c));
+  const L = h => { const n=parseInt(h.slice(1),16); const f=v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4)}; return 0.2126*f(n>>16)+0.7152*f((n>>8)&255)+0.0722*f(n&255); };
+  const contrast = (a,b)=>{ const x=L(a), y=L(b); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); };
+  const lightest = f => FAM[f].slice().sort((a,b)=>L(b)-L(a))[0];
+  const darker = (c)=>{ const f=FAM[famOf(c)].slice().sort((a,b)=>L(b)-L(a)); const i=f.indexOf(c); return f[Math.min(f.length-1,i+1)]; };
+  const darkest = f => FAM[f].slice().sort((a,b)=>L(a)-L(b))[0];
+  let pick = {}; try{ pick = JSON.parse(localStorage.getItem('asdTheme')||'{}'); }catch(e){}
+  ROLES.forEach(r=>{ if(!pick[r.k]) pick[r.k]=r.def; });
+  const root = document.documentElement.style;
+  function apply(){
+    const {bg,tx,btn,wa} = pick;
+    root.setProperty('--beige', bg); root.setProperty('--cream-2', bg);
+    root.setProperty('--ink', tx); root.setProperty('--ink-2', tx);
+    root.setProperty('--gold', btn); root.setProperty('--gold-l', lightest(famOf(btn))); root.setProperty('--gold-d', darker(btn));
+    root.setProperty('--green-l', wa); root.setProperty('--green-m', darker(wa)); root.setProperty('--green', darkest(famOf(wa)));
+    try{ localStorage.setItem('asdTheme', JSON.stringify(pick)); }catch(e){}
+    render();
+  }
+  function render(){
+    const rows = document.getElementById('tbRows');
+    rows.innerHTML = ROLES.map(r=>{
+      const sw = r.fams.map(f=>`<div><p class="tb-fam">${f}</p><div class="tb-sw">${FAM[f].map(c=>`<button type="button" style="background:${c};--ck:${L(c)>0.25?'#1A1A1A':'#E6D5A8'}" data-r="${r.k}" data-c="${c}" aria-pressed="${pick[r.k]===c}" aria-label="${r.t} ${c}" title="${c}"></button>`).join('')}</div></div>`).join('');
+      let warn = '';
+      if(r.k==='btn' && contrast(pick.btn, pick.tx) < 4.5) warn = `الكتابة ${pick.tx} مش واضحة على الأزرار باللون ده (التباين ${contrast(pick.btn,pick.tx).toFixed(1)} من 4.5). اختار زرار أفتح أو كتابة أغمق.`;
+      if(r.k==='wa' && contrast(pick.wa, pick.tx) < 4.5) warn = `الكتابة ${pick.tx} مش واضحة على زرار الواتساب باللون ده (التباين ${contrast(pick.wa,pick.tx).toFixed(1)} من 4.5).`;
+      if(r.k==='tx' && contrast(pick.bg, pick.tx) < 4.5) warn = `الكتابة باللون ده مش واضحة على الخلفية ${pick.bg}.`;
+      return `<div class="tb-row"><h4>${r.t}<span>${pick[r.k]}</span></h4>${sw}<div class="tb-warn ${warn?'on':''}">${warn}</div></div>`;
+    }).join('');
+  }
+  document.addEventListener('click', e=>{
+    const b = e.target.closest('#tb .tb-sw button'); if(!b) return;
+    pick[b.dataset.r] = b.dataset.c; apply();
+  });
+  document.getElementById('tbReset').onclick = ()=>{ ROLES.forEach(r=>pick[r.k]=r.def); apply(); };
+  document.getElementById('tbMin').onclick = function(){ const tb=document.getElementById('tb'); const m=tb.classList.toggle('min'); this.textContent = m?'تكبير':'تصغير'; this.setAttribute('aria-expanded', !m); document.body.classList.toggle('tb-open', !m); };
+  document.getElementById('tbCopy').onclick = async function(){
+    const txt = `ألوان الموقع:\nالخلفية: ${pick.bg}\nالكتابة: ${pick.tx}\nالأزرار والأيقونات: ${pick.btn}\nزرار الواتساب: ${pick.wa}`;
+    try{ await navigator.clipboard.writeText(txt); this.textContent='اتنسخ ✓'; }catch(err){ this.textContent='انسخ يدوي من تحت'; document.getElementById('tbRows').insertAdjacentHTML('afterbegin', `<pre style="white-space:pre-wrap;font:inherit;font-size:13px;background:#FFFFFF;border:1px solid #E8DDD0;border-radius:8px;padding:8px;margin:0">${txt}</pre>`); }
+    setTimeout(()=>this.textContent='انسخ الاختيارات', 2500);
+  };
+  function check(){
+    const on = location.hash === '#colors';
+    document.getElementById('tb').classList.toggle('on', on);
+    document.body.classList.toggle('tb-open', on && !document.getElementById('tb').classList.contains('min'));
+    if(on) apply(); else { ['--beige','--cream-2','--ink','--ink-2','--gold','--gold-l','--gold-d','--green-l','--green-m','--green'].forEach(v=>root.removeProperty(v)); }
+  }
+  window.addEventListener('hashchange', check); check();
+})();
+</script>
+
 </body>
 </html>
