@@ -1728,8 +1728,8 @@ function build3D(){
     if(vert){ gg.addColorStop(0,'rgba(217,164,65,.75)'); gg.addColorStop(.35,'rgba(230,213,168,.35)'); gg.addColorStop(1,'rgba(230,213,168,.08)'); }
     else { gg.addColorStop(0,'rgba(230,213,168,.0)'); gg.addColorStop(.6,'rgba(230,213,168,.35)'); gg.addColorStop(1,'rgba(255,255,255,.65)'); }
     x.fillStyle=gg; x.fillRect(0,0,64,128); const sg=x.createLinearGradient(0,0,64,0); sg.addColorStop(0,'rgba(0,0,0,1)'); sg.addColorStop(.12,'rgba(0,0,0,0)'); sg.addColorStop(.88,'rgba(0,0,0,0)'); sg.addColorStop(1,'rgba(0,0,0,1)'); x.globalCompositeOperation='destination-out'; x.fillStyle=sg; x.fillRect(0,0,64,128); return new T.CanvasTexture(c); };
-  const washMat = new T.MeshBasicMaterial({map: glowCanvas(true), transparent:true, depthWrite:false, blending:T.AdditiveBlending, opacity:0.55});
-  const poolMat = new T.MeshBasicMaterial({map: glowCanvas(false), transparent:true, depthWrite:false, blending:T.AdditiveBlending, opacity:0.5});
+  const washMat = new T.MeshBasicMaterial({map: glowCanvas(true), transparent:true, depthWrite:false, blending:T.AdditiveBlending, opacity:0.32});
+  const poolMat = new T.MeshBasicMaterial({map: glowCanvas(false), transparent:true, depthWrite:false, blending:T.AdditiveBlending, opacity:0.3});
   const RB = T.RoundedBoxGeometry;
   const geo = (w,h,d,round)=> (round && RB) ? new RB(w,h,d,2,Math.min(0.006, Math.min(w,h,d)/2.2)) : new T.BoxGeometry(w,h,d);
   let uvSeed = 0; const rnd = ()=>{ const v = Math.sin(++uvSeed*12.9898)*43758.5453; return v-Math.floor(v); };
@@ -1877,7 +1877,7 @@ function build3D(){
           const pool = new T.Mesh(new T.PlaneGeometry(mw-0.04, 0.42), poolMat); pool.rotation.x=-Math.PI/2; pool.position.set(cx, 0.9015, 0.24); pool.renderOrder=3; g.add(pool); }
         ao(g, mw, 0.16, cx, 1.45-0.08, 0.005, 0, 0, 0, s.led?0.18:0.35);   // ظل خفيف تحت كل ضلفة علوية
       }
-      if(s.led && T.RectAreaLight && THREE.__ral){ const ra = new T.RectAreaLight(0xFFD9A0, 14, len-0.06, 0.035); ra.position.set(len/2, 1.442, 0.27); ra.rotation.x = -Math.PI/2; g.add(ra); }
+      if(s.led && T.RectAreaLight && THREE.__ral){ const ra = new T.RectAreaLight(0xFFC978, 5, len-0.06, 0.035); ra.position.set(len/2, 1.442, 0.27); ra.rotation.x = -Math.PI/2; g.add(ra); }
       else if(s.led && ledLights<3){ const pl = new T.PointLight(0xD9A441, 0.5, 1.6, 2); pl.position.set(len/2, 1.38, 0.3); g.add(pl); ledLights++; }
     }
     placeRun(g, side, a, len);
