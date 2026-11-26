@@ -484,6 +484,24 @@ main .card{background:#FFFDF9;border-color:rgba(138,90,54,.10)}
 .insp-swap{margin-top:8px;background:#FBF7F1;border:1.5px solid #D8C6AC;border-radius:10px;padding:8px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;min-height:40px;color:#141210}
 .insp-swap:hover{border-color:#8A5A36}
 .insp-x{background:none;border:0;color:#B3412E;font-weight:600;cursor:pointer;font-size:13px;padding:6px;min-height:44px}
+
+/* ===== فتح الضلف والأدراج ===== */
+.pv-top{flex-wrap:wrap}
+.pv-acts{display:flex;gap:6px;margin-inline-start:auto;margin-inline-end:8px}
+.pv-acts button{border:1.5px solid #D8C6AC;background:#FFFDF9;border-radius:9px;padding:6px 10px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px;color:#141210}
+.pv-acts button:hover{border-color:#8A5A36}
+#pv2d .op2{cursor:pointer;outline:none}
+#pv2d .op2 .op-box,#pv2d .op2 .op-glow,#pv2d .op2 .op-led,#pv2d .op2 .op-hl{pointer-events:none}
+#pv2d .op2 .op-mk circle{transition:r .15s, fill .15s}
+#pv2d .op2:hover .op-mk circle,#pv2d .op2:focus-visible .op-mk circle{fill:#8A5A36;r:4.4}
+#pv2d .op2:focus-visible .op-hl{opacity:1}
+#pv3d{cursor:grab}
+#pv3d.pick{cursor:pointer}
+.pv-tip{position:absolute;pointer-events:none;background:#141210;color:#FFFDF9;font-size:12px;font-weight:600;padding:5px 9px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-130%);opacity:0;transition:opacity .15s;z-index:3}
+.pv-tip.on{opacity:1}
+.pv-tip2{position:absolute;pointer-events:none;background:#141210;color:#FFFDF9;font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:7px;white-space:nowrap;transform:translate(-50%,-120%);opacity:0;transition:opacity .15s;z-index:3}
+.pv-tip2.on{opacity:1}
+#pvCard{position:relative}
 </style>
 <noscript><style>#wizard{display:none!important}.hero-steps{display:none}.top-cta{display:none}</style></noscript>
 </head>
@@ -706,6 +724,7 @@ main .card{background:#FFFDF9;border-color:rgba(138,90,54,.10)}
       </div>
       <div class="pv-slot"><div id="pvCard">
   <div class="pv-top"><b>معاينة شكل التصميم</b>
+    <div class="pv-acts"><button type="button" id="pvOpenAll">افتح الكل</button><button type="button" id="pvCloseAll">اقفل الكل</button></div>
     <div class="pv-tabs" role="group" aria-label="طريقة العرض">
       <button type="button" class="pv-tab on" data-m="2d" aria-pressed="true">2D</button>
       <button type="button" class="pv-tab" data-m="3d" aria-pressed="false">3D</button>
@@ -1263,6 +1282,8 @@ function draw2D(){
   ${texReady ? `<pattern id="pvMarble" patternUnits="userSpaceOnUse" width="${120*sc}" height="${120*sc}"><image href="${imgURL('marble')}" width="${120*sc}" height="${120*sc}" preserveAspectRatio="none"/></pattern><pattern id="pvTileT" patternUnits="userSpaceOnUse" width="${30*sc}" height="${60*sc}"><image href="${imgURL('tile')}" width="${30*sc}" height="${60*sc}" preserveAspectRatio="none"/></pattern><pattern id="pvParq" patternUnits="userSpaceOnUse" width="160" height="160"><image href="${imgURL('parquet')}" width="160" height="160" preserveAspectRatio="none"/></pattern>` : ''}
   <linearGradient id="pvCeil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset=".55" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
   <linearGradient id="pvFloorSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+  <linearGradient id="pvInSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".25" stop-color="#000" stop-opacity=".04"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient>
+  <radialGradient id="pvInLed" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#FFE2A8" stop-opacity=".75"/><stop offset="1" stop-color="#FFE2A8" stop-opacity="0"/></radialGradient>
   <pattern id="pvGrain" width="9" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(${s.dress?0:90})"><path d="M2 0 C3 20 1 40 2 60" stroke="#000" stroke-width="1.2" fill="none" opacity=".08"/><path d="M6 0 C7 25 5 35 6.5 60" stroke="#fff" stroke-width=".8" fill="none" opacity=".1"/></pattern>
   <linearGradient id="pvShadeV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".10"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient>
   <linearGradient id="pvGloss" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="${gloss}"/><stop offset=".38" stop-color="#fff" stop-opacity="${gloss*0.15}"/><stop offset=".42" stop-color="#fff" stop-opacity="0"/></linearGradient>
@@ -1298,6 +1319,21 @@ function draw2D(){
     p += `<rect x="${X}" y="${Y}" width="${Wd}" height="${Hd}" rx="1.3" fill="url(#pvShadeV)"/>`;
     p += `<rect x="${X}" y="${Y}" width="${Wd}" height="${Hd}" rx="1.3" fill="url(#pvGloss)"/>`;
     return p + extra;
+  };
+  // ضلفة أو درج بيتفتح: جوه الدولاب + الضلفة نفسها + علامة صغيرة
+  const op2 = (id, kind, x, yy, w, h, hingeLeft, inner)=>{
+    const ix=x+1.2, iy=yy+1.2, iw=Math.max(0,w-2.4), ih=Math.max(0,h-2.4);
+    let g = `<g class="op2" data-id="${id}" data-k="${kind}" data-hx="${hingeLeft? x : x+w}" data-hl="${hingeLeft?1:0}" data-cx="${x+w/2}" data-cy="${yy+h/2}" data-h="${h}" data-w="${w}" tabindex="0" role="button" aria-label="${kind==='door'?'ضلفة':'درج'}: دوس عشان تفتح أو تقفل">`;
+    g += `<rect x="${ix}" y="${iy}" width="${iw}" height="${ih}" fill="#F5F2ED"/><rect x="${ix}" y="${iy}" width="${iw}" height="${ih}" fill="url(#pvInSh)"/>`;
+    if(kind==='door' && h>40) g += `<rect x="${ix+1}" y="${iy+ih*0.5}" width="${iw-2}" height="1.6" fill="#E8DDD0"/><rect x="${ix+1}" y="${iy+ih*0.5+1.6}" width="${iw-2}" height="1" fill="#000" opacity=".12"/>`;
+    g += `<rect class="op-glow" x="${ix}" y="${iy}" width="${iw}" height="${ih}" fill="url(#pvInLed)" opacity="0"/><rect class="op-led" x="${ix+2}" y="${iy+1}" width="${Math.max(0,iw-4)}" height="1.8" fill="#FFF1D2" filter="url(#pvBlur)" opacity="0"/>`;
+    if(kind==='drawer') g += `<polygon class="op-box" points="${x+2},${yy} ${x+w-2},${yy} ${x+w-w*0.12},${yy-h*0.55} ${x+w*0.12},${yy-h*0.55}" fill="#EFE8DE" stroke="#D9C7B2" stroke-width=".6" opacity="0"/>`;
+    g += `<g class="leaf">${inner}<rect class="leaf-sh" x="${x+0.7}" y="${yy+0.7}" width="${Math.max(0,w-1.4)}" height="${Math.max(0,h-1.4)}" fill="#000" opacity="0"/></g>`;
+    g += `<rect class="op-hl" x="${x+0.5}" y="${yy+0.5}" width="${Math.max(0,w-1)}" height="${Math.max(0,h-1)}" fill="none" stroke="#8A5A36" stroke-width="1.2" opacity="0"/>`;
+    const mx = hingeLeft ? x+w-5 : x+5, my = kind==='door' ? yy+h-6 : yy+h/2;
+    g += `<g class="op-mk"><circle cx="${mx}" cy="${my}" r="3.4" fill="#141210" opacity=".85"/><path d="M${mx-1.6} ${my+0.9} a1.9 1.9 0 1 1 1.9 1.1" stroke="#FFFDF9" stroke-width=".8" fill="none" stroke-linecap="round"/><path d="M${mx-2.4} ${my+0.2} l.8 .9 .9-.7" stroke="#FFFDF9" stroke-width=".7" fill="none" stroke-linecap="round"/></g>`;
+    g += `<title>${kind==='door'?'ضلفة':'درج'}: دوس عشان تفتح</title></g>`;
+    return g;
   };
   const hBar = (x,yy,w)=>`<rect x="${x}" y="${yy}" width="${w}" height="1.8" rx=".9" fill="url(#pvSteelV)"/><rect x="${x}" y="${yy+1.8}" width="${w}" height=".7" fill="#000" opacity=".18"/>`;
   const vBar = (x,yy,h)=>`<rect x="${x}" y="${yy}" width="1.8" height="${h}" rx=".9" fill="url(#pvSteel)"/><rect x="${x+1.8}" y="${yy}" width=".7" height="${h}" fill="#000" opacity=".15"/>`;
@@ -1349,16 +1385,16 @@ function draw2D(){
       }
       if(i===stove){
         const dh = bh*0.22;
-        o += panel(x, baseTop, mw, dh, hBar(x+mw*0.3, baseTop+3, mw*0.4));
+        o += op2(`s${i}`, 'drawer', x, baseTop, mw, dh, false, panel(x, baseTop, mw, dh, hBar(x+mw*0.3, baseTop+3, mw*0.4)));
         o += `<rect x="${x+1}" y="${baseTop+dh+1}" width="${mw-2}" height="${bh-dh-2}" rx="1.5" fill="url(#pvGlass)"/>
               <rect x="${x+mw*0.18}" y="${baseTop+dh+5}" width="${mw*0.64}" height="2" rx="1" fill="url(#pvSteelV)"/>
               <rect x="${x+5}" y="${baseTop+dh+11}" width="${mw-10}" height="${bh-dh-17}" rx="1.5" fill="#000000" opacity=".6"/>
               <rect x="${x+mw*0.42}" y="${baseTop+dh+8}" width="${mw*0.16}" height="1.6" fill="#D9A441" opacity=".9"/>`;
       } else if(i%3===2){
         const hh = bh/3;
-        for(let k=0;k<3;k++) o += panel(x, baseTop+k*hh, mw, hh, hBar(x+mw*0.3, baseTop+k*hh+3, mw*0.4));
+        for(let k=0;k<3;k++) o += op2(`d${i}-${k}`, 'drawer', x, baseTop+k*hh, mw, hh, false, panel(x, baseTop+k*hh, mw, hh, hBar(x+mw*0.3, baseTop+k*hh+3, mw*0.4)));
       } else {
-        o += panel(x, baseTop, mw, bh, vBar(i%2? x+mw-5 : x+3.2, baseTop+4, Math.min(16, bh*0.25)));
+        o += op2(`b${i}`, 'door', x, baseTop, mw, bh, i%2===1, panel(x, baseTop, mw, bh, vBar(i%2? x+mw-5 : x+3.2, baseTop+4, Math.min(16, bh*0.25))));
       }
     }
     o += `<rect x="${x0}" y="${y(10)}" width="${wW}" height="${10*sc}" fill="#1A1A1A"/>`;
@@ -1381,7 +1417,7 @@ function draw2D(){
     for(let i=0;i<n;i++){
       const x = x0 + i*mw;
       if(i===fr || i===stove || (winBack && (i===winA || i===winB))) continue;
-      o += panel(x, ut, mw, uh, vBar(i%2? x+mw-5 : x+3.2, ut+uh-4-Math.min(16,uh*0.25), Math.min(16, uh*0.25)));
+      o += op2(`u${i}`, 'door', x, ut, mw, uh, i%2===1, panel(x, ut, mw, uh, vBar(i%2? x+mw-5 : x+3.2, ut+uh-4-Math.min(16,uh*0.25), Math.min(16, uh*0.25))));
       o += `<rect x="${x}" y="${ut+uh}" width="${mw}" height=".9" fill="#000" opacity=".25"/>`;
     }
     if(winBack){
@@ -1411,10 +1447,10 @@ function draw2D(){
         for(let k=1;k<=4;k++){ const yy = tt + k*(sh/4.3); o += `<rect x="${x+2}" y="${yy}" width="${mw-4}" height="2.2" fill="${door}"/><rect x="${x+2}" y="${yy+2.2}" width="${mw-4}" height="1.4" fill="#000" opacity=".2"/>`;
           const cols=['#CDB79C','#7A8FA6','#EFE8DE','#B99F83']; for(let c=0;c<2;c++) o += `<rect x="${x+5+c*(mw-10)/2}" y="${yy-6}" width="${(mw-14)/2}" height="6" rx="1" fill="${cols[(k+c)%4]}"/>`; }
         const dt = tt + tH*sc*0.64, dh = (tH*sc*0.36)/3;
-        for(let k=0;k<3;k++) o += panel(x, dt+k*dh, mw, dh, hBar(x+mw*0.3, dt+k*dh+3, mw*0.4));
+        for(let k=0;k<3;k++) o += op2(`td${k}`, 'drawer', x, dt+k*dh, mw, dh, false, panel(x, dt+k*dh, mw, dh, hBar(x+mw*0.3, dt+k*dh+3, mw*0.4)));
         if(s.led) o += `<rect x="${x+3}" y="${tt+3}" width="${mw-6}" height="${sh}" fill="url(#pvLed)" opacity=".45"/><rect x="${x+4}" y="${tt+2}" width="${mw-8}" height="2" fill="#E6D5B8" filter="url(#pvBlur)"/>`;
       } else {
-        o += panel(x, tt, mw, tH*sc, vBar(i%2? x+3.2 : x+mw-5, tt+tH*sc*0.38, tH*sc*0.24));
+        o += op2(`t${i}`, 'door', x, tt, mw, tH*sc, i%2===0, panel(x, tt, mw, tH*sc, vBar(i%2? x+3.2 : x+mw-5, tt+tH*sc*0.38, tH*sc*0.24)));
       }
     }
     o += `<rect x="${x0}" y="${floorY-3}" width="${wW}" height="3" fill="#1A1A1A"/>`;
@@ -1446,6 +1482,7 @@ function draw2D(){
     }
   }
   svgEl.innerHTML = o;
+  apply2DAll();
 }
 
 /* =================== 3D =================== */
@@ -1496,7 +1533,9 @@ async function init3D(){
   three = {renderer, scene, camera, controls, sun, group:null, first:true, tex:{}};
   const resize = ()=>{ const w = box3d.clientWidth||300, h = box3d.clientHeight||300; renderer.setSize(w,h,false); renderer.domElement.style.width='100%'; renderer.domElement.style.height='100%'; camera.aspect = w/h; camera.updateProjectionMatrix(); };
   three.resize = resize; window.addEventListener('resize', resize); resize();
-  (function loop(){ requestAnimationFrame(loop); if(mode!=='3d'||!pv.offsetParent) return; controls.update(); renderer.render(scene,camera); })();
+  let lastT = performance.now();
+  (function loop(now){ requestAnimationFrame(loop); const dt=Math.min(0.05,((now||performance.now())-lastT)/1000); lastT=now||performance.now(); if(mode!=='3d'||!pv.offsetParent) return; updateOps(dt); controls.update(); renderer.render(scene,camera); })();
+  setup3DPicking();
   loading3d = false;
   build3D();
 }
@@ -1539,6 +1578,35 @@ function floorTex(){ return canvasTex('floor', 512, 512, (x,w,h)=>{
     for(let i=0;i<500;i++){ x.fillStyle = rnd(i+r*9+c)>0.5?'rgba(255,255,255,.12)':'rgba(122,92,68,.10)'; x.fillRect(c*w/2+rnd(i*3+c)*(w/2), r*h/2+rnd(i*5+r)*(h/2), 2+rnd(i)*6, 1+rnd(i+2)*3); } }
 }); }
 function skyTex(){ return canvasTex('sky', 64, 128, (x,w,h)=>{ const g=x.createLinearGradient(0,0,0,h); g.addColorStop(0,'#DCE8F0'); g.addColorStop(0.7,'#DCE8F0'); g.addColorStop(1,'#EFE8DE'); x.fillStyle=g; x.fillRect(0,0,w,h); }); }
+
+function applyOp(op){
+  const e = ease(op.t);
+  if(op.kind==='door') op.node.rotation.y = op.sign * e * DOOR_MAX;
+  else op.node.position.z = e * op.travel;
+  if(op.lights){ op.lights.led.emissiveIntensity = Math.max(op.lights.led.emissiveIntensity*0, 0) + 3.2*e; op.lights.im.emissiveIntensity = 0.22*e; }
+}
+function updateOps(dt){
+  if(!three || !three.ops) return;
+  const lit = {};
+  three.ops.forEach(op=>{ const tg = OPEN.d3[op.id]?1:0; if(op.t!==tg){ op.t = tg>op.t ? Math.min(1, op.t+dt/OPEN_TIME) : Math.max(0, op.t-dt/OPEN_TIME); } });
+  // نفس الدولاب ممكن يكون فيه أكتر من درج: الإضاءة على أكبر فتحة
+  three.ops.forEach(op=>{ if(op.lights){ const k=op.lights.led.uuid; lit[k]=Math.max(lit[k]||0, ease(op.t)); } });
+  three.ops.forEach(op=>{ const e=ease(op.t); if(op.kind==='door') op.node.rotation.y = op.sign*e*DOOR_MAX; else op.node.position.z = e*op.travel;
+    if(op.lights){ const L=lit[op.lights.led.uuid]; op.lights.led.emissiveIntensity = 3.2*L; op.lights.im.emissiveIntensity = 0.22*L; }
+    if(op.mkr){ const hv = three.hover===op; op.mkr.scale.setScalar(hv?0.06:0.045); } });
+}
+function setup3DPicking(){
+  const el = three.renderer.domElement, ray = new THREE.Raycaster(), v = new THREE.Vector2();
+  const tip = document.createElement('div'); tip.className='pv-tip'; box3d.appendChild(tip);
+  const pick = (ev)=>{ const r=el.getBoundingClientRect(); v.set(((ev.clientX-r.left)/r.width)*2-1, -((ev.clientY-r.top)/r.height)*2+1); ray.setFromCamera(v, three.camera);
+    const hit = three.group ? ray.intersectObject(three.group, true).find(h=>h.object.userData.op) : null; return hit ? hit.object.userData.op : null; };
+  let down=null;
+  el.addEventListener('pointerdown', ev=>{ down={x:ev.clientX,y:ev.clientY}; });
+  el.addEventListener('pointerup', ev=>{ if(!down) return; const moved=Math.hypot(ev.clientX-down.x, ev.clientY-down.y); down=null; if(moved>6) return; const op=pick(ev); if(op){ OPEN.d3[op.id]=!OPEN.d3[op.id]; } });
+  el.addEventListener('pointermove', ev=>{ if(down || ev.pointerType==='touch') return; const op=pick(ev); three.hover=op; box3d.classList.toggle('pick', !!op);
+    if(op){ const r=box3d.getBoundingClientRect(); tip.style.left=(ev.clientX-r.left)+'px'; tip.style.top=(ev.clientY-r.top)+'px'; tip.textContent=(op.kind==='door'?'ضلفة':'درج')+(OPEN.d3[op.id]?': دوس عشان تقفل':': دوس عشان تفتح'); tip.classList.add('on'); } else tip.classList.remove('on'); });
+  el.addEventListener('pointerleave', ()=>{ three.hover=null; tip.classList.remove('on'); box3d.classList.remove('pick'); });
+}
 
 function build3D(){
   if(!three) return;
@@ -1631,6 +1699,47 @@ function build3D(){
   function handleH(g, x, y, z, w){ w = w>0.25 ? 0.256 : 0.16; const bar=new T.Mesh(new T.CylinderGeometry(0.006,0.006,w,20), steel); bar.rotation.z=Math.PI/2; bar.position.set(x,y,z+0.028); bar.castShadow=true; g.add(bar); [x-w/2+0.016, x+w/2-0.016].forEach(xx=>{ const st=new T.Mesh(new T.CylinderGeometry(0.004,0.004,0.028,12), steel); st.rotation.x=Math.PI/2; st.position.set(xx,y,z+0.014); g.add(st); }); }
   function handleH_old(g, x, y, z, w){ mk(g, w, 0.012, 0.012, x, y, z+0.022, steel); mk(g, 0.01, 0.01, 0.022, x-w/2+0.005, y, z+0.011, steel); mk(g, 0.01, 0.01, 0.022, x+w/2-0.005, y, z+0.011, steel); }
 
+  // ---- ضلف وأدراج بتتفتح ----
+  const ops = three.ops = [];
+  if(!three.mkTex){ const c=document.createElement('canvas'); c.width=c.height=64; const x=c.getContext('2d'); x.fillStyle='rgba(20,18,16,.88)'; x.beginPath(); x.arc(32,32,28,0,Math.PI*2); x.fill(); x.strokeStyle='#FFFDF9'; x.lineWidth=5; x.lineCap='round'; x.beginPath(); x.arc(32,32,13,-Math.PI*0.15,Math.PI*1.25); x.stroke(); x.beginPath(); x.moveTo(17,30); x.lineTo(22,40); x.lineTo(29,33); x.stroke(); three.mkTex=new T.CanvasTexture(c); }
+  const mkMat = new T.SpriteMaterial({map: three.mkTex, depthTest:true, transparent:true});
+  function interior(parent, w, h, d, cx, cy, shelf){
+    const im = new T.MeshStandardMaterial({color:new T.Color('#F5F2ED').convertSRGBToLinear(), roughness:0.6, emissive:new T.Color('#FFD9A0'), emissiveIntensity:0, envMapIntensity: envOn?0.3:0});
+    const t=0.018;
+    mk(parent, t, h, d, cx-w/2+t/2, cy, d/2, im); mk(parent, t, h, d, cx+w/2-t/2, cy, d/2, im);
+    mk(parent, w, h, t, cx, cy, t/2, im); mk(parent, w, t, d, cx, cy-h/2+t/2, d/2, im); mk(parent, w, t, d, cx, cy+h/2-t/2, d/2, im);
+    if(shelf) mk(parent, w-2*t, 0.016, d-0.04, cx, cy, d/2-0.01, im);
+    const led = new T.MeshStandardMaterial({color:0xFFF1D2, emissive:new T.Color('#FFD08A'), emissiveIntensity:0});
+    mk(parent, w-0.06, 0.008, 0.014, cx, cy+h/2-t-0.006, d-0.04, led);
+    return {im, led};
+  }
+  function register(id, kind, node, extra, lights){
+    const op = Object.assign({id, kind, node, t: OPEN.d3[id]?1:0, lights}, extra);
+    if(OPEN.all && OPEN.d3[id]===undefined){ OPEN.d3[id]=true; op.t=1; }
+    node.traverse(m=>{ m.userData.op = op; });
+    ops.push(op); applyOp(op); return op;
+  }
+  function marker(parent, x, y, z){ const sp=new T.Sprite(mkMat); sp.scale.set(0.045,0.045,0.045); sp.position.set(x,y,z); sp.renderOrder=5; parent.add(sp); return sp; }
+  function hingedDoor(parent, id, cx, cy, w, h, fz, hingeLeft, handleY, handleH_, lights){
+    const piv=new T.Group(); piv.position.set(hingeLeft? cx-w/2 : cx+w/2, cy, fz); parent.add(piv);
+    const lx = hingeLeft? w/2 : -w/2, fx = hingeLeft? w-0.04 : -(w-0.04);
+    mk(piv, w-0.002, h, 0.019, lx, 0, 0, doorMat, true);
+    handleV(piv, fx, handleY, 0, handleH_);
+    const mkr = marker(piv, hingeLeft? w-0.04 : -(w-0.04), -h/2+0.05, 0.03);
+    return register(id, 'door', piv, {sign: hingeLeft?-1:1, mkr}, lights);
+  }
+  function slideDrawer(parent, id, cx, cy, w, h, fz, depth, handleY, lights){
+    const dg=new T.Group(); parent.add(dg);
+    mk(dg, w-0.002, h-0.002, 0.019, cx, cy, fz, doorMat, true);
+    handleH(dg, cx, cy+handleY, fz, Math.min(0.32, w*0.5));
+    const bm = new T.MeshStandardMaterial({color:new T.Color('#F5F2ED').convertSRGBToLinear(), roughness:0.55, envMapIntensity: envOn?0.3:0});
+    const bh=h-0.06, bz=fz-0.012-depth/2, bw=w-0.06;
+    mk(dg, 0.012, bh, depth, cx-bw/2, cy-0.015, bz, bm); mk(dg, 0.012, bh, depth, cx+bw/2, cy-0.015, bz, bm);
+    mk(dg, bw, bh, 0.012, cx, cy-0.015, fz-0.012-depth, bm); mk(dg, bw, 0.012, depth, cx, cy-0.015-bh/2, bz, bm);
+    const mkr = marker(dg, cx+w/2-0.05, cy, fz+0.03);
+    return register(id, 'drawer', dg, {travel: depth*0.85, mkr}, lights);
+  }
+
   function kitchenRun(side, a, b, o={}){
     const len = b-a; if(len<0.3) return null;
     const g = new T.Group();
@@ -1640,17 +1749,18 @@ function build3D(){
     const FZ = 0.58; // front plane
     for(let i=0;i<n;i++){
       const cx = mw*i+mw/2, kind = o.kinds && o.kinds[i];
-      mk(g, mw, 0.76, 0.56, cx, 0.48, 0.28, carcMat);
+      if(kind==='oven') mk(g, mw, 0.76, 0.56, cx, 0.48, 0.28, carcMat);
       if(kind==='oven'){
         mk(g, mw-0.002, 0.16, 0.019, cx, 0.78, FZ, doorMat, true); handleH(g, cx, 0.82, FZ, Math.min(0.3, mw*0.5));
         mk(g, mw-0.006, 0.58, 0.02, cx, 0.4, FZ, steel, true); mk(g, mw-0.1, 0.34, 0.004, cx, 0.37, FZ+0.011, blackGlass); handleH(g, cx, 0.64, FZ+0.002, 0.4);
         mk(g, mw*0.5, 0.025, 0.004, cx, 0.56, FZ+0.013, new T.MeshStandardMaterial({color:0x1A1A1A, emissive:0xD9A441, emissiveIntensity:0.6}));
       } else if(kind==='drawers' || (!kind && i%3===2)){
+        const L1 = interior(g, mw, 0.76, 0.56, cx, 0.48, false);
         const hs=[0.2,0.27,0.27]; let yy = 0.86;
-        hs.forEach(hh=>{ mk(g, mw-0.002, hh-0.002, 0.019, cx, yy-hh/2, FZ, doorMat, true); handleH(g, cx, yy-0.045, FZ, Math.min(0.32, mw*0.5)); yy-=hh; });
+        hs.forEach((hh,k)=>{ slideDrawer(g, `${side}-d${i}-${k}`, cx, yy-hh/2, mw, hh, FZ, 0.46, hh/2-0.045, L1); yy-=hh; });
       } else {
-        mk(g, mw-0.002, 0.758, 0.019, cx, 0.48, FZ, doorMat, true);
-        handleV(g, i%2? cx+mw/2-0.04 : cx-mw/2+0.04, 0.74, FZ, 0.16);
+        const L1 = interior(g, mw, 0.76, 0.56, cx, 0.48, true);
+        hingedDoor(g, `${side}-b${i}`, cx, 0.48, mw, 0.758, FZ, i%2===1, 0.26, 0.16, L1);
       }
     }
     mk(g, len+(o.extendEnd||0), 0.04, 0.62, (len+(o.extendEnd||0))/2, 0.88, 0.31, counterMat);
@@ -1660,9 +1770,8 @@ function build3D(){
       for(let i=0;i<n;i++){
         const cx = mw*i+mw/2, wx = a+cx;
         if(o.skips && o.skips.some(r=>wx>r[0]&&wx<r[1])) continue;
-        mk(g, mw, 0.7, 0.32, cx, 1.8, 0.16, carcMat);
-        mk(g, mw-0.002, 0.698, 0.019, cx, 1.8, 0.335, doorMat, true);
-        handleV(g, i%2? cx+mw/2-0.04 : cx-mw/2+0.04, 1.52, 0.335, 0.14);
+        const L1 = interior(g, mw, 0.7, 0.32, cx, 1.8, true);
+        hingedDoor(g, `${side}-u${i}`, cx, 1.8, mw, 0.698, 0.335, i%2===1, -0.28, 0.14, L1);
         if(s.led){ mk(g, mw-0.04, 0.008, 0.02, cx, 1.446, 0.27, ledMat); }
       }
       if(s.led && T.RectAreaLight && THREE.__ral){ const ra = new T.RectAreaLight(0xFFD9A0, 14, len-0.06, 0.035); ra.position.set(len/2, 1.442, 0.27); ra.rotation.x = -Math.PI/2; g.add(ra); }
@@ -1689,12 +1798,14 @@ function build3D(){
         for(let k=0;k<4;k++){ const yy = 0.95 + k*((th-1.0)/4); mk(g, mw-0.04, 0.02, 0.56, cx, yy, 0.29, doorMat);
           for(let c=0;c<2;c++) mk(g, (mw-0.12)/2, 0.07+rnd(k+c)*0.05, 0.3, cx-mw/4+0.02+c*(mw/2-0.04), yy+0.06, 0.3, Std({color:cols[(k*2+c)%5], roughness:0.95})); }
         const hs=[0.29,0.29,0.29]; let yy=0.9;
-        hs.forEach(hh=>{ mk(g, mw-0.002, hh-0.002, 0.019, cx, yy-hh/2, FZ, doorMat, true); handleH(g, cx, yy-0.05, FZ, Math.min(0.3,mw*0.5)); yy-=hh; });
+        hs.forEach((hh,k)=>{ slideDrawer(g, `${side}-td${k}`, cx, yy-hh/2, mw, hh, FZ, 0.46, hh/2-0.05, null); yy-=hh; });
         if(s.led){ mk(g, mw-0.06, 0.008, 0.02, cx, th-0.03, 0.5, ledMat); const pl=new T.PointLight(0xD9A441,0.5,1.4,2); pl.position.set(cx, th-0.15, 0.4); g.add(pl); }
       } else {
-        mk(g, mw, th-0.08, 0.56, cx, 0.08+(th-0.08)/2, 0.28, carcMat);
-        mk(g, mw-0.002, th-0.082, 0.019, cx, 0.08+(th-0.08)/2, FZ, doorMat, true);
-        handleV(g, i%2? cx-mw/2+0.04 : cx+mw/2-0.04, 1.1, FZ, 0.6);
+        const cy = 0.08+(th-0.08)/2;
+        const L1 = interior(g, mw, th-0.08, 0.56, cx, cy, false);
+        mk(g, mw-0.04, 0.02, 0.5, cx, th-0.45, 0.28, L1.im);                                  // رف فوق
+        const rod = new T.Mesh(new T.CylinderGeometry(0.012,0.012,mw-0.05,16), steel); rod.rotation.z=Math.PI/2; rod.position.set(cx, th-0.52, 0.3); g.add(rod);   // شماعة
+        hingedDoor(g, `${side}-t${i}`, cx, cy, mw, th-0.082, FZ, i%2===0, 1.1-cy, 0.6, L1);
       }
     }
     if(s.led) mk(g, len-0.04, 0.01, 0.02, len/2, th+0.002, 0.55, ledMat);
@@ -1799,6 +1910,49 @@ function build3D(){
   controls.update();
 }
 
+/* ===== محرك فتح وقفل الضلف والأدراج ===== */
+const OPEN = { d2:{}, d3:{} };            // الحالة المطلوبة لكل ضلفة/درج
+const T2 = {};                              // تقدم الحركة في الـ 2D (0..1)
+const ease = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+const DOOR_MAX = 110*Math.PI/180, OPEN_TIME = 0.7;
+function apply2D(gEl){
+  const id=gEl.dataset.id, e=ease(T2[id]||0), k=gEl.dataset.k;
+  const leaf=gEl.querySelector('.leaf'), sh=gEl.querySelector('.leaf-sh');
+  if(k==='door'){
+    const th=e*DOOR_MAX, hx=+gEl.dataset.hx, cy=+gEl.dataset.cy, hl=gEl.dataset.hl==='1';
+    const sx=Math.cos(th), sk=(hl?-1:1)*Math.sin(th)*0.10;
+    leaf.setAttribute('transform', e? `translate(${hx} ${cy}) matrix(${sx} ${sk} 0 1 0 0) translate(${-hx} ${-cy})` : '');
+    sh.setAttribute('opacity', (Math.sin(th)*0.28 + (th>Math.PI/2?0.18:0)).toFixed(3));
+  } else {
+    const cx=+gEl.dataset.cx, cy=+gEl.dataset.cy, h=+gEl.dataset.h, sc2=1+0.07*e;
+    leaf.setAttribute('transform', e? `translate(0 ${h*0.22*e}) translate(${cx} ${cy}) scale(${sc2}) translate(${-cx} ${-cy})` : '');
+    const bx=gEl.querySelector('.op-box'); if(bx){ bx.setAttribute('opacity', Math.min(1,e*1.4).toFixed(3)); bx.setAttribute('transform', `translate(0 ${h*0.22*e})`); }
+    sh.setAttribute('opacity','0');
+  }
+  gEl.querySelector('.op-led').setAttribute('opacity', e.toFixed(3));
+  gEl.querySelector('.op-glow').setAttribute('opacity', (e*0.9).toFixed(3));
+  gEl.querySelector('title').textContent = (k==='door'?'ضلفة':'درج') + (OPEN.d2[id] ? ': دوس عشان تقفل' : ': دوس عشان تفتح');
+}
+function apply2DAll(){ svgEl.querySelectorAll('.op2').forEach(apply2D); }
+let anim2 = 0, last2 = 0;
+function tick2(now){
+  const dt=Math.min(0.05,(now-(last2||now))/1000); last2=now; let moving=false;
+  svgEl.querySelectorAll('.op2').forEach(gEl=>{ const id=gEl.dataset.id, tg=OPEN.d2[id]?1:0, t=T2[id]||0;
+    if(t!==tg){ moving=true; T2[id] = tg>t ? Math.min(1,t+dt/OPEN_TIME) : Math.max(0,t-dt/OPEN_TIME); apply2D(gEl); } });
+  anim2 = moving ? requestAnimationFrame(tick2) : 0; if(!moving) last2=0;
+}
+function kick2(){ if(!anim2){ last2=0; anim2=requestAnimationFrame(tick2); } }
+function toggle2(id){ OPEN.d2[id] = !OPEN.d2[id]; kick2(); }
+svgEl.addEventListener('click', e=>{ const g=e.target.closest('.op2'); if(g) toggle2(g.dataset.id); });
+svgEl.addEventListener('keydown', e=>{ const g=e.target.closest('.op2'); if(g && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); toggle2(g.dataset.id); } });
+function setAll(v){
+  svgEl.querySelectorAll('.op2').forEach(g=>{ OPEN.d2[g.dataset.id]=v; }); kick2();
+  if(three && three.ops) three.ops.forEach(op=>{ OPEN.d3[op.id]=v; });
+  OPEN.all = v;
+}
+document.getElementById('pvOpenAll').addEventListener('click', ()=>setAll(true));
+document.getElementById('pvCloseAll').addEventListener('click', ()=>setAll(false));
+
 function render(){
   draw2D(); paintSwatches();
   if(mode==='3d'){ clearTimeout(rebuildT); rebuildT = setTimeout(build3D, 120); }
@@ -1810,7 +1964,7 @@ function setMode(m){
   tabs.forEach(t=>{ const on=t.dataset.m===m; t.classList.toggle('on',on); t.setAttribute('aria-pressed',on); });
   svgEl.style.display = m==='2d'?'block':'none';
   box3d.style.display = m==='3d'?'block':'none';
-  document.getElementById('pvHint').textContent = m==='3d' ? 'لف المطبخ بصباعك أو بالماوس' : 'شكل تقريبي، مش بالمقاسات الدقيقة';
+  document.getElementById('pvHint').textContent = m==='3d' ? 'لف المطبخ بصباعك، ودوس على أي ضلفة أو درج يتفتح' : 'دوس على أي ضلفة أو درج عشان يتفتح';
   if(m==='3d'){ if(!three) init3D(); else { three.resize(); build3D(); } }
 }
 tabs.forEach(t=>t.addEventListener('click',()=>setMode(t.dataset.m)));
