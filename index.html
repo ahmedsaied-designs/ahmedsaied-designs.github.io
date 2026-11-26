@@ -1276,14 +1276,29 @@ function paintSwatches(){
 }
 
 function backLayout(s, n){
-  const fr = /يمين/.test(s.fridge) ? n-1 : /شمال/.test(s.fridge) ? 0 : -1;
+  // التلاجة: يمين = على الحيطة اليمين أول ما تدخل (لو فيه حيطة يمين)، شمال = نفس الكلام على الشمال
+  const hasR = isL(s)||isU(s), hasL = isU(s);
+  const wantR = /يمين/.test(s.fridge), wantL = /شمال/.test(s.fridge);
+  const sideFr = (!s.dress && wantR && hasR) ? 'r' : (!s.dress && wantL && hasL) ? 'l' : null;
+  const fr = sideFr ? -1 : wantR ? n-1 : wantL ? 0 : -1;
   const winBack = s.window==='الحيطة اللي قدامك';
   const winA = Math.floor(n/2)-1, winB = Math.floor(n/2);
-  let stove = /يمين/.test(s.stove) ? n-2 : /شمال/.test(s.stove) ? 1 : (winBack ? Math.max(0,winA-2) : Math.floor(n/2));
-  if(stove===fr) stove = fr===0?1:n-2;
-  stove = Math.max(0,Math.min(n-1,stove));
-  const sink = winBack ? winA : (stove+2<n && stove+2!==fr ? stove+2 : Math.max(0,stove-2));
-  return {fr, winBack, winA, winB, stove, sink};
+  // البوتاجاز: حسب اختيار العميل، ولو مختارش وفيه شباك قدامه يبقى تحت الشباك
+  const st = s.stove || '';
+  let stove;
+  if(/تحت الشباك/.test(st)) stove = winBack ? winA : Math.floor(n/2);
+  else if(/يمين/.test(st)) stove = n-2;
+  else if(/شمال/.test(st)) stove = 1;
+  else if(/النص/.test(st)) stove = Math.floor(n/2);
+  else stove = winBack ? winA : Math.floor(n/2);
+  if(stove===fr) stove = fr===0 ? 1 : n-2;
+  stove = Math.max(0, Math.min(n-1, stove));
+  const stoveUnderWin = winBack && (stove===winA || stove===winB);
+  // الحوض: تحت الشباك لو البوتاجاز مش هناك، وإلا جنب البوتاجاز
+  let sink;
+  if(winBack && !stoveUnderWin) sink = winA;
+  else { const cands = [stove+2, stove-2, stove+3, stove-3].filter(k=>k>=0 && k<n && k!==fr && !(winBack && (k===winA||k===winB))); sink = cands.length ? cands[0] : Math.max(0, stove-1); }
+  return {fr, sideFr, winBack, winA, winB, stove, sink, stoveUnderWin};
 }
 const backN = Lcm => Math.max(3, Math.min(9, Math.round(Lcm/60)));
 function draw2D(){
@@ -1409,7 +1424,7 @@ function draw2D(){
 
   if(!s.dress){
     const n = backN(s.L), mw = wW/n;
-    const {fr, winBack, winA, winB, stove, sink} = backLayout(s, n);
+    const {fr, sideFr, winBack, winA, winB, stove, sink, stoveUnderWin} = backLayout(s, n);
     const baseTop = y(87), cTop = y(91), ut = y(215), uh = 70*sc, bh = 77*sc;
     // backsplash
     const bx1 = x0 + (fr===0?mw:0), bx2 = x0 + wW - (fr===n-1?mw:0);
@@ -1461,7 +1476,7 @@ function draw2D(){
     { const tH2 = Math.max(6, 10*sc); o += `<polygon points="${sx+4},${cTop-.6} ${sx+mw-4},${cTop-.6} ${sx+mw-7},${cTop-tH2*0.85} ${sx+7},${cTop-tH2*0.85}" fill="url(#pvOven)" stroke="#333333" stroke-width=".4"/><polygon points="${sx+mw*0.3},${cTop-.6} ${sx+mw*0.38},${cTop-.6} ${sx+mw*0.42},${cTop-tH2*0.85} ${sx+mw*0.36},${cTop-tH2*0.85}" fill="#FFFFFF" opacity=".14"/>`;
       [0.3,0.7].forEach(f=>{ o += `<ellipse cx="${sx+mw*f}" cy="${cTop-tH2*0.42}" rx="${mw*0.11}" ry="${tH2*0.2}" fill="none" stroke="#6B6B6B" stroke-width=".5"/>`; }); }
     const hb = y(170), ht = Math.max(ceil, y(s.H));
-    o += `<rect x="${sx+mw*0.36}" y="${ht}" width="${mw*0.28}" height="${hb-ht-12*sc}" fill="url(#pvSteel)"/>
+    if(!stoveUnderWin) o += `<rect x="${sx+mw*0.36}" y="${ht}" width="${mw*0.28}" height="${hb-ht-12*sc}" fill="url(#pvSteel)"/>
           <polygon points="${sx+mw*0.08},${hb} ${sx+mw*0.92},${hb} ${sx+mw*0.72},${hb-12*sc} ${sx+mw*0.28},${hb-12*sc}" fill="url(#pvSteel)" stroke="#A6A6A6" stroke-width=".5"/>
           <rect x="${sx+mw*0.08}" y="${hb}" width="${mw*0.84}" height="2.2" fill="#A6A6A6"/>
           <rect x="${sx+mw*0.15}" y="${hb+2.2}" width="${mw*0.7}" height="${(cTop-hb)*0.5}" fill="url(#pvLed)" opacity=".25"/>`;
@@ -1520,6 +1535,21 @@ function draw2D(){
   }
   if(s.color==='جوز ASD' && !texReady) { door = 'url(#pvWalnut)'; }
   if(sideR) o += sideRun(false);
+  const sideFridge = (left)=>{
+    const xa = left? x0 : x0+wW, dir = left?-1:1, xb = xa + dir*sideW*0.9;
+    const f = Math.min(0.62, 74/Math.max(120, s.W)), t1 = 1-f, t2 = 0.985;
+    const X = t=> xa+(xb-xa)*t, Yt = t=> y(198) - 5*t, Yb = t=> floorY + 18*t - 1, Ym = t=> y(120) - 1.5*t;
+    const sh = left? .10 : .2;
+    let p = `<polygon points="${X(t1)},${Yt(t1)} ${X(t2)},${Yt(t2)} ${X(t2)},${Yb(t2)} ${X(t1)},${Yb(t1)}" fill="url(#pvSteel)" stroke="#A6A6A6" stroke-width=".6"/>`;
+    p += `<polygon points="${X(t1)},${Yt(t1)} ${X(t2)},${Yt(t2)} ${X(t2)},${Yb(t2)} ${X(t1)},${Yb(t1)}" fill="#000" opacity="${sh}"/>`;
+    p += `<polygon points="${X(t1)},${Yt(t1)} ${X(t1+0.05)},${Yt(t1+0.05)} ${X(t1+0.05)},${Yb(t1+0.05)} ${X(t1)},${Yb(t1)}" fill="#FFFFFF" opacity=".35"/>`;
+    p += `<line x1="${X(t1)}" y1="${Ym(t1)}" x2="${X(t2)}" y2="${Ym(t2)}" stroke="#6B6B6B" stroke-width=".8"/>`;
+    const hx = X(t1+0.12);
+    p += `<line x1="${hx}" y1="${Yt(t1+0.12)+10}" x2="${hx}" y2="${Ym(t1+0.12)-8}" stroke="url(#pvV)" stroke-width="2.4" stroke-linecap="round"/><line x1="${hx}" y1="${Ym(t1+0.12)+6}" x2="${hx}" y2="${Ym(t1+0.12)+30}" stroke="url(#pvV)" stroke-width="2.4" stroke-linecap="round"/>`;
+    p += `<polygon points="${X(t1)},${Yb(t1)} ${X(t2)},${Yb(t2)} ${X(t2)},${Yb(t2)+3} ${X(t1)},${Yb(t1)+3}" fill="#000" opacity=".25" filter="url(#pvB1)"/>`;
+    return p;
+  };
+  if(!s.dress){ const BL = backLayout(s, backN(s.L)); if(BL.sideFr==='r' && sideR) o += sideFridge(false); if(BL.sideFr==='l' && sideL) o += sideFridge(true); }
   if(sideL) o += sideRun(true);
   if(s.window==='الحيطة اليمين' || s.window==='الحيطة الشمال'){ const fromR = s.window==='الحيطة اليمين'; o += `<defs><linearGradient id="pvWin" x1="${fromR?1:0}" y1="0" x2="${fromR?0:1}" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".35"/><stop offset=".6" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient></defs><rect x="${x0}" y="${ceil}" width="${wW}" height="${floorY-ceil}" fill="url(#pvWin)"/>`; }
   if(s.accent){
@@ -1946,18 +1976,20 @@ function build3D(){
     mk(G, Math.min(0.58,mw-0.04), 0.006, 0.5, sx, 0.903, 0.3, blackGlass);
     const ringMat = Std({color:0x333333, roughness:0.4});
     [[-0.13,-0.1],[0.13,-0.1],[-0.13,0.1],[0.13,0.1]].forEach(([dx,dz],k)=>{ const r = new T.Mesh(new T.TorusGeometry(k%3?0.06:0.08, 0.004, 6, 32), ringMat); r.rotation.x=-Math.PI/2; r.position.set(sx+dx, 0.907, 0.3+dz); G.add(r); });
+    if(!LAY.stoveUnderWin){
     mk(G, Math.min(0.6,mw), 0.06, 0.48, sx, 1.62, 0.24, steel, true);
     const hoodTop = Math.max(1.75, H-0.02);
     mk(G, 0.26, hoodTop-1.65, 0.24, sx, 1.65+(hoodTop-1.65)/2, 0.12, steel, true);
-    const hl = new T.PointLight(0xE6D5B8, 0.25, 1.2, 2); hl.position.set(sx, 1.55, 0.35); G.add(hl);
+    const hl = new T.PointLight(0xE6D5B8, 0.25, 1.2, 2); hl.position.set(sx, 1.55, 0.35); G.add(hl); }
     // sink + faucet
     const kx = bA + mw*kIdx + mw/2;
     mk(G, Math.min(0.55, mw-0.06), 0.004, 0.4, kx, 0.9015, 0.3, steel);
     mk(G, Math.min(0.5, mw-0.1), 0.003, 0.35, kx, 0.9035, 0.31, Std({color:0x6B6B6B, roughness:0.35, metalness:0.8}));
     const curve = new T.CatmullRomCurve3([new T.Vector3(0,0,0), new T.Vector3(0,0.24,0), new T.Vector3(0,0.31,0.05), new T.Vector3(0,0.29,0.15), new T.Vector3(0,0.25,0.17)]);
     const tap = new T.Mesh(new T.TubeGeometry(curve, 24, 0.012, 8, false), steel); tap.position.set(kx, 0.9, 0.08); tap.castShadow=true; G.add(tap);
-    if(hasR){ kitchenRun('r', LAY.fr===n2-1 ? 0.71 : 0.62, W, {noUpper: wr, noSplash:false}); }
-    if(hasL){ kitchenRun('l', LAY.fr===0 ? 0.71 : 0.62, W, {noUpper: wl}); }
+    const fwS = 0.72, endR = LAY.sideFr==='r' ? W-fwS-0.04 : W, endL = LAY.sideFr==='l' ? W-fwS-0.04 : W;
+    if(hasR){ kitchenRun('r', LAY.fr===n2-1 ? 0.71 : 0.62, Math.max(0.95,endR), {noUpper: wr, noSplash:false}); if(LAY.sideFr==='r') fridge(L-0.34, W-fwS/2-0.02, -Math.PI/2, fwS); }
+    if(hasL){ kitchenRun('l', LAY.fr===0 ? 0.71 : 0.62, Math.max(0.95,endL), {noUpper: wl}); if(LAY.sideFr==='l') fridge(0.34, W-fwS/2-0.02, Math.PI/2, fwS); }
   }
   if(isIsland(s)){
     const iw = Math.min(2.0, L*0.5), id = 0.9, iz = Math.min(W-0.75, Math.max(1.55, W*0.58)), ih = 0.88;
