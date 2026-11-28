@@ -490,6 +490,8 @@ main .card{background:#FFFDF9;border-color:rgba(138,90,54,.10)}
 .pv-acts{display:flex;gap:6px;margin-inline-start:auto;margin-inline-end:8px}
 .pv-acts button{border:1.5px solid #D8C6AC;background:#FFFDF9;border-radius:9px;padding:6px 10px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px;color:#141210}
 .pv-acts button:hover{border-color:#8A5A36}
+.seg3 label span{font-size:12.5px}
+.hnote{display:block;margin-top:6px;font-size:11.5px;color:#6B6B6B;line-height:1.5}
 .pv-acts button.on{background:#141210;color:#FFFDF9;border-color:#141210}
 #pv2d .gl2{cursor:default}
 .glass-mode #pv2d .gl2,.glass-mode #pv2d .op2[data-k="door"]{cursor:pointer}
@@ -715,18 +717,12 @@ main .card{background:#FFFDF9;border-color:rgba(138,90,54,.10)}
                 <option>تحت الشباك</option><option>يمين المطبخ</option><option>شمال المطبخ</option><option>في النص</option><option id="sinkIslandOpt" hidden disabled>على الجزيرة</option><option>لسه مش محدد</option>
               </select></div></div>
           </div>
-          <div class="q" style="margin-top:14px">أجهزة إضافية</div>
-          <div class="tgs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px">
-            <div class="tg"><h4>غسالة أطباق</h4>
-              <div class="seg">
-                <label><input type="radio" name="dw" value="أيوه"><span>أيوه</span></label>
-                <label><input type="radio" name="dw" value="لأ" checked><span>لأ</span></label>
-              </div></div>
-            <div class="tg"><h4>غسالة ملابس</h4>
-              <div class="seg">
-                <label><input type="radio" name="wm" value="أيوه"><span>أيوه</span></label>
-                <label><input type="radio" name="wm" value="لأ" checked><span>لأ</span></label>
-              </div></div>
+          <div class="q" style="margin-top:14px">أجهزة إضافية ومكانها</div>
+          <div class="fields" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+            <div class="field"><label for="dwSel">غسالة أطباق</label>
+              <div class="inp"><select id="dwSel" class="txt"><option>مفيش</option><option>جنب الحوض</option><option>يمين المطبخ</option><option>شمال المطبخ</option><option>في النص</option><option>تحت الشباك</option><option id="dwIslandOpt" hidden disabled>في الجزيرة</option></select></div></div>
+            <div class="field"><label for="wmSel">غسالة ملابس</label>
+              <div class="inp"><select id="wmSel" class="txt"><option>مفيش</option><option>جنب الحوض</option><option>يمين المطبخ</option><option>شمال المطبخ</option><option>في النص</option><option>تحت الشباك</option></select></div></div>
           </div>
           <div class="field" style="margin-top:12px"><label for="notes">ملاحظات إضافية (اختياري)</label>
             <textarea id="notes" class="txt" placeholder="مثلا: الحوض لازم يفضل تحت الشباك، أو فيه عمود في الركن…"></textarea></div>
@@ -802,6 +798,18 @@ main .card{background:#FFFDF9;border-color:rgba(138,90,54,.10)}
           <div class="seg">
             <label><input type="radio" name="led" value="أيوه" checked><span>أيوه، عايز ليد</span></label>
             <label><input type="radio" name="led" value="لأ"><span>لأ</span></label>
+          </div></div>
+        <div class="tg"><h4>فتح الدواليب السفلية</h4>
+          <div class="seg seg3">
+            <label><input type="radio" name="hLow" value="مقبض ظاهر" checked><span>مقبض ظاهر</span></label>
+            <label><input type="radio" name="hLow" value="هيدن"><span>هيدن</span></label>
+            <label><input type="radio" name="hLow" value="تتش"><span>تتش</span></label>
+          </div><small class="hnote">هيدن = بروفايل مخفي بدل المقبض · تتش = تفتح بالضغط من غير مقبض</small></div>
+        <div class="tg"><h4>فتح الدواليب العلوية</h4>
+          <div class="seg seg3">
+            <label><input type="radio" name="hUp" value="مقبض ظاهر" checked><span>مقبض ظاهر</span></label>
+            <label><input type="radio" name="hUp" value="هيدن"><span>هيدن</span></label>
+            <label><input type="radio" name="hUp" value="تتش"><span>تتش</span></label>
           </div></div>
         <div class="tg"><h4>دولاب زجاج بإضاءة</h4>
           <div class="seg">
@@ -1157,7 +1165,7 @@ function data(){
     fridge:$('#fridge').value||'—', stove:$('#stove').value||'—', sink:$('#sink').value||'—', notes:$('#notes').value.trim(),
     material:val('material'), color:val('color'),
     colorHex:(document.querySelector('input[name="color"]:checked')||{dataset:{}}).dataset.hex,
-    hinges:val('hinges'), led:val('led'), glass:(window.glassDesc ? window.glassDesc() : 'لأ'), dw:val('dw')||'لأ', wm:val('wm')||'لأ',
+    hinges:val('hinges'), led:val('led'), glass:(window.glassDesc ? window.glassDesc() : 'لأ'), dw:$('#dwSel').value||'مفيش', wm:$('#wmSel').value||'مفيش', hLow:val('hLow')||'مقبض ظاهر', hUp:val('hUp')||'مقبض ظاهر',
     name:$('#name').value.trim(), phone:normPhone($('#phone').value), area,
     photo: !!$('#photo').files.length
   };
@@ -1175,7 +1183,8 @@ function renderSummary(){
     row('اللون', `<span class="sum-sw" style="background:${d.colorHex||'transparent'}"></span>${d.color}`)+
     row('المفصلات / ليد', `${d.hinges} · ليد: ${d.led}`)+
     row('ضلف زجاج بإضاءة', d.glass)+
-    (d.type==='دريسنج' ? '' : row('غسالة أطباق / غسالة ملابس', `${d.dw} / ${d.wm}`));
+    (d.type==='دريسنج' ? '' : row('غسالة أطباق / غسالة ملابس', `${d.dw} / ${d.wm}`))+
+    row('فتح الدواليب', d.type==='دريسنج' ? d.hLow : `سفلي: ${d.hLow} · علوي: ${d.hUp}`);
   $('#afterNote').classList.toggle('on', d.photo);
 }
 function message(){
@@ -1192,6 +1201,7 @@ function message(){
     `🔥 البوتجاز: ${d.stove}`,
     d.type==='دريسنج' ? null : `🍽️ غسالة أطباق: ${d.dw}`,
     d.type==='دريسنج' ? null : `👕 غسالة ملابس: ${d.wm}`,
+    d.type==='دريسنج' ? `🔘 فتح الدواليب: ${d.hLow}` : `🔘 فتح الدواليب: السفلية ${d.hLow} · العلوية ${d.hUp}`,
     d.type==='دريسنج' ? null : `🚰 الحوض: ${d.sink}`,
     d.notes ? `📝 ملاحظات: ${d.notes}` : null,
     ``,
@@ -1250,7 +1260,7 @@ function st(){
     shape: g('shape') || 'مطبخ حرف L', dress: g('type') === 'دريسنج',
     L: num('len',320,50,2000), W: num('wid',260,50,2000), H: num('hei',280,180,600),
     color, ...photoLook(color),
-    mat: g('material') || 'MDF', led: g('led') === 'أيوه', glass: g('glass') === 'أيوه', dw: g('dw') === 'أيوه', wm: g('wm') === 'أيوه', sink: document.getElementById('sink').value, islandSink: document.getElementById('sink').value === 'على الجزيرة',
+    mat: g('material') || 'MDF', led: g('led') === 'أيوه', glass: g('glass') === 'أيوه', dwPos: document.getElementById('dwSel').value||'مفيش', wmPos: document.getElementById('wmSel').value||'مفيش', dw: !/^(مفيش)?$/.test(document.getElementById('dwSel').value), wm: !/^(مفيش)?$/.test(document.getElementById('wmSel').value), hLow: ({'هيدن':'hidden','تتش':'touch'})[g('hLow')]||'show', hUp: ({'هيدن':'hidden','تتش':'touch'})[g('hUp')]||'show', sink: document.getElementById('sink').value, islandSink: document.getElementById('sink').value === 'على الجزيرة',
     window: g('window'), fridge: document.getElementById('fridge').value, stove: document.getElementById('stove').value
   };
 }
@@ -1362,16 +1372,22 @@ function backLayout(s, n){
   const cornerR = hasR, cornerL = hasL;   // أطراف الحيطة اللي قدامك في مطبخ L/U أركان مقفولة، مينفعش فيها أجهزة
   const freeB = k => k>=0 && k<n && !used.has(k) && !(cornerR && k===n-1) && !(cornerL && k===0);
   let dw = -1, wm = -1;
-  if(s.dw && !s.dress && !islandSink && sink>=0){
-    const away = sink>stove ? [sink+1, sink-1] : [sink-1, sink+1];
-    dw = away.find(freeB); if(dw===undefined) dw = -1; if(dw>=0) used.add(dw);
+  const nearF = k0 => { for(let d=0; d<n; d++) for(const k of [k0+d, k0-d]) if(freeB(k)) return k; return -1; };
+  const placeAt = pos => /يمين/.test(pos) ? nearF(n-1) : /شمال/.test(pos) ? nearF(0) : /النص/.test(pos) ? nearF(Math.floor(n/2)) : /تحت الشباك/.test(pos) ? nearF(winBack ? winA : Math.floor(n/2)) : null;
+  const dwPos = s.dwPos||'', wmPos = s.wmPos||'';
+  const dwIsland = !!(s.dw && !s.dress && isIsland(s) && (/الجزيرة/.test(dwPos) || (islandSink && placeAt(dwPos)===null)));
+  if(s.dw && !s.dress && !dwIsland){
+    const at = placeAt(dwPos);
+    if(at!==null) dw = at;
+    else if(sink>=0){ const away = sink>stove ? [sink+1, sink-1] : [sink-1, sink+1]; dw = away.find(freeB); if(dw===undefined) dw = nearF(sink); }
+    else dw = nearF(Math.floor(n/2));
+    if(dw>=0) used.add(dw);
   }
   if(s.wm && !s.dress){
-    const ref = sink>=0 ? sink : Math.floor(n/2);
-    const order = [ref+1, ref-1, ref+2, ref-2, ref+3, ref-3, n-1, 0, ref+4, ref-4];
-    wm = order.find(freeB); if(wm===undefined) wm = -1;
+    const at = placeAt(wmPos);
+    if(at!==null) wm = at;
+    else { const ref = sink>=0 ? sink : Math.floor(n/2); wm = nearF(ref); }
   }
-  const dwIsland = !!(s.dw && islandSink);
   return {fr, sideFr, winBack, winA, winB, stove, sink, stoveUnderWin, glassIdx, dw, wm, islandSink, dwIsland};
 }
 const backN = Lcm => Math.max(3, Math.min(9, Math.round(Lcm/60)));
@@ -1489,6 +1505,7 @@ function draw2D(){
   };
   const hBarS = (x,yy,w)=>{ const W2 = w*1.35, X2 = x - (W2-w)/2; return `<rect x="${X2+.6}" y="${yy+1.6}" width="${W2}" height="2.6" rx="1.3" fill="#000" opacity=".35" filter="url(#pvB1)"/><rect x="${X2}" y="${yy}" width="${W2}" height="2.6" rx="1.3" fill="url(#pvH)" stroke="#6B6B6B" stroke-width=".25"/><rect x="${X2+1}" y="${yy+.45}" width="${W2-2}" height=".5" rx=".25" fill="#FFFFFF" opacity=".9"/>`; };
   const vBarS = (x,yy,h)=>`<rect x="${x+1.4}" y="${yy+1}" width="2.6" height="${h}" rx="1.3" fill="#000" opacity=".35" filter="url(#pvB1)"/><rect x="${x-.4}" y="${yy}" width="2.6" height="${h}" rx="1.3" fill="url(#pvV)" stroke="#6B6B6B" stroke-width=".25"/><rect x="${x+.25}" y="${yy+1}" width=".5" height="${h-2}" rx=".25" fill="#FFFFFF" opacity=".9"/>`;
+  const HL = h => s.hLow==='show' ? h : '', HU = h => s.hUp==='show' ? h : '';
   const knob = (x,yy)=>`<circle cx="${x+1}" cy="${yy+1.4}" r="2.4" fill="#000" opacity=".35" filter="url(#pvB1)"/><circle cx="${x}" cy="${yy}" r="2.3" fill="url(#pvKnob)"/><circle cx="${x-.7}" cy="${yy-.8}" r=".55" fill="#FFFFFF" opacity=".55"/>`;
   const hBar = (x,yy,w)=>{ const W2 = w*1.35, X2 = x - (W2-w)/2; return `<rect x="${X2+.6}" y="${yy+1.6}" width="${W2}" height="2.6" rx="1.3" fill="#000" opacity=".35" filter="url(#pvB1)"/><rect x="${X2}" y="${yy}" width="${W2}" height="2.6" rx="1.3" fill="url(#pvHB)"/><rect x="${X2+1}" y="${yy+.45}" width="${W2-2}" height=".45" rx=".2" fill="#A6A6A6" opacity=".7"/>`; };
   const vBar = (x,yy,h)=>`<rect x="${x+1.4}" y="${yy+1}" width="2.6" height="${h}" rx="1.3" fill="#000" opacity=".35" filter="url(#pvB1)"/><rect x="${x-.4}" y="${yy}" width="2.6" height="${h}" rx="1.3" fill="url(#pvHB)"/><rect x="${x+.25}" y="${yy+1}" width=".45" height="${h-2}" rx=".2" fill="#A6A6A6" opacity=".7"/>`;
@@ -1612,7 +1629,7 @@ function draw2D(){
       }
       if(i===stove){
         const dh = bh*0.22;
-        o += op2(`s${i}`, 'drawer', x, baseTop, mw, dh, false, panel(x, baseTop, mw, dh, hBar(x+mw*0.3, baseTop+3, mw*0.4)));
+        o += op2(`s${i}`, 'drawer', x, baseTop, mw, dh, false, panel(x, baseTop, mw, dh, HL(hBar(x+mw*0.3, baseTop+3, mw*0.4))));
         const oy = baseTop+dh+1, oh = bh-dh-2, ox = x+1, ow = mw-2;
         o += `<rect x="${ox+.4}" y="${oy+1.6}" width="${ow}" height="${oh}" rx="1.5" fill="#000" opacity=".35" filter="url(#pvDS)"/>
               <rect x="${ox}" y="${oy}" width="${ow}" height="${oh}" rx="1.5" fill="url(#pvOven)" stroke="#333333" stroke-width=".6"/>
@@ -1631,12 +1648,16 @@ function draw2D(){
         o += washM2D(x, baseTop, mw, bh);
       } else if(i%3===2 && i!==sink){
         const hh = bh/3;
-        for(let k=0;k<3;k++) o += op2(`d${i}-${k}`, 'drawer', x, baseTop+k*hh, mw, hh, false, panel(x, baseTop+k*hh, mw, hh, hBar(x+mw*0.3, baseTop+k*hh+3, mw*0.4)));
+        for(let k=0;k<3;k++) o += op2(`d${i}-${k}`, 'drawer', x, baseTop+k*hh, mw, hh, false, panel(x, baseTop+k*hh, mw, hh, HL(hBar(x+mw*0.3, baseTop+k*hh+3, mw*0.4))));
       } else {
         if(GLASS.has('b-b'+i)) o += `<g class="gl2" data-id="b-b${i}">${glassCab(x, baseTop, mw, bh)}</g>`;
-        else o += op2(`b${i}`, 'door', x, baseTop, mw, bh, i%2===1, panel(x, baseTop, mw, bh, knob(i%2? x+mw-5.5 : x+5.5, baseTop+8)));
+        else o += op2(`b${i}`, 'door', x, baseTop, mw, bh, i%2===1, panel(x, baseTop, mw, bh, HL(knob(i%2? x+mw-5.5 : x+5.5, baseTop+8))));
       }
     }
+    if(s.hLow==='hidden'){ const gola = (yy)=>`<rect x="${x0}" y="${yy}" width="${wW}" height="2.6" fill="#1A1A1A" opacity=".85"/><rect x="${x0}" y="${yy+2.2}" width="${wW}" height=".6" fill="#A6A6A6"/>`;
+      for(let i=0;i<n;i++){ if(i===fr || i===dw || i===wm || GLASS.has('b-b'+i)) continue; const x=x0+i*mw; o += `<rect x="${x+.6}" y="${baseTop+.3}" width="${mw-1.2}" height="3.8" fill="#1A1A1A" opacity=".9"/><rect x="${x+.6}" y="${baseTop+3.6}" width="${mw-1.2}" height=".8" fill="#D9D9D9"/>`;
+        if(i%3===2 && i!==sink){ const hh=bh/3; for(let k=1;k<3;k++) o += `<rect x="${x+.6}" y="${baseTop+k*hh-.4}" width="${mw-1.2}" height="2.2" fill="#1A1A1A" opacity=".8"/><rect x="${x+.6}" y="${baseTop+k*hh+1.5}" width="${mw-1.2}" height=".5" fill="#A6A6A6"/>`; } } }
+    if(s.hUp==='hidden'){ for(let i=0;i<n;i++){ if(i===fr || i===stove || (winBack && (i===winA || i===winB)) || GLASS.has('b-u'+i)) continue; const x=x0+i*mw; o += `<rect x="${x+.6}" y="${ut+uh-2.4}" width="${mw-1.2}" height="2.4" fill="#2B2118" opacity=".55"/><rect x="${x+.6}" y="${ut+uh-2.6}" width="${mw-1.2}" height=".5" fill="#A6A6A6" opacity=".8"/>`; } }
     o += `<rect x="${x0}" y="${y(10)}" width="${wW}" height="${10*sc}" fill="#1A1A1A"/>`;
     if(fr>=0) o += panel(x0+fr*mw, y(10), mw, 0.01);
     // countertop
@@ -1664,7 +1685,7 @@ function draw2D(){
       const x = x0 + i*mw;
       if(i===fr || i===stove || (winBack && (i===winA || i===winB))) continue;
       if(GLASS.has('b-u'+i)){ o += `<g class="gl2" data-id="b-u${i}">${glassCab(x, ut, mw, uh)}</g>`; continue; }
-      o += op2(`u${i}`, 'door', x, ut, mw, uh, i%2===1, panel(x, ut, mw, uh, knob(i%2? x+mw-5.5 : x+5.5, ut+uh-8)));
+      o += op2(`u${i}`, 'door', x, ut, mw, uh, i%2===1, panel(x, ut, mw, uh, HU(knob(i%2? x+mw-5.5 : x+5.5, ut+uh-8))));
       o += `<rect x="${x}" y="${ut+uh}" width="${mw}" height=".9" fill="#000" opacity=".25"/>`;
     }
     if(winBack){
@@ -1699,12 +1720,12 @@ function draw2D(){
         for(let k=1;k<=4;k++){ const yy = tt + k*(sh/4.3); o += `<rect x="${x+2}" y="${yy}" width="${mw-4}" height="2.2" fill="${door}"/><rect x="${x+2}" y="${yy+2.2}" width="${mw-4}" height="1.4" fill="#000" opacity=".2"/>`;
           const cols=['#CDB79C','#7A8FA6','#EFE8DE','#B99F83']; for(let c=0;c<2;c++) o += `<rect x="${x+5+c*(mw-10)/2}" y="${yy-6}" width="${(mw-14)/2}" height="6" rx="1" fill="${cols[(k+c)%4]}"/>`; }
         const dt = tt + tH*sc*0.64, dh = (tH*sc*0.36)/3;
-        for(let k=0;k<3;k++) o += op2(`td${k}`, 'drawer', x, dt+k*dh, mw, dh, false, panel(x, dt+k*dh, mw, dh, hBar(x+mw*0.3, dt+k*dh+3, mw*0.4)));
+        for(let k=0;k<3;k++) o += op2(`td${k}`, 'drawer', x, dt+k*dh, mw, dh, false, panel(x, dt+k*dh, mw, dh, HL(hBar(x+mw*0.3, dt+k*dh+3, mw*0.4))));
         if(s.led) o += `<rect x="${x+3}" y="${tt+3}" width="${mw-6}" height="${sh}" fill="url(#pvLed)" opacity=".45"/><rect x="${x+4}" y="${tt+2}" width="${mw-8}" height="2" fill="#E6D5B8" filter="url(#pvBlur)"/>`;
       } else if(GLASS.has('b-t'+i)){
         o += `<g class="gl2" data-id="b-t${i}">${glassWard(x, tt, mw, tH*sc)}</g>`;
       } else {
-        o += op2(`t${i}`, 'door', x, tt, mw, tH*sc, i%2===0, panel(x, tt, mw, tH*sc, vBar(i%2? x+3.2 : x+mw-5, tt+tH*sc*0.38, tH*sc*0.24)));
+        o += op2(`t${i}`, 'door', x, tt, mw, tH*sc, i%2===0, panel(x, tt, mw, tH*sc, HL(vBar(i%2? x+3.2 : x+mw-5, tt+tH*sc*0.38, tH*sc*0.24))));
       }
     }
     o += `<rect x="${x0}" y="${floorY-3}" width="${wW}" height="3" fill="#1A1A1A"/>`;
@@ -1742,7 +1763,7 @@ function draw2D(){
     }
     o += `<ellipse cx="${ix+iw/2}" cy="${floorY+27}" rx="${iw*0.6}" ry="5" fill="#000" opacity=".22" filter="url(#pvSoft)"/>`;
     const n2 = Math.max(2, Math.round(iw/(60*sc)));
-    for(let k=0;k<n2;k++) o += panel(ix + k*iw/n2, iy, iw/n2, ih, s.dress? hBar(ix+k*iw/n2+iw/n2*0.3, iy+4, iw/n2*0.4) : knob(ix+k*iw/n2+(k%2? iw/n2-5.5:5.5), iy+8));
+    for(let k=0;k<n2;k++) o += panel(ix + k*iw/n2, iy, iw/n2, ih, s.dress? hBar(ix+k*iw/n2+iw/n2*0.3, iy+4, iw/n2*0.4) : HL(knob(ix+k*iw/n2+(k%2? iw/n2-5.5:5.5), iy+8)));
     if(s.accent) o += `<rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="${base}"/><rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="url(#pvGloss)"/><rect x="${ix+2}" y="${iy+ih-2}" width="${iw-4}" height="2.4" fill="#E6D5A8" filter="url(#pvBlur)"/>`;
     o += `<rect x="${ix-5}" y="${iy-5*sc}" width="${iw+10}" height="${5*sc+1}" fill="${s.dress?door:(texReady?'url(#pvMarble)':'url(#pvQuartz)')}"/><rect x="${ix-5}" y="${iy-5*sc}" width="${iw+10}" height=".8" fill="#fff" opacity=".5"/>`;
     if(!s.dress && s.islandSink){ const scx = ix+iw*0.5, top = iy-5*sc;
@@ -2008,6 +2029,7 @@ function build3D(){
     G.add(g);
   }
   const knobMat = lum(dHex) < 0.3 ? steel : Std({color:0x1A1A1A, roughness:0.25, metalness:0.7, envMapIntensity: envOn?1.0:0});
+  const golaM = Std({color:0x1A1A1A, roughness:0.5, metalness:0.3});
   function knob3(g, x, y, z){ const c=new T.Mesh(new T.CylinderGeometry(0.012,0.010,0.024,20), knobMat); c.rotation.x=Math.PI/2; c.position.set(x,y,z+0.012); g.add(c); const sph=new T.Mesh(new T.SphereGeometry(0.014,18,10), knobMat); sph.scale.set(1,1,0.45); sph.position.set(x,y,z+0.026); sph.castShadow=true; g.add(sph); }
   function handleVS(g, x, y, z, h){ const bar=new T.Mesh(new T.CylinderGeometry(0.0085,0.0085,h*1.25,20), steel); bar.position.set(x,y,z+0.028); bar.castShadow=true; g.add(bar); [y+h/2-0.016, y-h/2+0.016].forEach(yy=>{ const st=new T.Mesh(new T.CylinderGeometry(0.004,0.004,0.028,12), steel); st.rotation.x=Math.PI/2; st.position.set(x,yy,z+0.014); g.add(st); }); }
   function handleV(g, x, y, z, h){ knob3(g, x, y + (y>0 ? h*0.4 : -h*0.4), z); }
@@ -2042,14 +2064,17 @@ function build3D(){
     const piv=new T.Group(); piv.position.set(hingeLeft? cx-w/2 : cx+w/2, cy, fz); parent.add(piv);
     const lx = hingeLeft? w/2 : -w/2, fx = hingeLeft? w-0.04 : -(w-0.04);
     mk(piv, w-0.002, h, 0.019, lx, 0, 0, doorMat, true);
-    handleV(piv, fx, handleY, 0, handleH_);
+    const zoneUp = h < 1.2 && cy > 1.2, mode = zoneUp ? s.hUp : s.hLow;
+    if(mode==='show') handleV(piv, fx, handleY, 0, handleH_);
+    else if(mode==='hidden'){ const gy = zoneUp ? -h/2+0.012 : h/2-0.014; mk(piv, w-0.01, 0.024, 0.006, lx, gy, 0.0125, golaM); mk(piv, w-0.01, 0.005, 0.008, lx, gy+(zoneUp?0.012:-0.012), 0.013, steel); }
     const mkr = marker(piv, hingeLeft? w-0.04 : -(w-0.04), -h/2+0.05, 0.03);
     return register(id, 'door', piv, {sign: hingeLeft?-1:1, mkr}, lights);
   }
   function slideDrawer(parent, id, cx, cy, w, h, fz, depth, handleY, lights){
     const dg=new T.Group(); parent.add(dg);
     mk(dg, w-0.002, h-0.002, 0.019, cx, cy, fz, doorMat, true);
-    handleH(dg, cx, cy+handleY, fz, Math.min(0.32, w*0.5));
+    if(s.hLow==='show') handleH(dg, cx, cy+handleY, fz, Math.min(0.32, w*0.5));
+    else if(s.hLow==='hidden'){ mk(dg, w-0.01, 0.022, 0.006, cx, cy+h/2-0.013, fz+0.0125, golaM); mk(dg, w-0.01, 0.005, 0.008, cx, cy+h/2-0.025, fz+0.013, steel); }
     const bm = new T.MeshStandardMaterial({color:new T.Color('#F5F2ED').convertSRGBToLinear(), roughness:0.55, envMapIntensity: envOn?0.3:0});
     const bh=h-0.06, bz=fz-0.012-depth/2, bw=w-0.06;
     mk(dg, 0.012, bh, depth, cx-bw/2, cy-0.015, bz, bm); mk(dg, 0.012, bh, depth, cx+bw/2, cy-0.015, bz, bm);
@@ -2119,7 +2144,7 @@ function build3D(){
       const cx = mw*i+mw/2, kind = o.kinds && o.kinds[i];
       if(kind==='oven') mk(g, mw, 0.76, 0.56, cx, 0.48, 0.28, carcMat);
       if(kind==='oven'){
-        mk(g, mw-0.002, 0.16, 0.019, cx, 0.78, FZ, doorMat, true); handleH(g, cx, 0.82, FZ, Math.min(0.3, mw*0.5));
+        mk(g, mw-0.002, 0.16, 0.019, cx, 0.78, FZ, doorMat, true); if(s.hLow==='show') handleH(g, cx, 0.82, FZ, Math.min(0.3, mw*0.5)); else if(s.hLow==='hidden') mk(g, mw-0.01, 0.022, 0.006, cx, 0.847, FZ+0.0125, golaM);
         mk(g, mw-0.006, 0.58, 0.02, cx, 0.4, FZ, ovenBlack, true); mk(g, mw-0.1, 0.34, 0.004, cx, 0.37, FZ+0.011, blackGlass); handleHS(g, cx, 0.64, FZ+0.002, 0.4);
         mk(g, mw*0.5, 0.025, 0.004, cx, 0.56, FZ+0.013, new T.MeshStandardMaterial({color:0x1A1A1A, emissive:0xD9A441, emissiveIntensity:0.6}));
       } else if(kind==='dw'){ dishW3(g, cx, mw, FZ);
@@ -2278,7 +2303,7 @@ function build3D(){
       const front = new T.Group(); front.rotation.y = Math.PI; front.position.set(0,0,0); g.add(front);
       if(!s.dress && i===iDwIdx){ mk(front, mw-0.004, 0.72, 0.02, -cx, 0.48, id/2-0.02, steel, true); mk(front, mw-0.004, 0.06, 0.022, -cx, 0.82, id/2-0.019, Std({color:0x1A1A1A, roughness:0.3, metalness:0.4}), true); handleHS(front, -cx, 0.74, id/2-0.02, 0.4); mk(g, mw-0.002, ih-0.14, 0.019, cx, 0.1+(ih-0.14)/2, id/2-0.02, (accentMat||doorMat), true); continue; }
       if(s.dress){ [0.25,0.25,0.25].forEach((hh,k)=>{ mk(front, mw-0.004, hh-0.002, 0.019, -cx, 0.82-hh/2-k*hh, id/2-0.02, (accentMat||doorMat), true); handleH(front, -cx, 0.82-0.05-k*hh, id/2-0.02, Math.min(0.28,mw*0.5)); }); }
-      else { mk(front, mw-0.004, 0.72, 0.019, -cx, 0.48, id/2-0.02, (accentMat||doorMat), true); handleV(front, i%2? -cx+mw/2-0.04 : -cx-mw/2+0.04, 0.72, id/2-0.02, 0.16); }
+      else { mk(front, mw-0.004, 0.72, 0.019, -cx, 0.48, id/2-0.02, (accentMat||doorMat), true); if(s.hLow==='show') handleV(front, i%2? -cx+mw/2-0.04 : -cx-mw/2+0.04, 0.72, id/2-0.02, 0.16); }
       mk(g, mw-0.002, ih-0.14, 0.019, cx, 0.1+(ih-0.14)/2, id/2-0.02, (accentMat||doorMat), true);
     }
     if(s.dress){ mk(g, iw+0.04, 0.03, id+0.04, 0, ih+0.015, 0, doorMat, true); }
@@ -2411,7 +2436,8 @@ window.pvRender = render;
 <script>
 /* اختيار "حوض على الجزيرة" يظهر بس لو شكل المطبخ بجزيرة */
 (function(){ const upd=()=>{ const sh=document.querySelector('input[name="shape"]:checked'); const o=document.getElementById('sinkIslandOpt'), sel=document.getElementById('sink'); const on = !!(sh && /جزيرة/.test(sh.value));
-    if(o){ o.hidden = !on; o.disabled = !on; if(!on && sel.value==='على الجزيرة'){ sel.value=''; sel.dispatchEvent(new Event('change',{bubbles:true})); } } };
+    if(o){ o.hidden = !on; o.disabled = !on; if(!on && sel.value==='على الجزيرة'){ sel.value=''; sel.dispatchEvent(new Event('change',{bubbles:true})); } }
+    const d=document.getElementById('dwIslandOpt'), ds=document.getElementById('dwSel'); if(d){ d.hidden=!on; d.disabled=!on; if(!on && ds.value==='في الجزيرة'){ ds.value='مفيش'; ds.dispatchEvent(new Event('change',{bubbles:true})); } } };
   document.querySelectorAll('input[name="shape"]').forEach(e=>e.addEventListener('change', upd)); upd(); })();
 </script>
 </body>
