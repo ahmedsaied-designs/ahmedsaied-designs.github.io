@@ -704,6 +704,24 @@ main .card{background:#FFFDF9;border-color:rgba(138,90,54,.10)}
                 <option>يمين المطبخ</option><option>شمال المطبخ</option><option>تحت الشباك</option><option>في النص</option><option>في الجزيرة</option><option>لسه مش محدد</option>
               </select></div></div>
           </div>
+          <div class="q" style="margin-top:14px">أجهزة إضافية</div>
+          <div class="tgs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px">
+            <div class="tg"><h4>غسالة أطباق</h4>
+              <div class="seg">
+                <label><input type="radio" name="dw" value="أيوه"><span>أيوه</span></label>
+                <label><input type="radio" name="dw" value="لأ" checked><span>لأ</span></label>
+              </div></div>
+            <div class="tg"><h4>غسالة ملابس</h4>
+              <div class="seg">
+                <label><input type="radio" name="wm" value="أيوه"><span>أيوه</span></label>
+                <label><input type="radio" name="wm" value="لأ" checked><span>لأ</span></label>
+              </div></div>
+            <div class="tg" id="islandSinkWrap" style="display:none"><h4>حوض على الجزيرة</h4>
+              <div class="seg">
+                <label><input type="radio" name="islandSink" value="أيوه"><span>أيوه</span></label>
+                <label><input type="radio" name="islandSink" value="لأ" checked><span>لأ</span></label>
+              </div></div>
+          </div>
           <div class="field" style="margin-top:12px"><label for="notes">ملاحظات إضافية (اختياري)</label>
             <textarea id="notes" class="txt" placeholder="مثلا: الحوض لازم يفضل تحت الشباك، أو فيه عمود في الركن…"></textarea></div>
         </div>
@@ -1133,7 +1151,7 @@ function data(){
     fridge:$('#fridge').value||'—', stove:$('#stove').value||'—', notes:$('#notes').value.trim(),
     material:val('material'), color:val('color'),
     colorHex:(document.querySelector('input[name="color"]:checked')||{dataset:{}}).dataset.hex,
-    hinges:val('hinges'), led:val('led'), glass:val('glass')||'لأ',
+    hinges:val('hinges'), led:val('led'), glass:val('glass')||'لأ', dw:val('dw')||'لأ', wm:val('wm')||'لأ', islandSink:(/جزيرة/.test(val('shape')||'') ? (val('islandSink')||'لأ') : null),
     name:$('#name').value.trim(), phone:normPhone($('#phone').value), area,
     photo: !!$('#photo').files.length
   };
@@ -1149,7 +1167,8 @@ function renderSummary(){
     row('الخامة', d.material)+
     row('اللون', `<span class="sum-sw" style="background:${d.colorHex||'transparent'}"></span>${d.color}`)+
     row('المفصلات / ليد', `${d.hinges} · ليد: ${d.led}`)+
-    row('دولاب زجاج بإضاءة', d.glass);
+    row('دولاب زجاج بإضاءة', d.glass)+
+    (d.type==='دريسنج' ? '' : row('غسالة أطباق / غسالة ملابس', `${d.dw} / ${d.wm}`) + (d.islandSink ? row('حوض على الجزيرة', d.islandSink) : ''));
   $('#afterNote').classList.toggle('on', d.photo);
 }
 function message(){
@@ -1164,6 +1183,9 @@ function message(){
     `🚪 الباب: ${d.door}`,
     `🧊 الثلاجة: ${d.fridge}`,
     `🔥 البوتجاز: ${d.stove}`,
+    d.type==='دريسنج' ? null : `🍽️ غسالة أطباق: ${d.dw}`,
+    d.type==='دريسنج' ? null : `👕 غسالة ملابس: ${d.wm}`,
+    (d.type!=='دريسنج' && d.islandSink) ? `🚰 حوض على الجزيرة: ${d.islandSink}` : null,
     d.notes ? `📝 ملاحظات: ${d.notes}` : null,
     ``,
     `🪵 الخامة: ${d.material}`,
@@ -1221,7 +1243,7 @@ function st(){
     shape: g('shape') || 'مطبخ حرف L', dress: g('type') === 'دريسنج',
     L: num('len',320,50,2000), W: num('wid',260,50,2000), H: num('hei',280,180,600),
     color, ...photoLook(color),
-    mat: g('material') || 'MDF', led: g('led') === 'أيوه', glass: g('glass') === 'أيوه',
+    mat: g('material') || 'MDF', led: g('led') === 'أيوه', glass: g('glass') === 'أيوه', dw: g('dw') === 'أيوه', wm: g('wm') === 'أيوه', islandSink: g('islandSink') === 'أيوه',
     window: g('window'), fridge: document.getElementById('fridge').value, stove: document.getElementById('stove').value
   };
 }
@@ -1301,7 +1323,8 @@ function backLayout(s, n){
   if(stove===fr) stove = fr===0 ? 1 : n-2;
   stove = Math.max(0, Math.min(n-1, stove));
   const stoveUnderWin = winBack && (stove===winA || stove===winB);
-  // الحوض: تحت الشباك لو البوتاجاز مش هناك، وإلا جنب البوتاجاز
+  // الحوض: تحت الشباك لو البوتاجاز مش هناك، وإلا جنب البوتاجاز (أو على الجزيرة لو العميل اختار كده)
+  const islandSink = !!(s.islandSink && isIsland(s) && !s.dress);
   let sink;
   if(winBack && !stoveUnderWin) sink = winA;
   else { const cands = [stove+2, stove-2, stove+3, stove-3].filter(k=>k>=0 && k<n && k!==fr && !(winBack && (k===winA||k===winB))); sink = cands.length ? cands[0] : Math.max(0, stove-1); }
@@ -1314,7 +1337,23 @@ function backLayout(s, n){
     if(best!==null) glassIdx = [best, best+1];
     else { for(let k=0;k<n;k++) if(free(k)){ const d=Math.abs(k-(n-1)/2); if(d<bd){ bd=d; best=k; } } if(best!==null) glassIdx=[best]; }
   }
-  return {fr, sideFr, winBack, winA, winB, stove, sink, stoveUnderWin, glassIdx};
+  if(islandSink) sink = -1;
+  // غسالة الأطباق جنب الحوض (الناحية البعيدة عن البوتاجاز)، وغسالة الملابس في الناحية التانية أو أقرب مكان فاضي
+  const used = new Set([fr, stove, sink].filter(k=>k>=0));
+  const cornerR = hasR, cornerL = hasL;   // أطراف الحيطة اللي قدامك في مطبخ L/U أركان مقفولة، مينفعش فيها أجهزة
+  const freeB = k => k>=0 && k<n && !used.has(k) && !(cornerR && k===n-1) && !(cornerL && k===0);
+  let dw = -1, wm = -1;
+  if(s.dw && !s.dress && !islandSink && sink>=0){
+    const away = sink>stove ? [sink+1, sink-1] : [sink-1, sink+1];
+    dw = away.find(freeB); if(dw===undefined) dw = -1; if(dw>=0) used.add(dw);
+  }
+  if(s.wm && !s.dress){
+    const ref = sink>=0 ? sink : Math.floor(n/2);
+    const order = [ref+1, ref-1, ref+2, ref-2, ref+3, ref-3, n-1, 0, ref+4, ref-4];
+    wm = order.find(freeB); if(wm===undefined) wm = -1;
+  }
+  const dwIsland = !!(s.dw && islandSink);
+  return {fr, sideFr, winBack, winA, winB, stove, sink, stoveUnderWin, glassIdx, dw, wm, islandSink, dwIsland};
 }
 const backN = Lcm => Math.max(3, Math.min(9, Math.round(Lcm/60)));
 function dressLayout(s){
@@ -1435,6 +1474,33 @@ function draw2D(){
   const hBar = (x,yy,w)=>{ const W2 = w*1.35, X2 = x - (W2-w)/2; return `<rect x="${X2+.6}" y="${yy+1.6}" width="${W2}" height="2.6" rx="1.3" fill="#000" opacity=".35" filter="url(#pvB1)"/><rect x="${X2}" y="${yy}" width="${W2}" height="2.6" rx="1.3" fill="url(#pvHB)"/><rect x="${X2+1}" y="${yy+.45}" width="${W2-2}" height=".45" rx=".2" fill="#A6A6A6" opacity=".7"/>`; };
   const vBar = (x,yy,h)=>`<rect x="${x+1.4}" y="${yy+1}" width="2.6" height="${h}" rx="1.3" fill="#000" opacity=".35" filter="url(#pvB1)"/><rect x="${x-.4}" y="${yy}" width="2.6" height="${h}" rx="1.3" fill="url(#pvHB)"/><rect x="${x+.25}" y="${yy+1}" width=".45" height="${h-2}" rx=".2" fill="#A6A6A6" opacity=".7"/>`;
 
+  // غسالة أطباق: واجهة ستانلس + شريط تحكم أسود + مقبض
+  const dishW2D = (x, yy, w, h)=>{
+    let g = `<rect x="${x+0.4+0.5}" y="${yy+1.8}" width="${w-1}" height="${h-0.6}" rx="1.3" fill="#000" opacity=".32" filter="url(#pvDS)"/>`;
+    g += `<rect x="${x+0.5}" y="${yy+0.3}" width="${w-1}" height="${h-0.6}" rx="1.3" fill="url(#pvSteel)" stroke="#A6A6A6" stroke-width=".5"/>`;
+    g += `<rect x="${x+0.5}" y="${yy+0.3}" width="${w-1}" height="6" rx="1" fill="#1A1A1A"/>`;
+    for(let k=0;k<4;k++) g += `<circle cx="${x+w*0.55+k*3.2}" cy="${yy+3.3}" r=".75" fill="${k===0?'#D9A441':'#6B6B6B'}"/>`;
+    g += `<rect x="${x+w*0.12}" y="${yy+2.4}" width="${w*0.25}" height="1.8" rx=".5" fill="#333333"/>`;
+    g += hBarS(x+w*0.2, yy+9, w*0.6/1.35);
+    g += `<polygon points="${x+w*0.1},${yy+h} ${x+w*0.32},${yy+6} ${x+w*0.42},${yy+6} ${x+w*0.2},${yy+h}" fill="#FFFFFF" opacity=".12"/>`;
+    return g;
+  };
+  // غسالة ملابس: أبيض، باب دايري، درج صابون، زرار ولوحة
+  const washM2D = (x, yy, w, h)=>{
+    const cx = x+w/2, r = Math.min(w, h)*0.3, cy = yy + h*0.58;
+    let g = `<rect x="${x+0.9}" y="${yy+1.8}" width="${w-1}" height="${h-0.6}" rx="1.6" fill="#000" opacity=".32" filter="url(#pvDS)"/>`;
+    g += `<rect x="${x+0.5}" y="${yy+0.3}" width="${w-1}" height="${h-0.6}" rx="1.6" fill="#F2F2F2" stroke="#D9D9D9" stroke-width=".5"/>`;
+    g += `<rect x="${x+0.5}" y="${yy+0.3}" width="${w-1}" height="${h-0.6}" rx="1.6" fill="url(#pvShadeV)"/>`;
+    g += `<rect x="${x+2}" y="${yy+2}" width="${w*0.3}" height="${h*0.11}" rx=".8" fill="#FFFFFF" stroke="#D9D9D9" stroke-width=".4"/>`;
+    g += `<rect x="${x+w*0.46}" y="${yy+2.6}" width="${w*0.18}" height="${h*0.07}" rx=".6" fill="#1A1A1A"/><rect x="${x+w*0.49}" y="${yy+3.6}" width="${w*0.1}" height="1" fill="#7A8FA6"/>`;
+    g += `<circle cx="${x+w*0.8}" cy="${yy+2+h*0.055}" r="${Math.min(3.2, h*0.05)}" fill="url(#pvV)" stroke="#A6A6A6" stroke-width=".3"/>`;
+    g += `<line x1="${x+1}" y1="${yy+h*0.17}" x2="${x+w-1}" y2="${yy+h*0.17}" stroke="#D9D9D9" stroke-width=".5"/>`;
+    g += `<circle cx="${cx}" cy="${cy}" r="${r+2.4}" fill="url(#pvV)" stroke="#A6A6A6" stroke-width=".4"/>`;
+    g += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#121A26"/><circle cx="${cx}" cy="${cy}" r="${r*0.82}" fill="#2C3E55" opacity=".7"/>`;
+    g += `<path d="M${cx-r*0.6} ${cy-r*0.35} A${r*0.75} ${r*0.75} 0 0 1 ${cx+r*0.15} ${cy-r*0.7}" stroke="#FFFFFF" stroke-width="1.2" fill="none" opacity=".45"/>`;
+    g += `<rect x="${cx+r+0.6}" y="${cy-r*0.25}" width="1.6" height="${r*0.5}" rx=".8" fill="#A6A6A6"/>`;
+    return g;
+  };
   // دولاب زجاج: برواز ألومنيوم أسود، ضهر خشب، رفوف زجاج، ليد جوه، كاسات وأطباق
   const glassCab = (x, yy, w, h)=>{
     const ix=x+2.2, iy=yy+2.2, iw=w-4.4, ih=h-4.4;
@@ -1508,7 +1574,7 @@ function draw2D(){
 
   if(!s.dress){
     const n = backN(s.L), mw = wW/n;
-    const {fr, sideFr, winBack, winA, winB, stove, sink, stoveUnderWin, glassIdx} = backLayout(s, n);
+    const {fr, sideFr, winBack, winA, winB, stove, sink, stoveUnderWin, glassIdx, dw, wm, islandSink} = backLayout(s, n);
     const baseTop = y(87), cTop = y(91), ut = y(215), uh = 70*sc, bh = 77*sc;
     // backsplash
     const bx1 = x0 + (fr===0?mw:0), bx2 = x0 + wW - (fr===n-1?mw:0);
@@ -1540,6 +1606,10 @@ function draw2D(){
               <polygon points="${ox+ow*0.08},${oy+oh} ${ox+ow*0.3},${oy} ${ox+ow*0.44},${oy} ${ox+ow*0.22},${oy+oh}" fill="#FFFFFF" opacity=".10"/>
               <polygon points="${ox+ow*0.5},${oy+oh} ${ox+ow*0.66},${oy} ${ox+ow*0.7},${oy} ${ox+ow*0.54},${oy+oh}" fill="#FFFFFF" opacity=".07"/>
               <rect x="${ox+1}" y="${oy+.4}" width="${ow-2}" height=".6" fill="#FFFFFF" opacity=".5"/>`;
+      } else if(i===dw){
+        o += dishW2D(x, baseTop, mw, bh);
+      } else if(i===wm){
+        o += washM2D(x, baseTop, mw, bh);
       } else if(i%3===2 && i!==sink){
         const hh = bh/3;
         for(let k=0;k<3;k++) o += op2(`d${i}-${k}`, 'drawer', x, baseTop+k*hh, mw, hh, false, panel(x, baseTop+k*hh, mw, hh, hBar(x+mw*0.3, baseTop+k*hh+3, mw*0.4)));
@@ -1566,8 +1636,8 @@ function draw2D(){
           <rect x="${sx+mw*0.15}" y="${hb+2.2}" width="${mw*0.7}" height="${(cTop-hb)*0.5}" fill="url(#pvLed)" opacity=".25"/>`;
     // sink + faucet
     const kx = x0 + sink*mw;
-    { const tH2 = Math.max(6, 10*sc); o += `<polygon points="${kx+mw*0.16},${cTop-tH2*0.2} ${kx+mw*0.84},${cTop-tH2*0.2} ${kx+mw*0.8},${cTop-tH2*0.85} ${kx+mw*0.2},${cTop-tH2*0.85}" fill="url(#pvSteelV)" stroke="#A6A6A6" stroke-width=".4"/><polygon points="${kx+mw*0.2},${cTop-tH2*0.3} ${kx+mw*0.8},${cTop-tH2*0.3} ${kx+mw*0.77},${cTop-tH2*0.78} ${kx+mw*0.23},${cTop-tH2*0.78}" fill="#6B6B6B" opacity=".55"/>`; }
-    o += `<rect x="${kx+mw*0.14}" y="${cTop-1.2}" width="0" height="0" fill="none"/>
+    if(sink>=0){ const tH2 = Math.max(6, 10*sc); o += `<polygon points="${kx+mw*0.16},${cTop-tH2*0.2} ${kx+mw*0.84},${cTop-tH2*0.2} ${kx+mw*0.8},${cTop-tH2*0.85} ${kx+mw*0.2},${cTop-tH2*0.85}" fill="url(#pvSteelV)" stroke="#A6A6A6" stroke-width=".4"/><polygon points="${kx+mw*0.2},${cTop-tH2*0.3} ${kx+mw*0.8},${cTop-tH2*0.3} ${kx+mw*0.77},${cTop-tH2*0.78} ${kx+mw*0.23},${cTop-tH2*0.78}" fill="#6B6B6B" opacity=".55"/>`; }
+    if(sink>=0) o += `<rect x="${kx+mw*0.14}" y="${cTop-1.2}" width="0" height="0" fill="none"/>
           <path d="M${kx+mw*0.5} ${cTop-1} v-${13*sc} q0 -${4*sc} ${4*sc} -${4*sc} h${2*sc} v${3*sc}" stroke="url(#pvV)" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
     // uppers
     for(let i=0;i<n;i++){
@@ -1655,6 +1725,10 @@ function draw2D(){
     for(let k=0;k<n2;k++) o += panel(ix + k*iw/n2, iy, iw/n2, ih, s.dress? hBar(ix+k*iw/n2+iw/n2*0.3, iy+4, iw/n2*0.4) : knob(ix+k*iw/n2+(k%2? iw/n2-5.5:5.5), iy+8));
     if(s.accent) o += `<rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="${base}"/><rect x="${ix}" y="${iy+ih*0.36}" width="${iw}" height="${ih*0.3}" fill="url(#pvGloss)"/><rect x="${ix+2}" y="${iy+ih-2}" width="${iw-4}" height="2.4" fill="#E6D5A8" filter="url(#pvBlur)"/>`;
     o += `<rect x="${ix-5}" y="${iy-5*sc}" width="${iw+10}" height="${5*sc+1}" fill="${s.dress?door:(texReady?'url(#pvMarble)':'url(#pvQuartz)')}"/><rect x="${ix-5}" y="${iy-5*sc}" width="${iw+10}" height=".8" fill="#fff" opacity=".5"/>`;
+    if(!s.dress && s.islandSink){ const scx = ix+iw*0.5, top = iy-5*sc;
+      o += `<polygon points="${scx-iw*0.16},${top} ${scx+iw*0.16},${top} ${scx+iw*0.13},${top-3.2} ${scx-iw*0.13},${top-3.2}" fill="url(#pvSteelV)" stroke="#A6A6A6" stroke-width=".4"/><polygon points="${scx-iw*0.12},${top-0.6} ${scx+iw*0.12},${top-0.6} ${scx+iw*0.1},${top-2.8} ${scx-iw*0.1},${top-2.8}" fill="#6B6B6B" opacity=".55"/>`;
+      const fp = `M${scx} ${top-1} v-${22*sc} q0 -${7*sc} -${7*sc} -${7*sc} q-${6*sc} 0 -${6*sc} ${6*sc} v${3*sc}`;
+      o += `<path d="${fp}" stroke="#6B6B6B" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="${fp}" stroke="#D9D9D9" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="${fp}" stroke="#FFFFFF" stroke-width=".7" fill="none" stroke-linecap="round" opacity=".8"/>`; }
     if(!s.dress){
       o += `<rect x="${ix-5}" y="${iy-5*sc}" width="4" height="${ih+5*sc}" fill="${texReady?'url(#pvMarble)':'url(#pvQuartz)'}"/><rect x="${ix+iw+1}" y="${iy-5*sc}" width="4" height="${ih+5*sc}" fill="${texReady?'url(#pvMarble)':'url(#pvQuartz)'}"/>`;
       for(let k=0;k<3;k++){ const bx = ix + iw*(0.2+k*0.3), sy = iy+ih*0.28; o += `<ellipse cx="${bx}" cy="${floorY+27}" rx="8" ry="2" fill="#000" opacity=".2"/><rect x="${bx-8}" y="${sy}" width="16" height="3.4" rx="1.7" fill="#333333"/><line x1="${bx-6}" y1="${sy+3}" x2="${bx-8}" y2="${floorY+26}" stroke="#333333" stroke-width="1.4"/><line x1="${bx+6}" y1="${sy+3}" x2="${bx+8}" y2="${floorY+26}" stroke="#333333" stroke-width="1.4"/><line x1="${bx-7}" y1="${sy+(floorY+26-sy)*0.6}" x2="${bx+7}" y2="${sy+(floorY+26-sy)*0.6}" stroke="url(#pvSteel)" stroke-width="1.2"/>`; }
@@ -1963,6 +2037,27 @@ function build3D(){
     return register(id, 'drawer', dg, {travel: depth*0.85, mkr}, lights);
   }
 
+  // غسالة أطباق 3D
+  function dishW3(g, cx, mw, FZ){
+    mk(g, mw, 0.76, 0.56, cx, 0.48, 0.28, carcMat);
+    mk(g, mw-0.006, 0.74, 0.02, cx, 0.48, FZ, steel, true);
+    mk(g, mw-0.006, 0.06, 0.022, cx, 0.82, FZ+0.001, Std({color:0x1A1A1A, roughness:0.3, metalness:0.4}), true);
+    mk(g, 0.03, 0.008, 0.003, cx+mw*0.12, 0.82, FZ+0.013, new T.MeshStandardMaterial({color:0x1A1A1A, emissive:0xD9A441, emissiveIntensity:1}));
+    handleHS(g, cx, 0.74, FZ, 0.4);
+  }
+  // غسالة ملابس 3D
+  function washM3(g, cx, mw, FZ){
+    mk(g, mw, 0.76, 0.56, cx, 0.48, 0.28, carcMat);
+    const white = Std({color:new T.Color('#F2F2F2').convertSRGBToLinear(), roughness:0.3, envMapIntensity: envOn?0.8:0});
+    mk(g, mw-0.006, 0.82, 0.02, cx, 0.46, FZ, white, true);
+    mk(g, mw*0.3, 0.07, 0.008, cx-mw*0.28, 0.79, FZ+0.012, Std({color:0xFFFFFF, roughness:0.25}));
+    mk(g, mw*0.18, 0.045, 0.004, cx+mw*0.02, 0.8, FZ+0.012, new T.MeshStandardMaterial({color:0x1A1A1A, emissive:0x7A8FA6, emissiveIntensity:0.6}));
+    const kn = new T.Mesh(new T.CylinderGeometry(0.022,0.022,0.02,24), steel); kn.rotation.x=Math.PI/2; kn.position.set(cx+mw*0.3, 0.8, FZ+0.02); g.add(kn);
+    const r = Math.min(mw, 0.6)*0.27, dy = 0.42;
+    const ring = new T.Mesh(new T.TorusGeometry(r, 0.022, 14, 40), steel); ring.position.set(cx, dy, FZ+0.022); ring.castShadow=true; g.add(ring);
+    const gl = new T.Mesh(new T.CircleGeometry(r-0.01, 40), new T.MeshPhysicalMaterial({color:new T.Color('#121A26').convertSRGBToLinear(), roughness:0.05, clearcoat:1, envMapIntensity: envOn?1.2:0})); gl.position.set(cx, dy, FZ+0.02); g.add(gl);
+    const hd = new T.Mesh(new T.BoxGeometry(0.018, r*0.6, 0.02), steel); hd.position.set(cx+r+0.025, dy, FZ+0.024); g.add(hd);
+  }
   // دولاب زجاج 3D (نفس شكل الـ 2D)
   let glassLights = 0;
   function glassCab3(g, cx, w){
@@ -2004,6 +2099,8 @@ function build3D(){
         mk(g, mw-0.002, 0.16, 0.019, cx, 0.78, FZ, doorMat, true); handleH(g, cx, 0.82, FZ, Math.min(0.3, mw*0.5));
         mk(g, mw-0.006, 0.58, 0.02, cx, 0.4, FZ, ovenBlack, true); mk(g, mw-0.1, 0.34, 0.004, cx, 0.37, FZ+0.011, blackGlass); handleHS(g, cx, 0.64, FZ+0.002, 0.4);
         mk(g, mw*0.5, 0.025, 0.004, cx, 0.56, FZ+0.013, new T.MeshStandardMaterial({color:0x1A1A1A, emissive:0xD9A441, emissiveIntensity:0.6}));
+      } else if(kind==='dw'){ dishW3(g, cx, mw, FZ);
+      } else if(kind==='wm'){ washM3(g, cx, mw, FZ);
       } else if(kind==='drawers' || (!kind && (i+io)%3===2)){
         const L1 = interior(g, mw, 0.76, 0.56, cx, 0.48, false);
         const hs=[0.2,0.27,0.27]; let yy = 0.86;
@@ -2118,7 +2215,8 @@ function build3D(){
     const io = LAY.fr===0 ? 1 : 0, n = n2 - (LAY.fr>=0?1:0), mw = mw2;
     const sIdx = LAY.stove-io, kIdx = LAY.sink-io;
     const sx = bA + mw*sIdx + mw/2;
-    const kinds = {}; kinds[sIdx]='oven'; if(kIdx!==sIdx) kinds[kIdx]='door';
+    const kinds = {}; kinds[sIdx]='oven'; if(LAY.sink>=0 && kIdx!==sIdx) kinds[kIdx]='door';
+    if(LAY.dw>=0) kinds[LAY.dw-io]='dw'; if(LAY.wm>=0) kinds[LAY.wm-io]='wm';
     const skipIdx = [sIdx]; if(LAY.winBack) skipIdx.push(LAY.winA-io, LAY.winB-io);
     kitchenRun('b', bA, bB, {kinds, skipIdx, n, io, glassIdx: (LAY.glassIdx||[]).map(k=>k-io)});
     // cooktop & hood
@@ -2132,23 +2230,28 @@ function build3D(){
     const hl = new T.PointLight(0xE6D5B8, 0.25, 1.2, 2); hl.position.set(sx, 1.55, 0.35); G.add(hl); }
     // sink + faucet
     const kx = bA + mw*kIdx + mw/2;
+    if(LAY.sink>=0){
     mk(G, Math.min(0.55, mw-0.06), 0.004, 0.4, kx, 0.9015, 0.3, steel);
     mk(G, Math.min(0.5, mw-0.1), 0.003, 0.35, kx, 0.9035, 0.31, Std({color:0x6B6B6B, roughness:0.35, metalness:0.8}));
     const curve = new T.CatmullRomCurve3([new T.Vector3(0,0,0), new T.Vector3(0,0.24,0), new T.Vector3(0,0.31,0.05), new T.Vector3(0,0.29,0.15), new T.Vector3(0,0.25,0.17)]);
     const tap = new T.Mesh(new T.TubeGeometry(curve, 24, 0.012, 8, false), steel); tap.position.set(kx, 0.9, 0.08); tap.castShadow=true; G.add(tap);
+    }
     const fwS = 0.72, endR = LAY.sideFr==='r' ? W-fwS-0.04 : W, endL = LAY.sideFr==='l' ? W-fwS-0.04 : W;
     if(hasR){ kitchenRun('r', LAY.fr===n2-1 ? 0.71 : 0.62, Math.max(0.95,endR), {noUpper: wr, noSplash:false}); if(LAY.sideFr==='r') fridge(L-0.34, W-fwS/2-0.02, -Math.PI/2, fwS); }
     if(hasL){ kitchenRun('l', LAY.fr===0 ? 0.71 : 0.62, Math.max(0.95,endL), {noUpper: wl}); if(LAY.sideFr==='l') fridge(0.34, W-fwS/2-0.02, Math.PI/2, fwS); }
   }
   if(isIsland(s)){
+    const LAY = backLayout(s, backN(L*100));
     const iw = Math.min(2.0, L*0.5), id = 0.9, iz = Math.min(W-0.75, Math.max(1.55, W*0.58)), ih = 0.88;
     const g = new T.Group(); g.position.set(L/2, 0, iz); G.add(g);
     const n = Math.max(2, Math.round(iw/0.6)), mw = iw/n;
     mk(g, iw, 0.1, id-0.1, 0, 0.05, 0, dark);
     mk(g, iw, ih-0.14, id-0.06, 0, 0.1+(ih-0.14)/2, 0, carcMat);
+    const iSinkIdx = Math.floor((n-1)/2), iDwIdx = (n>1 && LAY && LAY.dwIsland) ? iSinkIdx+1 : -1;
     for(let i=0;i<n;i++){ const cx = -iw/2+mw*i+mw/2;
       // drawers face the back run (‑z side)
       const front = new T.Group(); front.rotation.y = Math.PI; front.position.set(0,0,0); g.add(front);
+      if(!s.dress && i===iDwIdx){ mk(front, mw-0.004, 0.72, 0.02, -cx, 0.48, id/2-0.02, steel, true); mk(front, mw-0.004, 0.06, 0.022, -cx, 0.82, id/2-0.019, Std({color:0x1A1A1A, roughness:0.3, metalness:0.4}), true); handleHS(front, -cx, 0.74, id/2-0.02, 0.4); mk(g, mw-0.002, ih-0.14, 0.019, cx, 0.1+(ih-0.14)/2, id/2-0.02, (accentMat||doorMat), true); continue; }
       if(s.dress){ [0.25,0.25,0.25].forEach((hh,k)=>{ mk(front, mw-0.004, hh-0.002, 0.019, -cx, 0.82-hh/2-k*hh, id/2-0.02, (accentMat||doorMat), true); handleH(front, -cx, 0.82-0.05-k*hh, id/2-0.02, Math.min(0.28,mw*0.5)); }); }
       else { mk(front, mw-0.004, 0.72, 0.019, -cx, 0.48, id/2-0.02, (accentMat||doorMat), true); handleV(front, i%2? -cx+mw/2-0.04 : -cx-mw/2+0.04, 0.72, id/2-0.02, 0.16); }
       mk(g, mw-0.002, ih-0.14, 0.019, cx, 0.1+(ih-0.14)/2, id/2-0.02, (accentMat||doorMat), true);
@@ -2157,6 +2260,11 @@ function build3D(){
     else {
       const ov = 0.28;
       mk(g, iw+0.1, 0.04, id+ov, 0, ih+0.02, ov/2, counterMat);
+      if(LAY && LAY.islandSink){ const sxI = -iw/2+mw*iSinkIdx+mw/2;
+        mk(g, Math.min(0.55, mw-0.06), 0.004, 0.42, sxI, ih+0.0415, -0.1, steel);
+        mk(g, Math.min(0.5, mw-0.1), 0.003, 0.36, sxI, ih+0.0435, -0.09, Std({color:0x6B6B6B, roughness:0.35, metalness:0.8}));
+        const c2 = new T.CatmullRomCurve3([new T.Vector3(0,0,0), new T.Vector3(0,0.3,0), new T.Vector3(0,0.38,-0.06), new T.Vector3(0,0.35,-0.17), new T.Vector3(0,0.3,-0.19)]);
+        const tp = new T.Mesh(new T.TubeGeometry(c2, 24, 0.013, 8, false), steel); tp.position.set(sxI, ih+0.04, 0.17); tp.castShadow=true; g.add(tp); }
       mk(g, 0.04, ih+0.0, id+ov, -iw/2-0.03, ih/2, ov/2, counterMat); mk(g, 0.04, ih, id+ov, iw/2+0.03, ih/2, ov/2, counterMat);
       const seat = Std({color:0x333333, roughness:0.55}), legM = Std({color:0x1A1A1A, roughness:0.4, metalness:0.5});
       for(let k=-1;k<=1;k++){ const bx = k*iw*0.3, bz = id/2+ov+0.12;
@@ -2260,6 +2368,11 @@ window.pvPlace = function(n){
 };
 window.pvRender = render;
 })();
+</script>
+<script>
+/* اختيار "حوض على الجزيرة" يظهر بس لو شكل المطبخ بجزيرة */
+(function(){ const upd=()=>{ const sh=document.querySelector('input[name="shape"]:checked'); const w=document.getElementById('islandSinkWrap'); if(w) w.style.display = (sh && /جزيرة/.test(sh.value)) ? '' : 'none'; };
+  document.querySelectorAll('input[name="shape"]').forEach(e=>e.addEventListener('change', upd)); upd(); })();
 </script>
 </body>
 </html>
